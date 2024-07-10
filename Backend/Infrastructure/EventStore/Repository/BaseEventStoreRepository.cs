@@ -1,6 +1,6 @@
 ﻿using Core.Common.Aggregate;
-using Core.Foo;
 using EventStore.Client;
+using System.Collections.Concurrent;
 using System.Text.Json;
 
 namespace Infrastructure.EventStore.Repository
@@ -8,34 +8,32 @@ namespace Infrastructure.EventStore.Repository
     public class BaseEventStoreRepository<T> : IEventStoreRepository<T> where T : class, IAggregate
     {
         private readonly EventStoreClient _eventStoreClient;
-
-        public BaseEventStoreRepository(EventStoreClient eventStoreClient)
+        private readonly EventTypeParser _eventTypeParser;
+        public BaseEventStoreRepository(EventStoreClient eventStoreClient, EventTypeParser eventTypeParser)
         {
             _eventStoreClient = eventStoreClient;
+            _eventTypeParser = eventTypeParser;
         }
 
-        public Task<ulong> Append(Guid id, object @event, CancellationToken ct = default)
+        public Task Create(Guid id, object @event, CancellationToken ct = default)
+        {
+            return Create(id, new[]{ @event }, ct);
+        }
+
+        public async Task Create(Guid id, IEnumerable<object> events, CancellationToken ct = default)
+        {
+            await AppendToStream(id, events, StreamState.NoStream, ct);
+        }
+
+        public Task Append(Guid id, object @event, CancellationToken ct = default)
         {
             return Append(id, [@event], ct);
         }
 
-        public async Task<ulong> Append(Guid id, IEnumerable<object> @events, CancellationToken ct = default)
+        public async Task Append(Guid id, IEnumerable<object> @events, CancellationToken ct = default)
         {
-            var eventsToAppend = @events.Select(e => ObjectToEventData(e));
+            await AppendToStream(id, @events, StreamState.StreamExists, ct);
 
-            var res = await _eventStoreClient.AppendToStreamAsync(GetStreamId(id), StreamState.NoStream, eventsToAppend, cancellationToken: ct);
-
-            return res.NextExpectedStreamRevision.ToUInt64();
-        }
-
-        public Task<ulong> Append(Guid id, object @event, ulong version, CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ulong> Append(Guid id, IEnumerable<object> events, ulong version, CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<T?> Find(Guid id, CancellationToken cancellationToken, ulong? fromVersion)
@@ -53,7 +51,7 @@ namespace Infrastructure.EventStore.Repository
             await foreach (var @event in readResult)
             {
                 var evt = @event.Event;
-                var eventType = GetEventType(evt.EventType);
+                var eventType = _eventTypeParser.GetEventType(evt.EventType);
 
                 if (eventType == null)
                 {
@@ -74,10 +72,13 @@ namespace Infrastructure.EventStore.Repository
             return aggregate;
         }
 
-        private static Type? GetEventType(string eventType)
+        private async Task AppendToStream(Guid id, IEnumerable<object> @events, StreamState streamState, CancellationToken ct = default)
         {
-            return AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes().Where(x => x.FullName == eventType || x.Name == eventType)).FirstOrDefault();
+            var eventsToAppend = @events.Select(e => ObjectToEventData(e));
+
+            var res = await _eventStoreClient.AppendToStreamAsync(GetStreamId(id), streamState, eventsToAppend, cancellationToken: ct);
         }
+
 
         private EventData ObjectToEventData(object @event)
         {

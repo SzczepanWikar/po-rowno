@@ -6,7 +6,11 @@ namespace Infrastructure.EventStore
 {
     public static class Configuration
     {
-        public static IServiceCollection AddEventStore(this IServiceCollection services, IConfiguration config) => services.AddEventStoreClient(config.GetConnectionString("EventStore"));
+        public static IServiceCollection AddEventStore(this IServiceCollection services, IConfiguration config) {
+            services.AddEventStoreClient(config.GetConnectionString("EventStore"));
+            services.AddSingleton(EventTypeParser.Instance);
+            return services;
+        }
         public static WebApplication UseEventStore(this WebApplication app) => app;
 
     }
