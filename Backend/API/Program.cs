@@ -1,6 +1,7 @@
 using Infrastructure.CQRS;
 using Infrastructure.EventStore;
 using Application;
+using Infrastructure.Projections;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddEventStore(builder.Configuration);
 builder.Services.AddCQRS();
-builder.Services.AddBusinessLogic();
+builder.Services.AddBusinessLogic(builder.Configuration);
 
 var app = builder.Build();
 
@@ -27,6 +28,7 @@ app.UseHttpsRedirection();
 app.UseEventStore();
 app.UseCQRS();
 app.UseAuthorization();
+app.UseProjections();
 
 app.MapControllers();
 

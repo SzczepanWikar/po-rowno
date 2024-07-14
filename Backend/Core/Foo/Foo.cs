@@ -21,6 +21,7 @@ namespace Core.Foo
                     Id = id;
                     Name = name;
                     SomeNumber = someNumber;
+                    Deleted = false;
                     break;
                 case FooUpdated(_, int someNumber):
                     SomeNumber = someNumber;

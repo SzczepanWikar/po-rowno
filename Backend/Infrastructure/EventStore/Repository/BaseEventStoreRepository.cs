@@ -8,8 +8,8 @@ namespace Infrastructure.EventStore.Repository
     public class BaseEventStoreRepository<T> : IEventStoreRepository<T> where T : class, IAggregate
     {
         private readonly EventStoreClient _eventStoreClient;
-        private readonly EventTypeParser _eventTypeParser;
-        public BaseEventStoreRepository(EventStoreClient eventStoreClient, EventTypeParser eventTypeParser)
+        private readonly EventParser _eventTypeParser;
+        public BaseEventStoreRepository(EventStoreClient eventStoreClient, EventParser eventTypeParser)
         {
             _eventStoreClient = eventStoreClient;
             _eventTypeParser = eventTypeParser;

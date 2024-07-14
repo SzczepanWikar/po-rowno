@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Infrastructure.CQRS
 {
-    public static class Configure
+    public static class Configuration
     {
         public static IServiceCollection AddCQRS(this IServiceCollection services)
         {
