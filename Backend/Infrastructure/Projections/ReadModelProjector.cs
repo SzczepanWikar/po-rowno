@@ -2,6 +2,7 @@
 using EventStore.Client;
 using Infrastructure.EventStore;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Threading;
 
@@ -10,17 +11,17 @@ namespace Infrastructure.Projections
     public class ReadModelProjector : IHostedService
     {
         private readonly EventStoreClient _eventStoreClient;
-        private readonly IMediator _mediator;
         private readonly EventParser _eventParser;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private StreamSubscription? _subscription;
         private readonly object _resubscribeLock = new();
         private CancellationToken _cancellationToken;
 
-        public ReadModelProjector(EventStoreClient eventStoreClient, EventParser eventTypeParser, IMediator mediator)
+        public ReadModelProjector(EventStoreClient eventStoreClient, EventParser eventTypeParser, IServiceScopeFactory serviceScopeFactory)
         {
             _eventStoreClient = eventStoreClient;
             _eventParser = eventTypeParser;
-            _mediator = mediator;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -50,19 +51,24 @@ namespace Infrastructure.Projections
 
         private async Task OnEventAppered(StreamSubscription subscription, ResolvedEvent resolvedEvent, CancellationToken cancellationToken)
         {
-            if (resolvedEvent.Event.Data.Length == 0)
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
-                return;
+                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
+                if (resolvedEvent.Event.Data.Length == 0)
+                {
+                    return;
+                }
+
+                var notification = _eventParser.GetEventNotification(resolvedEvent.Event);
+
+                if (notification == null)
+                {
+                    return;
+                }
+
+                await mediator.Publish(notification, cancellationToken: cancellationToken);
             }
-
-            var notification = _eventParser.GetEventNotification(resolvedEvent.Event);
-
-            if (notification == null)
-            {
-                return;
-            }
-
-            await _mediator.Publish(notification, cancellationToken: cancellationToken);
         }
 
         private void OnSubscriptionDropped(StreamSubscription streamSubscription, SubscriptionDroppedReason reason, Exception? exception)

@@ -29,7 +29,7 @@ app.UseEventStore();
 app.UseCQRS();
 app.UseAuthorization();
 app.UseProjections();
-
+app.UseBusinessLogic();
 app.MapControllers();
 
 app.Run();
