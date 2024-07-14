@@ -23,12 +23,18 @@ namespace Infrastructure.Projections
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             await Task.Yield();
-            _subscription = await _eventStoreClient.SubscribeToAllAsync(FromAll.Start, HandleEvent, cancellationToken: cancellationToken).ConfigureAwait(false);
+            _subscription = await _eventStoreClient.SubscribeToAllAsync(
+                FromAll.Start,
+                HandleEvent,
+                cancellationToken: cancellationToken
+            ).ConfigureAwait(false);
         }
 
-        public async Task StopAsync(CancellationToken cancellationToken)
+        public Task StopAsync(CancellationToken cancellationToken)
         {
             _subscription?.Dispose();
+
+            return Task.CompletedTask;
         }
 
         private async Task HandleEvent(StreamSubscription subscription, ResolvedEvent resolvedEvent, CancellationToken cancellationToken)

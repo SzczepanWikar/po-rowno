@@ -49,6 +49,18 @@ namespace Infrastructure.EventStore
 
             if (eventType == null)
             {
+                if(!_eventNotificationsDictionary.ContainsKey(@event.EventType))
+                {
+                    _eventNotificationsDictionary.TryAdd(@event.EventType, null);
+                }
+
+                return null;
+            }
+
+            var notificationType = GetNotificationType(@event.EventType, eventType);
+
+            if(notificationType == null)
+            {
                 return null;
             }
 
@@ -59,15 +71,27 @@ namespace Infrastructure.EventStore
                 return null;
             }
 
-            return GetEventNotification(eventData, eventType);
-        }
-
-        public object? GetEventNotification(object eventData, Type eventType)
-        {
-            var notificationType = typeof(EventNotification<>).MakeGenericType(eventType);
             var notification = Activator.CreateInstance(notificationType, new object[] { eventData });
 
             return notification;
+        }
+
+        private Type? GetNotificationType(string name, Type eventType)
+        {
+            Type? notificationType;
+
+            if (_eventNotificationsDictionary.ContainsKey(name))
+            {
+                 notificationType = _eventNotificationsDictionary[name];
+            }
+            else
+            {
+                notificationType = typeof(EventNotification<>).MakeGenericType(eventType);
+                _eventNotificationsDictionary.TryAdd(name, notificationType);
+                
+            }
+            
+            return notificationType;
         }
     }
 }
