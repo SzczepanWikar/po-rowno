@@ -2,6 +2,7 @@
 using Core.Common;
 using Core.Foo;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Foo.Projections
 {
@@ -9,7 +10,7 @@ namespace Application.Foo.Projections
     {
         public Task Handle(EventNotification<FooCreated> notification, CancellationToken cancellationToken)
         {
-            Console.WriteLine("Test");
+
             return Task.CompletedTask;
         }
     }

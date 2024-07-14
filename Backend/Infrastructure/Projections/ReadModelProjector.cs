@@ -3,6 +3,7 @@ using EventStore.Client;
 using Infrastructure.EventStore;
 using MediatR;
 using Microsoft.Extensions.Hosting;
+using System.Threading;
 
 namespace Infrastructure.Projections
 {
@@ -12,6 +13,8 @@ namespace Infrastructure.Projections
         private readonly IMediator _mediator;
         private readonly EventParser _eventParser;
         private StreamSubscription? _subscription;
+        private readonly object _resubscribeLock = new();
+        private CancellationToken _cancellationToken;
 
         public ReadModelProjector(EventStoreClient eventStoreClient, EventParser eventTypeParser, IMediator mediator)
         {
@@ -23,11 +26,9 @@ namespace Infrastructure.Projections
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             await Task.Yield();
-            _subscription = await _eventStoreClient.SubscribeToAllAsync(
-                FromAll.Start,
-                HandleEvent,
-                cancellationToken: cancellationToken
-            ).ConfigureAwait(false);
+            _cancellationToken = cancellationToken;
+            await SubscribeToEventStoreAsync();
+
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -37,7 +38,17 @@ namespace Infrastructure.Projections
             return Task.CompletedTask;
         }
 
-        private async Task HandleEvent(StreamSubscription subscription, ResolvedEvent resolvedEvent, CancellationToken cancellationToken)
+        private async Task SubscribeToEventStoreAsync()
+        {
+            _subscription = await _eventStoreClient.SubscribeToAllAsync(
+                FromAll.Start,
+                OnEventAppered,
+                cancellationToken: _cancellationToken,
+                subscriptionDropped: OnSubscriptionDropped
+            );
+        }
+
+        private async Task OnEventAppered(StreamSubscription subscription, ResolvedEvent resolvedEvent, CancellationToken cancellationToken)
         {
             if (resolvedEvent.Event.Data.Length == 0)
             {
@@ -51,7 +62,34 @@ namespace Infrastructure.Projections
                 return;
             }
 
-            await this._mediator.Publish(notification, cancellationToken: cancellationToken);
+            await _mediator.Publish(notification, cancellationToken: cancellationToken);
+        }
+
+        private void OnSubscriptionDropped(StreamSubscription streamSubscription, SubscriptionDroppedReason reason, Exception? exception)
+        {
+            var resubscribed = false;
+            while (resubscribed == false)
+            {
+                try
+                {
+                    Monitor.Enter(_resubscribeLock);
+
+                    using (NoSynchonizationContextScope.Enter())
+                    {
+                        SubscribeToEventStoreAsync().Wait(_cancellationToken);
+                    }
+
+                    resubscribed = true;
+                }
+                catch (Exception)
+                {
+                    resubscribed = false;
+                }
+                finally
+                {
+                    Monitor.Exit(_resubscribeLock);
+                }
+            }
         }
     }
 }
