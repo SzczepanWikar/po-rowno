@@ -1,12 +1,10 @@
-﻿using Application.Foo.Projections;
-using Core.Common;
+﻿using Core.Common.Projections;
 using Core.Foo;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Foo.Projections
 {
-    public class FooCreatedProjection : INotificationHandler<EventNotification<FooCreated>>
+    public class FooCreatedProjection : IEventNotificationHandler<FooCreated>
     {
         private readonly ApplicationContext _dbContext;
 
@@ -16,7 +14,14 @@ namespace Application.Foo.Projections
         }
 
         public async Task Handle(EventNotification<FooCreated> notification, CancellationToken cancellationToken)
-        {
+        {   
+           
+            var existing = await _dbContext.Foos.Select(e => e.Id).Where(e => e == notification.@event.Id).FirstOrDefaultAsync();
+            
+            if (existing != Guid.Empty) {
+                return;
+            }
+
             var entity = new FooEntity
             {
                 Id = notification.@event.Id,

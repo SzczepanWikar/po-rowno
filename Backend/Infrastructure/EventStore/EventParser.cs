@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
 using System.Text.Json;
-using Core.Common;
+using Core.Common.Projections;
 using EventStore.Client;
 
 namespace Infrastructure.EventStore
