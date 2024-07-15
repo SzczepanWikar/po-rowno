@@ -15,7 +15,6 @@ namespace Application.Foo.Projections
 
         public async Task Handle(EventNotification<FooCreated> notification, CancellationToken cancellationToken)
         {   
-           
             var existing = await _dbContext.Foos.Select(e => e.Id).Where(e => e == notification.@event.Id).FirstOrDefaultAsync();
             
             if (existing != Guid.Empty) {

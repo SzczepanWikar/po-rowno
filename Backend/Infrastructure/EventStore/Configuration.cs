@@ -8,6 +8,7 @@ namespace Infrastructure.EventStore
     {
         public static IServiceCollection AddEventStore(this IServiceCollection services, IConfiguration config) {
             services.AddEventStoreClient(config.GetConnectionString("EventStore"));
+            services.AddEventStorePersistentSubscriptionsClient(config.GetConnectionString("EventStore"));
             services.AddSingleton(EventParser.Instance);
             return services;
         }

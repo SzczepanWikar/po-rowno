@@ -30,7 +30,7 @@ namespace Infrastructure.EventStore
         {
             if (eventType == null)
             {
-                eventType = this.GetEventType(@event.EventType);
+                eventType = GetEventType(@event.EventType);
 
                 if (eventType == null)
                 {
