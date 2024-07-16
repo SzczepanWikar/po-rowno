@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Projections
 {
@@ -13,17 +14,19 @@ namespace Infrastructure.Projections
         private readonly EventParser _eventParser;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<ReadModelProjector> _logger;
         private PersistentSubscription? _subscription;
         private readonly object _resubscribeLock = new();
         private CancellationToken _cancellationToken;
         private readonly string _subscriptionGroup;
 
-        public ReadModelProjector(EventStorePersistentSubscriptionsClient eventStoreClient, EventParser eventTypeParser, IServiceScopeFactory serviceScopeFactory, IConfiguration config)
+        public ReadModelProjector(EventStorePersistentSubscriptionsClient eventStoreClient, EventParser eventTypeParser, IServiceScopeFactory serviceScopeFactory, IConfiguration config, ILogger<ReadModelProjector> logger)
         {
             _eventStoreClient = eventStoreClient;
             _eventParser = eventTypeParser;
             _serviceScopeFactory = serviceScopeFactory;
             _configuration = config;
+            _logger = logger;
 
             var group = _configuration.GetRequiredSection("EventStore").GetValue<string>("SubscriptionGroup");
             if (group == null)
@@ -52,6 +55,7 @@ namespace Infrastructure.Projections
             if (existingGroup == null) 
             {
                 await _eventStoreClient.CreateToAllAsync(_subscriptionGroup, new PersistentSubscriptionSettings(startFrom: Position.Start), cancellationToken: _cancellationToken);
+                _logger.LogInformation($"Created new Subcription Group {_subscriptionGroup}");
             }
         }
 
@@ -70,19 +74,24 @@ namespace Infrastructure.Projections
                 cancellationToken: _cancellationToken,
                 subscriptionDropped: OnSubscriptionDropped
             );
+
+            _logger.LogInformation($"Subscribed to {_subscription}");
         }
 
         private async Task OnEventAppered(PersistentSubscription subscription, ResolvedEvent resolvedEvent, int? retryCount, CancellationToken cancellationToken)
         {
             try
             {
+                _logger.LogInformation($"Event ${resolvedEvent.Event.EventId} from stream ${resolvedEvent.Event.EventStreamId} appered");
                 await HandleEventAsync(resolvedEvent, cancellationToken);
                 var ev = resolvedEvent.Event.EventType;
                 await subscription.Ack(resolvedEvent);
+                _logger.LogInformation($"Event ${resolvedEvent.Event.EventId} from stream ${resolvedEvent.Event.EventStreamId} proceed correctly");
             }
             catch (Exception ex) 
             {
                 await subscription.Nack(PersistentSubscriptionNakEventAction.Park, ex.Message, resolvedEvent);
+                _logger.LogInformation($"Error ocured while processing event ${resolvedEvent.Event.EventId} from stream ${resolvedEvent.Event.EventStreamId}");
             }
         }
 
@@ -110,11 +119,14 @@ namespace Infrastructure.Projections
 
         private void OnSubscriptionDropped(PersistentSubscription streamSubscription, SubscriptionDroppedReason reason, Exception? exception)
         {
+            _logger.LogError("Subcription dropped!!!");
+            _logger.LogError(exception?.ToString());
             var resubscribed = false;
             while (resubscribed == false)
             {
                 try
                 {
+                    _logger.LogInformation("Trying to resubscribe");
                     Monitor.Enter(_resubscribeLock);
 
                     using (NoSynchonizationContextScope.Enter())
@@ -124,13 +136,18 @@ namespace Infrastructure.Projections
 
                     resubscribed = true;
                 }
-                catch (Exception)
+                catch (Exception err)
                 {
+                    _logger.LogError("Resubscription failed");
+                    _logger.LogError(err.ToString());
+
                     resubscribed = false;
                 }
                 finally
                 {
                     Monitor.Exit(_resubscribeLock);
+
+                    _logger.LogInformation("Resubscribed");
                 }
             }
         }

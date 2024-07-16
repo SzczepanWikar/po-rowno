@@ -2,6 +2,7 @@ using Infrastructure.CQRS;
 using Infrastructure.EventStore;
 using Application;
 using Infrastructure.Projections;
+using Infrastructure.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddEventStore(builder.Configuration);
 builder.Services.AddCQRS();
 builder.Services.AddBusinessLogic(builder.Configuration);
+builder.Logging.ConfigureLogging();
 
 var app = builder.Build();
 
