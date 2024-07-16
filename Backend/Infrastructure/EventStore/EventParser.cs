@@ -38,9 +38,18 @@ namespace Infrastructure.EventStore
                 }
             }
 
-            var eventData = JsonSerializer.Deserialize(@event.Data.Span, eventType);
+            try
+            {
+                var eventData = JsonSerializer.Deserialize(@event.Data.Span, eventType);
 
-            return eventData;
+                return eventData;
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
         }
 
         public object? GetEventNotification(EventRecord @event)
