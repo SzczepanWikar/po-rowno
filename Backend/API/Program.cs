@@ -1,5 +1,6 @@
 using Application;
 using Infrastructure.CQRS;
+using Infrastructure.Email;
 using Infrastructure.EventStore;
 using Infrastructure.Logging;
 using Infrastructure.Projections;
@@ -16,6 +17,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddEventStore(builder.Configuration);
 builder.Services.AddCQRS();
 builder.Services.AddBusinessLogic(builder.Configuration);
+builder.Services.AddMailing(builder.Configuration);
 builder.Logging.ConfigureLogging();
 
 var app = builder.Build();
