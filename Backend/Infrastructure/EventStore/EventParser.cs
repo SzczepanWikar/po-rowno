@@ -19,7 +19,10 @@ namespace Infrastructure.EventStore
                 return _eventTypesDictionary[name];
             }
 
-            var type = AppDomain.CurrentDomain.GetAssemblies().SelectMany(e => e.GetTypes().Where(f => f.FullName == name || f.Name == name)).FirstOrDefault();
+            var type = AppDomain
+                .CurrentDomain.GetAssemblies()
+                .SelectMany(e => e.GetTypes().Where(f => f.FullName == name || f.Name == name))
+                .FirstOrDefault();
 
             _eventTypesDictionary.TryAdd(name, type);
 
@@ -43,13 +46,11 @@ namespace Infrastructure.EventStore
                 var eventData = JsonSerializer.Deserialize(@event.Data.Span, eventType);
 
                 return eventData;
-
             }
             catch (Exception)
             {
                 return null;
             }
-
         }
 
         public object? GetEventNotification(EventRecord @event)
@@ -58,7 +59,7 @@ namespace Infrastructure.EventStore
 
             if (eventType == null)
             {
-                if(!_eventNotificationsDictionary.ContainsKey(@event.EventType))
+                if (!_eventNotificationsDictionary.ContainsKey(@event.EventType))
                 {
                     _eventNotificationsDictionary.TryAdd(@event.EventType, null);
                 }
@@ -68,7 +69,7 @@ namespace Infrastructure.EventStore
 
             var notificationType = GetNotificationType(@event.EventType, eventType);
 
-            if(notificationType == null)
+            if (notificationType == null)
             {
                 return null;
             }
@@ -80,7 +81,10 @@ namespace Infrastructure.EventStore
                 return null;
             }
 
-            var notification = Activator.CreateInstance(notificationType, new object[] { eventData });
+            var notification = Activator.CreateInstance(
+                notificationType,
+                new object[] { eventData }
+            );
 
             return notification;
         }
@@ -91,15 +95,14 @@ namespace Infrastructure.EventStore
 
             if (_eventNotificationsDictionary.ContainsKey(name))
             {
-                 notificationType = _eventNotificationsDictionary[name];
+                notificationType = _eventNotificationsDictionary[name];
             }
             else
             {
                 notificationType = typeof(EventNotification<>).MakeGenericType(eventType);
                 _eventNotificationsDictionary.TryAdd(name, notificationType);
-                
             }
-            
+
             return notificationType;
         }
     }

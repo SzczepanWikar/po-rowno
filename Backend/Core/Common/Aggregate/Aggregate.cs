@@ -1,5 +1,4 @@
-﻿
-namespace Core.Common.Aggregate
+﻿namespace Core.Common.Aggregate
 {
     public abstract class Aggregate : IAggregate
     {

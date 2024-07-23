@@ -4,7 +4,7 @@ namespace Infrastructure.Logging
 {
     public static class Configuration
     {
-        public static ILoggingBuilder ConfigureLogging(this ILoggingBuilder loggingBuilder) 
+        public static ILoggingBuilder ConfigureLogging(this ILoggingBuilder loggingBuilder)
         {
             loggingBuilder.ClearProviders();
             loggingBuilder.AddConsole();

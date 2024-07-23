@@ -29,12 +29,15 @@ namespace Core.Foo
                 case FooDeleted(_):
                     Deleted = true;
                     break;
-                default: return;
+                default:
+                    return;
             }
         }
     }
 
     public record FooCreated(Guid Id, string Name, int SomeNumber);
+
     public record FooUpdated(Guid Id, int SomeNumber);
+
     public record FooDeleted(Guid Id);
 }

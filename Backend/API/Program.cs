@@ -1,14 +1,15 @@
+using Application;
 using Infrastructure.CQRS;
 using Infrastructure.EventStore;
-using Application;
-using Infrastructure.Projections;
 using Infrastructure.Logging;
+using Infrastructure.Projections;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

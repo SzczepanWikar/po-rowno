@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Core.Common.Projections
 {
-    public interface IEventNotificationHandler<T>: INotificationHandler<EventNotification<T>>{}
+    public interface IEventNotificationHandler<T> : INotificationHandler<EventNotification<T>> { }
 }

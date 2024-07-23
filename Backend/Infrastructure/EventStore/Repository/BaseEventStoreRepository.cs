@@ -1,15 +1,20 @@
-﻿using Core.Common.Aggregate;
-using EventStore.Client;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Text.Json;
+using Core.Common.Aggregate;
+using EventStore.Client;
 
 namespace Infrastructure.EventStore.Repository
 {
-    public class BaseEventStoreRepository<T> : IEventStoreRepository<T> where T : class, IAggregate
+    public class BaseEventStoreRepository<T> : IEventStoreRepository<T>
+        where T : class, IAggregate
     {
         private readonly EventStoreClient _eventStoreClient;
         private readonly EventParser _eventTypeParser;
-        public BaseEventStoreRepository(EventStoreClient eventStoreClient, EventParser eventTypeParser)
+
+        public BaseEventStoreRepository(
+            EventStoreClient eventStoreClient,
+            EventParser eventTypeParser
+        )
         {
             _eventStoreClient = eventStoreClient;
             _eventTypeParser = eventTypeParser;
@@ -17,10 +22,14 @@ namespace Infrastructure.EventStore.Repository
 
         public Task Create(Guid id, object @event, CancellationToken ct = default)
         {
-            return Create(id, new[]{ @event }, ct);
+            return Create(id, new[] { @event }, ct);
         }
 
-        public async Task Create(Guid id, IEnumerable<object> events, CancellationToken ct = default)
+        public async Task Create(
+            Guid id,
+            IEnumerable<object> events,
+            CancellationToken ct = default
+        )
         {
             await AppendToStream(id, events, StreamState.NoStream, ct);
         }
@@ -30,15 +39,23 @@ namespace Infrastructure.EventStore.Repository
             return Append(id, [@event], ct);
         }
 
-        public async Task Append(Guid id, IEnumerable<object> @events, CancellationToken ct = default)
+        public async Task Append(
+            Guid id,
+            IEnumerable<object> @events,
+            CancellationToken ct = default
+        )
         {
             await AppendToStream(id, @events, StreamState.StreamExists, ct);
-
         }
 
         public async Task<T?> Find(Guid id, CancellationToken cancellationToken, ulong? fromVersion)
         {
-            var readResult = _eventStoreClient.ReadStreamAsync(Direction.Forwards, GetStreamId(id), fromVersion ?? StreamPosition.Start, cancellationToken: cancellationToken);
+            var readResult = _eventStoreClient.ReadStreamAsync(
+                Direction.Forwards,
+                GetStreamId(id),
+                fromVersion ?? StreamPosition.Start,
+                cancellationToken: cancellationToken
+            );
 
             var readState = await readResult.ReadState.ConfigureAwait(false);
             if (readState == ReadState.StreamNotFound)
@@ -66,24 +83,35 @@ namespace Infrastructure.EventStore.Repository
                 }
 
                 aggregate.When(eventData);
-
             }
 
             return aggregate;
         }
 
-        private async Task AppendToStream(Guid id, IEnumerable<object> @events, StreamState streamState, CancellationToken ct = default)
+        private async Task AppendToStream(
+            Guid id,
+            IEnumerable<object> @events,
+            StreamState streamState,
+            CancellationToken ct = default
+        )
         {
             var eventsToAppend = @events.Select(e => ObjectToEventData(e));
 
-            var res = await _eventStoreClient.AppendToStreamAsync(GetStreamId(id), streamState, eventsToAppend, cancellationToken: ct);
+            var res = await _eventStoreClient.AppendToStreamAsync(
+                GetStreamId(id),
+                streamState,
+                eventsToAppend,
+                cancellationToken: ct
+            );
         }
-
 
         private EventData ObjectToEventData(object @event)
         {
-            return new EventData(Uuid.NewUuid(), @event.GetType().Name, JsonSerializer.SerializeToUtf8Bytes(@event));
-
+            return new EventData(
+                Uuid.NewUuid(),
+                @event.GetType().Name,
+                JsonSerializer.SerializeToUtf8Bytes(@event)
+            );
         }
 
         private string GetStreamId(Guid id)

@@ -6,9 +6,10 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FooController: ControllerBase
+    public class FooController : ControllerBase
     {
         private readonly IMediator _mediator;
+
         public FooController(IMediator mediator) => _mediator = mediator;
 
         [HttpPost]
@@ -21,15 +22,15 @@ namespace API.Controllers
 
         [HttpPatch]
         [Route(":id")]
-        public async Task<ActionResult<Guid>> Update(Guid id, [FromBody] UpdateFooViewModel viewModel)
+        public async Task<ActionResult<Guid>> Update(
+            Guid id,
+            [FromBody] UpdateFooViewModel viewModel
+        )
         {
             var command = new UpdateFoo(id, viewModel.SomeNumber);
             var res = await _mediator.Send(command);
             return Ok(res);
         }
-
-
-        
     }
 
     public record UpdateFooViewModel(int SomeNumber);

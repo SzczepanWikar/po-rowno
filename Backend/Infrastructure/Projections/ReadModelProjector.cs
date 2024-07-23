@@ -20,7 +20,13 @@ namespace Infrastructure.Projections
         private CancellationToken _cancellationToken;
         private readonly string _subscriptionGroup;
 
-        public ReadModelProjector(EventStorePersistentSubscriptionsClient eventStoreClient, EventParser eventTypeParser, IServiceScopeFactory serviceScopeFactory, IConfiguration config, ILogger<ReadModelProjector> logger)
+        public ReadModelProjector(
+            EventStorePersistentSubscriptionsClient eventStoreClient,
+            EventParser eventTypeParser,
+            IServiceScopeFactory serviceScopeFactory,
+            IConfiguration config,
+            ILogger<ReadModelProjector> logger
+        )
         {
             _eventStoreClient = eventStoreClient;
             _eventParser = eventTypeParser;
@@ -28,7 +34,10 @@ namespace Infrastructure.Projections
             _configuration = config;
             _logger = logger;
 
-            var group = _configuration.GetRequiredSection("EventStore").GetValue<string>("SubscriptionGroup");
+            var group = _configuration
+                .GetRequiredSection("EventStore")
+                .GetValue<string>("SubscriptionGroup");
+
             if (group == null)
             {
                 throw new Exception("Config EventStore.SubscriptionGroup must be defined");
@@ -50,11 +59,17 @@ namespace Infrastructure.Projections
         private async Task CheckSubscritpionGroup()
         {
             var existingGroups = await _eventStoreClient.ListToAllAsync();
-            var existingGroup = existingGroups.Where(e => e.GroupName == _subscriptionGroup).FirstOrDefault();
-            
-            if (existingGroup == null) 
+            var existingGroup = existingGroups
+                .Where(e => e.GroupName == _subscriptionGroup)
+                .FirstOrDefault();
+
+            if (existingGroup == null)
             {
-                await _eventStoreClient.CreateToAllAsync(_subscriptionGroup, new PersistentSubscriptionSettings(startFrom: Position.Start), cancellationToken: _cancellationToken);
+                await _eventStoreClient.CreateToAllAsync(
+                    _subscriptionGroup,
+                    new PersistentSubscriptionSettings(startFrom: Position.Start),
+                    cancellationToken: _cancellationToken
+                );
                 _logger.LogInformation($"Created new Subcription Group {_subscriptionGroup}");
             }
         }
@@ -67,7 +82,7 @@ namespace Infrastructure.Projections
         }
 
         private async Task SubscribeToEventStoreAsync()
-        {   
+        {
             _subscription = await _eventStoreClient.SubscribeToAllAsync(
                 _subscriptionGroup,
                 OnEventAppered,
@@ -78,24 +93,42 @@ namespace Infrastructure.Projections
             _logger.LogInformation($"Subscribed to {_subscription}");
         }
 
-        private async Task OnEventAppered(PersistentSubscription subscription, ResolvedEvent resolvedEvent, int? retryCount, CancellationToken cancellationToken)
+        private async Task OnEventAppered(
+            PersistentSubscription subscription,
+            ResolvedEvent resolvedEvent,
+            int? retryCount,
+            CancellationToken cancellationToken
+        )
         {
             try
             {
-                _logger.LogInformation($"Event ${resolvedEvent.Event.EventId} from stream ${resolvedEvent.Event.EventStreamId} appered");
+                _logger.LogInformation(
+                    $"Event ${resolvedEvent.Event.EventId} from stream ${resolvedEvent.Event.EventStreamId} appered"
+                );
                 await HandleEventAsync(resolvedEvent, cancellationToken);
                 var ev = resolvedEvent.Event.EventType;
                 await subscription.Ack(resolvedEvent);
-                _logger.LogInformation($"Event ${resolvedEvent.Event.EventId} from stream ${resolvedEvent.Event.EventStreamId} proceed correctly");
+                _logger.LogInformation(
+                    $"Event ${resolvedEvent.Event.EventId} from stream ${resolvedEvent.Event.EventStreamId} proceed correctly"
+                );
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                await subscription.Nack(PersistentSubscriptionNakEventAction.Park, ex.Message, resolvedEvent);
-                _logger.LogInformation($"Error ocured while processing event ${resolvedEvent.Event.EventId} from stream ${resolvedEvent.Event.EventStreamId}");
+                await subscription.Nack(
+                    PersistentSubscriptionNakEventAction.Park,
+                    ex.Message,
+                    resolvedEvent
+                );
+                _logger.LogInformation(
+                    $"Error ocured while processing event ${resolvedEvent.Event.EventId} from stream ${resolvedEvent.Event.EventStreamId}"
+                );
             }
         }
 
-        private async Task HandleEventAsync(ResolvedEvent resolvedEvent, CancellationToken cancellationToken)
+        private async Task HandleEventAsync(
+            ResolvedEvent resolvedEvent,
+            CancellationToken cancellationToken
+        )
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -117,7 +150,11 @@ namespace Infrastructure.Projections
             }
         }
 
-        private void OnSubscriptionDropped(PersistentSubscription streamSubscription, SubscriptionDroppedReason reason, Exception? exception)
+        private void OnSubscriptionDropped(
+            PersistentSubscription streamSubscription,
+            SubscriptionDroppedReason reason,
+            Exception? exception
+        )
         {
             _logger.LogError("Subcription dropped!!!");
             _logger.LogError(exception?.ToString());

@@ -7,7 +7,11 @@ namespace Infrastructure.Projections
 {
     public static class Configuration
     {
-        public static IServiceCollection AddProjections<T>(this IServiceCollection services, IConfiguration config) where T : DbContext
+        public static IServiceCollection AddProjections<T>(
+            this IServiceCollection services,
+            IConfiguration config
+        )
+            where T : DbContext
         {
             services.AddDbContext<T>(options =>
             {

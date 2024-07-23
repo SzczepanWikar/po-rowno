@@ -1,7 +1,7 @@
-﻿using MediatR;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System.Reflection;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
-using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.CQRS
 {
@@ -14,6 +14,7 @@ namespace Infrastructure.CQRS
 
             return services;
         }
+
         public static WebApplication UseCQRS(this WebApplication app) => app;
     }
 }

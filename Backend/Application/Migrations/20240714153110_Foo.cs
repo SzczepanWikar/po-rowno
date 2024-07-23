@@ -22,14 +22,14 @@ namespace Application.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Foos", x => x.Id);
-                });
+                }
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Foos");
+            migrationBuilder.DropTable(name: "Foos");
         }
     }
 }

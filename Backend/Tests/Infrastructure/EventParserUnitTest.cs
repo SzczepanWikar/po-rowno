@@ -1,7 +1,7 @@
-﻿using EventStore.Client;
+﻿using System.Text.Json;
+using EventStore.Client;
 using Infrastructure.EventStore;
 using Microsoft.AspNetCore.Http.HttpResults;
-using System.Text.Json;
 
 namespace Tests.Infrastructure
 {
@@ -51,7 +51,12 @@ namespace Tests.Infrastructure
                 new Uuid(),
                 StreamPosition.Start,
                 Position.Start,
-                new Dictionary<string, string>() { { "type", "" }, { "created", "123" }, { "content-type", "" } },
+                new Dictionary<string, string>()
+                {
+                    { "type", "" },
+                    { "created", "123" },
+                    { "content-type", "" }
+                },
                 readOnlyMemory,
                 new ReadOnlyMemory<byte>()
             );
@@ -73,7 +78,12 @@ namespace Tests.Infrastructure
                 new Uuid(),
                 StreamPosition.Start,
                 Position.Start,
-                new Dictionary<string, string>() { { "type", nameof(TestEvent) }, { "created", "123" }, { "content-type", "" } },
+                new Dictionary<string, string>()
+                {
+                    { "type", nameof(TestEvent) },
+                    { "created", "123" },
+                    { "content-type", "" }
+                },
                 readOnlyMemory,
                 new ReadOnlyMemory<byte>()
             );
@@ -88,14 +98,19 @@ namespace Tests.Infrastructure
         public void GetEventData_IncorrectJSON_ReturnsNull()
         {
             var testEvent = new TestEvent() { Id = 1 };
-            var json = new byte[] {};
+            var json = new byte[] { };
             var readOnlyMemory = new ReadOnlyMemory<byte>(json);
             var @event = new EventRecord(
                 "",
                 new Uuid(),
                 StreamPosition.Start,
                 Position.Start,
-                new Dictionary<string, string>() { { "type", nameof(TestEvent) }, { "created", "123" }, { "content-type", "" } },
+                new Dictionary<string, string>()
+                {
+                    { "type", nameof(TestEvent) },
+                    { "created", "123" },
+                    { "content-type", "" }
+                },
                 readOnlyMemory,
                 new ReadOnlyMemory<byte>()
             );
@@ -117,7 +132,12 @@ namespace Tests.Infrastructure
                 new Uuid(),
                 StreamPosition.Start,
                 Position.Start,
-                new Dictionary<string, string>() { { "type", nameof(TestEvent) }, { "created", "123" }, { "content-type", "" } },
+                new Dictionary<string, string>()
+                {
+                    { "type", nameof(TestEvent) },
+                    { "created", "123" },
+                    { "content-type", "" }
+                },
                 readOnlyMemory,
                 new ReadOnlyMemory<byte>()
             );

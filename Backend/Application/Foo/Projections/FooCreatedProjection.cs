@@ -13,11 +13,18 @@ namespace Application.Foo.Projections
             _dbContext = dbContext;
         }
 
-        public async Task Handle(EventNotification<FooCreated> notification, CancellationToken cancellationToken)
-        {   
-            var existing = await _dbContext.Foos.Select(e => e.Id).Where(e => e == notification.@event.Id).FirstOrDefaultAsync();
-            
-            if (existing != Guid.Empty) {
+        public async Task Handle(
+            EventNotification<FooCreated> notification,
+            CancellationToken cancellationToken
+        )
+        {
+            var existing = await _dbContext
+                .Foos.Select(e => e.Id)
+                .Where(e => e == notification.@event.Id)
+                .FirstOrDefaultAsync();
+
+            if (existing != Guid.Empty)
+            {
                 return;
             }
 

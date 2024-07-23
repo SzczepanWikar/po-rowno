@@ -1,8 +1,8 @@
-﻿using Core.Foo;
+﻿using System.Text.Json;
+using Core.Foo;
 using EventStore.Client;
 using Infrastructure.EventStore.Repository;
 using MediatR;
-using System.Text.Json;
 
 namespace Application.Foo.Commands
 {
@@ -22,11 +22,10 @@ namespace Application.Foo.Commands
             var existing = await _fooRepository.Find(request.Id, cancellationToken);
 
             var evt = new FooUpdated(request.Id, request.SomeNumber);
-            
+
             await _fooRepository.Append(request.Id, evt, cancellationToken);
 
             return request.Id;
         }
     }
-
 }

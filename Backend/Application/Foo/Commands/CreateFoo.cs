@@ -1,8 +1,8 @@
-﻿using Core.Foo;
+﻿using System.Text.Json;
+using Core.Foo;
 using EventStore.Client;
 using Infrastructure.EventStore.Repository;
 using MediatR;
-using System.Text.Json;
 
 namespace Application.Foo.Commands
 {
@@ -16,6 +16,7 @@ namespace Application.Foo.Commands
         {
             _fooRepository = fooRepository;
         }
+
         public async Task<Guid> Handle(CreateFoo request, CancellationToken cancellationToken)
         {
             var evt = new FooCreated(Guid.NewGuid(), request.Name, request.SomeNumber);
@@ -24,5 +25,4 @@ namespace Application.Foo.Commands
             return evt.Id;
         }
     }
-
 }
