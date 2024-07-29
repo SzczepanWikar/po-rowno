@@ -3,6 +3,7 @@ using Infrastructure.CQRS;
 using Infrastructure.Email;
 using Infrastructure.EventStore;
 using Infrastructure.Logging;
+using Infrastructure.Middleware.ErrorHandling;
 using Infrastructure.Projections;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,8 @@ builder.Services.AddEventStore(builder.Configuration);
 builder.Services.AddCQRS();
 builder.Services.AddBusinessLogic(builder.Configuration);
 builder.Services.AddMailing(builder.Configuration);
+builder.Services.AddHttpExceptionHandlingMiddleware();
+
 builder.Logging.ConfigureLogging();
 
 var app = builder.Build();
@@ -29,6 +32,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpExceptionHandlingMiddleware();
 app.UseHttpsRedirection();
 app.UseEventStore();
 app.UseCQRS();
