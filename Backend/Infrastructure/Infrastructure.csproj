@@ -7,11 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Projections\InternalProjections\JavaScript\EmailIndex.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CSharpier.MsBuild" Version="0.28.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="EventStore.Client.Grpc.PersistentSubscriptions" Version="23.3.3" />
+    <PackageReference Include="EventStore.Client.Grpc.ProjectionManagement" Version="23.3.3" />
     <PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.3.3" />
     <PackageReference Include="MailKit" Version="4.7.1.1" />
     <PackageReference Include="MediatR" Version="12.3.0" />
@@ -24,6 +29,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Projections\InternalProjections\JavaScript\EmailIndex.js" />
   </ItemGroup>
 
 </Project>

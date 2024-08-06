@@ -58,19 +58,21 @@ namespace Infrastructure.Projections
 
         private async Task CheckSubscritpionGroup()
         {
-            var existingGroups = await _eventStoreClient.ListToAllAsync();
-            var existingGroup = existingGroups
-                .Where(e => e.GroupName == _subscriptionGroup)
-                .FirstOrDefault();
-
-            if (existingGroup == null)
+            try
             {
-                await _eventStoreClient.CreateToAllAsync(
-                    _subscriptionGroup,
-                    new PersistentSubscriptionSettings(startFrom: Position.Start),
-                    cancellationToken: _cancellationToken
-                );
-                _logger.LogInformation($"Created new Subcription Group {_subscriptionGroup}");
+                var existingGroups = await _eventStoreClient.ListToAllAsync();
+                var existingGroup = existingGroups
+                    .Where(e => e.GroupName == _subscriptionGroup)
+                    .FirstOrDefault();
+
+                if (existingGroup == null)
+                {
+                    await CreateSubscriptionGroup();
+                }
+            }
+            catch (PersistentSubscriptionNotFoundException ex)
+            {
+                await CreateSubscriptionGroup();
             }
         }
 
@@ -79,6 +81,16 @@ namespace Infrastructure.Projections
             _subscription?.Dispose();
 
             return Task.CompletedTask;
+        }
+
+        private async Task CreateSubscriptionGroup()
+        {
+            await _eventStoreClient.CreateToAllAsync(
+                _subscriptionGroup,
+                new PersistentSubscriptionSettings(startFrom: Position.Start),
+                cancellationToken: _cancellationToken
+            );
+            _logger.LogInformation($"Created new Subcription Group {_subscriptionGroup}");
         }
 
         private async Task SubscribeToEventStoreAsync()

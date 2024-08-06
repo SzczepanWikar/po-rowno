@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Core.Common.Projections;
+using Infrastructure.Projections.InternalProjections;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +19,19 @@ namespace Infrastructure.Projections
             {
                 options.UseSqlServer(config.GetConnectionString("ReadModel"));
             });
+
+            var projections = new (string Name, string FileName)[]
+            {
+                (Name: InternalProjectionName.EmailIndex, FileName: "EmailIndex"),
+            };
+
+            services.AddKeyedSingleton<IReadOnlyCollection<(string Name, string FileName)>>(
+                "InternalProjections",
+                projections
+            );
+
             services.AddHostedService<ReadModelProjector>();
+            services.AddHostedService<InternalProjectionInitializer>();
 
             return services;
         }

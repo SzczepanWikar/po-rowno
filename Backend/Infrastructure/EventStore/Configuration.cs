@@ -11,11 +11,19 @@ namespace Infrastructure.EventStore
             IConfiguration config
         )
         {
-            services.AddEventStoreClient(config.GetConnectionString("EventStore"));
-            services.AddEventStorePersistentSubscriptionsClient(
-                config.GetConnectionString("EventStore")
-            );
+            var connectionString = config.GetConnectionString("EventStore");
+
+            if (connectionString == null)
+            {
+                throw new InvalidProgramException("EventStoreDB connection string is missing.");
+            }
+
+            services.AddEventStoreClient(connectionString);
+            services.AddEventStorePersistentSubscriptionsClient(connectionString);
+            services.AddEventStoreProjectionManagementClient(connectionString);
+
             services.AddSingleton(EventParser.Instance);
+
             return services;
         }
 

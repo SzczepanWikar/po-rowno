@@ -1,4 +1,5 @@
-﻿using Infrastructure.EventStore.Repository;
+﻿using Application.User.Auth;
+using Infrastructure.EventStore.Repository;
 using Infrastructure.Projections;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +14,9 @@ namespace Application
             IConfiguration config
         )
         {
+            services.AddScoped<EmailConflictValidator>();
             services.AddEventStoreRepository<Core.Foo.Foo>();
+            services.AddEventStoreRepository<Core.User.User>();
             services.AddProjections<ApplicationContext>(config);
 
             return services;
