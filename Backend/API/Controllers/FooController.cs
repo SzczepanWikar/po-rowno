@@ -1,5 +1,6 @@
 ﻿using Application.Foo.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.User
@@ -13,6 +14,7 @@ namespace API.User
         public FooController(IMediator mediator) => _mediator = mediator;
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Guid>> Create([FromBody] CreateFoo createFoo)
         {
             var command = new CreateFoo(createFoo.Name, createFoo.SomeNumber);

@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Application.User.Auth;
+using Core.Common.Configs;
 using Core.Common.Exceptions;
 using Core.User;
 using Infrastructure.EventStore.Repository;
@@ -82,7 +83,7 @@ namespace Application.User.Commands
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
-            var jwtConfig = _configuration.GetSection("JWT").Get<JWTConfig>();
+            var jwtConfig = _configuration.GetSection("JWT").Get<JwtConfig>();
 
             if (jwtConfig == null)
             {
@@ -90,15 +91,14 @@ namespace Application.User.Commands
             }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Token));
-            var signingCredentials = new SigningCredentials(
-                key,
-                SecurityAlgorithms.HmacSha512Signature
-            );
+            var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.Now.AddSeconds(jwtConfig.ExpiresInSeconds),
-                signingCredentials: signingCredentials
+                signingCredentials: signingCredentials,
+                issuer: jwtConfig.Issuer,
+                audience: jwtConfig.Audience
             );
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);

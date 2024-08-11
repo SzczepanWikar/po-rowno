@@ -4,7 +4,6 @@
     {
         public static WebApplication UseAuthViews(this WebApplication app)
         {
-            app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
