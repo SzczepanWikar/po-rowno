@@ -1,4 +1,6 @@
-﻿namespace Core.User.Events
+﻿using Core.Common.Code;
+
+namespace Core.User.Events
 {
     public record UserSignedUp(Guid Id, string Username, string Email, string Password);
 }

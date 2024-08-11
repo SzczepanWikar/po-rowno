@@ -8,6 +8,11 @@ namespace Application.User.Auth
 {
     public class EmailConflictValidator
     {
+        #region Constants
+        private const string StreamName = $"{InternalProjectionName.EmailIndex}-res";
+        private const string EmailIndexedEvent = "UserEmailIndexed";
+        #endregion
+
         private readonly EventStoreClient _eventStoreClient;
         private readonly ILogger<EmailConflictValidator> _logger;
 
@@ -25,46 +30,88 @@ namespace Application.User.Auth
             CancellationToken cancellationToken = default
         )
         {
-            try
+            var readResult = _eventStoreClient.ReadStreamAsync(
+                Direction.Backwards,
+                StreamName,
+                StreamPosition.End,
+                cancellationToken: cancellationToken
+            );
+
+            var readState = await readResult.ReadState.ConfigureAwait(false);
+            if (readState == ReadState.StreamNotFound)
             {
-                var readResult = _eventStoreClient.ReadStreamAsync(
-                    Direction.Backwards,
-                    $"{InternalProjectionName.EmailIndex}-res",
-                    StreamPosition.End,
-                    cancellationToken: cancellationToken
-                );
-                var readState = await readResult.ReadState.ConfigureAwait(false);
-                if (readState == ReadState.StreamNotFound)
+                return; // If Stream not found any account has been created yet
+            }
+
+            var emailLower = email.ToLower();
+
+            await foreach (var @event in readResult)
+            {
+                var eventData = JsonSerializer.Deserialize<IndexedEmail>(@event.Event.Data.Span);
+
+                if (eventData.Email != emailLower)
                 {
-                    throw new Exception($"{InternalProjectionName.EmailIndex}-res not found.");
+                    continue;
                 }
 
-                var emailLower = email.ToLower();
-
-                await foreach (var @event in readResult)
+                if (@event.Event.EventType == EmailIndexedEvent)
                 {
-                    var eventData = JsonSerializer.Deserialize<IndexedEmail>(
-                        @event.Event.Data.Span
-                    );
-
-                    if (
-                        eventData.Email == emailLower
-                        && @event.Event.EventType == "UserEmailIndexed"
-                    )
-                    {
-                        throw new ConflictException("Given email is already in use.");
-                    }
+                    throw new ConflictException("Given email is already in use.");
+                }
+                else
+                {
+                    break;
                 }
             }
-            catch (Exception ex)
+        }
+
+        public async Task<Guid?> GetUserId(
+            string email,
+            CancellationToken cancellationToken = default
+        )
+        {
+            var readResult = _eventStoreClient.ReadStreamAsync(
+                Direction.Backwards,
+                StreamName,
+                StreamPosition.End,
+                cancellationToken: cancellationToken
+            );
+
+            var readState = await readResult.ReadState.ConfigureAwait(false);
+
+            if (readState == ReadState.StreamNotFound)
             {
-                Console.WriteLine(ex);
+                throw new Exception($"Stream {StreamName} not found");
             }
+
+            var emailLower = email.ToLower();
+
+            await foreach (var @event in readResult)
+            {
+                var eventData = JsonSerializer.Deserialize<IndexedEmail>(@event.Event.Data.Span);
+
+                if (eventData.Email.ToLower() != emailLower)
+                {
+                    continue;
+                }
+
+                if (@event.Event.EventType == EmailIndexedEvent)
+                {
+                    return eventData.UserId;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            return null;
         }
 
         private struct IndexedEmail
         {
             public string Email { get; set; }
+            public Guid? UserId { get; set; }
         }
     }
 }

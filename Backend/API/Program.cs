@@ -1,3 +1,4 @@
+using API.User.AuthView;
 using Application;
 using Infrastructure.CQRS;
 using Infrastructure.Email;
@@ -20,6 +21,7 @@ builder.Services.AddCQRS();
 builder.Services.AddBusinessLogic(builder.Configuration);
 builder.Services.AddMailing(builder.Configuration);
 builder.Services.AddHttpExceptionHandlingMiddleware();
+builder.Services.AddControllersWithViews();
 
 builder.Logging.ConfigureLogging();
 
@@ -33,10 +35,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpExceptionHandlingMiddleware();
+app.UseAuthViews();
 app.UseHttpsRedirection();
 app.UseEventStore();
 app.UseCQRS();
-app.UseAuthorization();
 app.UseProjections();
 app.UseBusinessLogic();
 app.MapControllers();

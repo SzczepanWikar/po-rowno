@@ -13,6 +13,12 @@ namespace Core.Common.Code
         public DateTime? ValidTo { get; init; }
         public bool Used { get; set; } = false;
 
+        public Code(T type)
+        {
+            Type = type;
+            Value = RandomNumberGenerator.GetString(allowedChar, 8);
+        }
+
         public Code(T type, DateTime? validTo)
         {
             Type = type;
@@ -27,6 +33,21 @@ namespace Core.Common.Code
             Type = type;
             Value = RandomNumberGenerator.GetString(allowedChar, 8);
             ValidTo = DateTime.Now.AddSeconds(duration);
+        }
+
+        public bool Check(string value, T type)
+        {
+            if (value != Value || !Type.Equals(type))
+            {
+                return false;
+            }
+
+            if (ValidTo != null && ValidTo < DateTime.Now)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

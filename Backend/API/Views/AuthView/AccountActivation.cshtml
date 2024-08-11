@@ -1,0 +1,17 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "PoRowno";
+    var success = ViewBag.ActivationSucces;
+}
+
+
+@if(success)
+{
+    <p>
+        Konto zostało aktywowane pomyślnie.
+    </p>
+} else {
+    <p>
+        Konto nie mogło zostać aktywowane.
+    </p>
+}

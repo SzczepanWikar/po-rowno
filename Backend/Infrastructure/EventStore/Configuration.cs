@@ -15,7 +15,7 @@ namespace Infrastructure.EventStore
 
             if (connectionString == null)
             {
-                throw new InvalidProgramException("EventStoreDB connection string is missing.");
+                throw new InvalidOperationException("EventStoreDB connection string is missing.");
             }
 
             services.AddEventStoreClient(connectionString);
