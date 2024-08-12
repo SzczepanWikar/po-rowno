@@ -9,6 +9,10 @@ namespace Infrastructure.EventStore.Repository
         Task Create(Guid id, IEnumerable<object> @events, CancellationToken ct = default);
         Task Append(Guid id, object @event, CancellationToken ct = default);
         Task Append(Guid id, IEnumerable<object> @events, CancellationToken ct = default);
-        Task<T?> Find(Guid id, CancellationToken cancellationToken, ulong? fromVersion = null);
+        Task<T?> Find(
+            Guid id,
+            CancellationToken cancellationToken = default,
+            ulong? fromVersion = null
+        );
     }
 }

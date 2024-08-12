@@ -47,7 +47,11 @@ namespace Infrastructure.EventStore.Repository
             await AppendToStream(id, @events, StreamState.StreamExists, ct);
         }
 
-        public async Task<T?> Find(Guid id, CancellationToken cancellationToken, ulong? fromVersion)
+        public async Task<T?> Find(
+            Guid id,
+            CancellationToken cancellationToken = default,
+            ulong? fromVersion = null
+        )
         {
             var readResult = _eventStoreClient.ReadStreamAsync(
                 Direction.Forwards,

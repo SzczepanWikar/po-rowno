@@ -17,6 +17,7 @@ namespace API.User
         [Authorize]
         public async Task<ActionResult<Guid>> Create([FromBody] CreateFoo createFoo)
         {
+            var user = HttpContext.Items["User"] as Core.User.User;
             var command = new CreateFoo(createFoo.Name, createFoo.SomeNumber);
             var res = await _mediator.Send(command);
             return Ok(res);

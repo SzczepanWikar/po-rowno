@@ -1,4 +1,3 @@
-using System.Text;
 using API.User.AuthView;
 using Application;
 using Infrastructure.CQRS;
@@ -7,10 +6,8 @@ using Infrastructure.EventStore;
 using Infrastructure.Logging;
 using Infrastructure.Middleware.Auth;
 using Infrastructure.Middleware.ErrorHandling;
+using Infrastructure.Middleware.UserFetching;
 using Infrastructure.Projections;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Pqc.Crypto.Crystals.Dilithium;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +25,7 @@ builder.Services.AddMailing(builder.Configuration);
 builder.Services.AddHttpExceptionHandlingMiddleware();
 builder.Services.AddControllersWithViews();
 builder.Services.AddAuth(builder.Configuration);
+builder.Services.AddUserFetchng();
 
 builder.Logging.ConfigureLogging();
 
@@ -43,6 +41,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpExceptionHandlingMiddleware();
 app.UseRouting();
 app.UseAuth();
+app.UseUserFetching();
 app.UseAuthViews();
 app.UseHttpsRedirection();
 app.UseEventStore();
