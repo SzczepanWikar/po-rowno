@@ -3,6 +3,9 @@ using System.Security.Cryptography;
 
 namespace Core.Common.Code
 {
+    public class Codes<T> : Stack<Code<T>>
+        where T : Enum;
+
     public class Code<T>
         where T : Enum
     {

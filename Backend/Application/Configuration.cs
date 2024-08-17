@@ -1,4 +1,5 @@
-﻿using Application.User;
+﻿using Application.Group;
+using Application.User;
 using Application.User.Auth;
 using Core.User.UserToken;
 using Infrastructure.EventStore.Repository;
@@ -23,6 +24,7 @@ namespace Application
 
             services.AddScoped<EmailConflictValidator>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IGroupService, GroupService>();
 
             services.AddProjections<ApplicationContext>(config);
 
