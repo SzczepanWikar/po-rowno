@@ -19,19 +19,19 @@ namespace Application.User.Commands
 
     public class SignInUserHandler : IRequestHandler<SignInUser, AppSignInResult>
     {
-        private readonly IEventStoreRepository<User> _eventStoreRepository;
+        private readonly IUserService _userService;
         private readonly EmailConflictValidator _emailConflictValidator;
         private readonly IConfiguration _configuration;
 
         public SignInUserHandler(
-            IEventStoreRepository<User> eventStoreRepository,
             EmailConflictValidator emailConflictValidator,
-            IConfiguration configuration
+            IConfiguration configuration,
+            IUserService userService
         )
         {
-            _eventStoreRepository = eventStoreRepository;
             _emailConflictValidator = emailConflictValidator;
             _configuration = configuration;
+            _userService = userService;
         }
 
         public async Task<AppSignInResult> Handle(
@@ -47,7 +47,7 @@ namespace Application.User.Commands
             }
 
             var userIdVal = userId.Value;
-            var user = await _eventStoreRepository.Find(userIdVal, cancellationToken);
+            var user = await _userService.FindOneAsync(userIdVal, cancellationToken);
 
             ValidateAuth(request, user);
 
@@ -58,13 +58,8 @@ namespace Application.User.Commands
             return res;
         }
 
-        private static void ValidateAuth(SignInUser request, User? user)
+        private static void ValidateAuth(SignInUser request, User user)
         {
-            if (user == null)
-            {
-                throw new BadRequestException("Incorrect credentials.");
-            }
-
             if (user.Status != UserStatus.Active)
             {
                 throw new BadRequestException("User is not active.");

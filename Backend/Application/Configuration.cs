@@ -1,4 +1,5 @@
-﻿using Application.User.Auth;
+﻿using Application.User;
+using Application.User.Auth;
 using Core.User.UserToken;
 using Infrastructure.EventStore.Repository;
 using Infrastructure.Projections;
@@ -15,10 +16,14 @@ namespace Application
             IConfiguration config
         )
         {
-            services.AddScoped<EmailConflictValidator>();
             services.AddEventStoreRepository<Core.Foo.Foo>();
             services.AddEventStoreRepository<Core.User.User>();
+            services.AddEventStoreRepository<Core.Group.Group>();
             services.AddEventStoreRepository<UserToken>();
+
+            services.AddScoped<EmailConflictValidator>();
+            services.AddScoped<IUserService, UserService>();
+
             services.AddProjections<ApplicationContext>(config);
 
             return services;
