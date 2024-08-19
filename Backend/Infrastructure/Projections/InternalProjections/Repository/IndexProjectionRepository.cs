@@ -4,9 +4,9 @@ using Core.Common.Projections;
 using EventStore.Client;
 using Microsoft.Extensions.Logging;
 
-namespace Application.User.Auth
+namespace Infrastructure.Projections.InternalProjections.Repository
 {
-    public class EmailConflictValidator
+    public class IndexProjectionRepository : IIndexProjectionRepository
     {
         #region Constants
         private const string StreamName = $"{InternalProjectionName.EmailIndex}-res";
@@ -14,11 +14,11 @@ namespace Application.User.Auth
         #endregion
 
         private readonly EventStoreClient _eventStoreClient;
-        private readonly ILogger<EmailConflictValidator> _logger;
+        private readonly ILogger<IndexProjectionRepository> _logger;
 
-        public EmailConflictValidator(
+        public IndexProjectionRepository(
             EventStoreClient eventStoreClient,
-            ILogger<EmailConflictValidator> logger
+            ILogger<IndexProjectionRepository> logger
         )
         {
             _eventStoreClient = eventStoreClient;
@@ -26,7 +26,7 @@ namespace Application.User.Auth
         }
 
         public async Task CheckAvailibility(
-            string email,
+            string indexedValue,
             CancellationToken cancellationToken = default
         )
         {
@@ -43,13 +43,15 @@ namespace Application.User.Auth
                 return; // If Stream not found any account has been created yet
             }
 
-            var emailLower = email.ToLower();
+            var emailLower = indexedValue.ToLower();
 
             await foreach (var @event in readResult)
             {
-                var eventData = JsonSerializer.Deserialize<IndexedEmail>(@event.Event.Data.Span);
+                var eventData = JsonSerializer.Deserialize<IndexedValueEvent>(
+                    @event.Event.Data.Span
+                );
 
-                if (eventData.Email != emailLower)
+                if (eventData.IndexedValue != emailLower)
                 {
                     continue;
                 }
@@ -65,8 +67,8 @@ namespace Application.User.Auth
             }
         }
 
-        public async Task<Guid?> GetUserId(
-            string email,
+        public async Task<Guid?> GetOwnerId(
+            string indexedValue,
             CancellationToken cancellationToken = default
         )
         {
@@ -84,20 +86,22 @@ namespace Application.User.Auth
                 throw new Exception($"Stream {StreamName} not found");
             }
 
-            var emailLower = email.ToLower();
+            var emailLower = indexedValue.ToLower();
 
             await foreach (var @event in readResult)
             {
-                var eventData = JsonSerializer.Deserialize<IndexedEmail>(@event.Event.Data.Span);
+                var eventData = JsonSerializer.Deserialize<IndexedValueEvent>(
+                    @event.Event.Data.Span
+                );
 
-                if (eventData.Email.ToLower() != emailLower)
+                if (eventData.IndexedValue.ToLower() != emailLower)
                 {
                     continue;
                 }
 
                 if (@event.Event.EventType == EmailIndexedEvent)
                 {
-                    return eventData.UserId;
+                    return eventData.OwnerId;
                 }
                 else
                 {
@@ -106,12 +110,6 @@ namespace Application.User.Auth
             }
 
             return null;
-        }
-
-        private struct IndexedEmail
-        {
-            public string Email { get; set; }
-            public Guid? UserId { get; set; }
         }
     }
 }

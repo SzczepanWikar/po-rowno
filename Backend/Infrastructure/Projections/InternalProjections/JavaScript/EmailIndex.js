@@ -12,14 +12,16 @@ fromAll()
         UserSignedUp: function (state, event) {
             const { data } = event;
             const eventData = { 
-                Email: data.Email?.toLowerCase(),
-                UserId: data.Id
+                IndexedValue: data.Email?.toLowerCase(),
+                OwnerId: data.Id
             }
 
             emit('user-email-index-res', 'UserEmailIndexed', eventData);
         },
         UserDeleted: function (state, event) {
-            const Email = JSON.parse(event.bodyRaw).Email?.toLowerCase();
-            emit('user-email-index-res', 'UserEmailRemoved', { Email });
+            const { data } = event;
+
+            const IndexedValue = data.Email?.toLowerCase();
+            emit('user-email-index-res', 'UserEmailRemoved', { IndexedValue });
         },
     });

@@ -1,13 +1,10 @@
-﻿using Application.User.Auth;
-using Core.Common.Code;
-using Core.Common.Exceptions;
-using Core.User;
+﻿using Core.Common.Exceptions;
 using Core.User.Events;
 using Core.User.UserToken;
 using Infrastructure.Email.Service;
 using Infrastructure.EventStore.Repository;
+using Infrastructure.Projections.InternalProjections.Repository;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
 namespace Application.User.Commands
@@ -25,21 +22,21 @@ namespace Application.User.Commands
     {
         private readonly IEventStoreRepository<User> _repository;
         private readonly IEventStoreRepository<UserToken> _tokenRepository;
-        private readonly EmailConflictValidator _emailConflictValidator;
+        private readonly IIndexProjectionRepository _indexedEmailRepository;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
 
         public SignUpUserHandler(
             IEventStoreRepository<User> repository,
             IEventStoreRepository<UserToken> tokenRepository,
-            EmailConflictValidator emailConflictValidator,
+            IIndexProjectionRepository indexedEmailRepository,
             IEmailService emailService,
             IConfiguration configuration
         )
         {
             _repository = repository;
             _tokenRepository = tokenRepository;
-            _emailConflictValidator = emailConflictValidator;
+            _indexedEmailRepository = indexedEmailRepository;
             _emailService = emailService;
             _configuration = configuration;
         }
@@ -51,7 +48,7 @@ namespace Application.User.Commands
                 throw new BadRequestException("Passwords are not same.");
             }
 
-            await _emailConflictValidator.CheckAvailibility(request.Email, cancellationToken);
+            await _indexedEmailRepository.CheckAvailibility(request.Email, cancellationToken);
 
             var hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password, 10);
 

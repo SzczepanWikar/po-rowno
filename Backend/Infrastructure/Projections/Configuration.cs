@@ -1,5 +1,6 @@
 ﻿using Core.Common.Projections;
 using Infrastructure.Projections.InternalProjections;
+using Infrastructure.Projections.InternalProjections.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,6 +33,7 @@ namespace Infrastructure.Projections
 
             services.AddHostedService<ReadModelProjector>();
             services.AddHostedService<InternalProjectionInitializer>();
+            services.AddScoped<IIndexProjectionRepository, IndexProjectionRepository>();
 
             return services;
         }

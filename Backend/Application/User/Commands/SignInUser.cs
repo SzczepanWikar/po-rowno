@@ -1,12 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
-using Application.User.Auth;
 using Core.Common.Configs;
 using Core.Common.Exceptions;
 using Core.User;
-using Infrastructure.EventStore.Repository;
+using Infrastructure.Projections.InternalProjections.Repository;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -20,16 +18,16 @@ namespace Application.User.Commands
     public class SignInUserHandler : IRequestHandler<SignInUser, AppSignInResult>
     {
         private readonly IUserService _userService;
-        private readonly EmailConflictValidator _emailConflictValidator;
+        private readonly IIndexProjectionRepository _indexedEmailRepository;
         private readonly IConfiguration _configuration;
 
         public SignInUserHandler(
-            EmailConflictValidator emailConflictValidator,
+            IIndexProjectionRepository emailConflictValidator,
             IConfiguration configuration,
             IUserService userService
         )
         {
-            _emailConflictValidator = emailConflictValidator;
+            _indexedEmailRepository = emailConflictValidator;
             _configuration = configuration;
             _userService = userService;
         }
@@ -39,7 +37,7 @@ namespace Application.User.Commands
             CancellationToken cancellationToken
         )
         {
-            var userId = await _emailConflictValidator.GetUserId(request.Email, cancellationToken);
+            var userId = await _indexedEmailRepository.GetOwnerId(request.Email, cancellationToken);
 
             if (!userId.HasValue)
             {
