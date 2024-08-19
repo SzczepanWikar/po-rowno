@@ -9,8 +9,8 @@ namespace Infrastructure.Projections.InternalProjections.Repository
     public class IndexProjectionRepository : IIndexProjectionRepository
     {
         #region Constants
-        private const string StreamName = $"{InternalProjectionName.EmailIndex}-res";
-        private const string EmailIndexedEvent = "UserEmailIndexed";
+        private readonly string _streamName;
+        private readonly string _emailIndexedEvent;
         #endregion
 
         private readonly EventStoreClient _eventStoreClient;
@@ -18,11 +18,16 @@ namespace Infrastructure.Projections.InternalProjections.Repository
 
         public IndexProjectionRepository(
             EventStoreClient eventStoreClient,
-            ILogger<IndexProjectionRepository> logger
+            ILogger<IndexProjectionRepository> logger,
+            string streamName,
+            string emailIndexedEvent
         )
         {
             _eventStoreClient = eventStoreClient;
             _logger = logger;
+            _streamName = streamName ?? throw new ArgumentNullException(nameof(streamName));
+            _emailIndexedEvent =
+                emailIndexedEvent ?? throw new ArgumentNullException(nameof(emailIndexedEvent));
         }
 
         public async Task CheckAvailibility(
@@ -32,7 +37,7 @@ namespace Infrastructure.Projections.InternalProjections.Repository
         {
             var readResult = _eventStoreClient.ReadStreamAsync(
                 Direction.Backwards,
-                StreamName,
+                _streamName,
                 StreamPosition.End,
                 cancellationToken: cancellationToken
             );
@@ -56,7 +61,7 @@ namespace Infrastructure.Projections.InternalProjections.Repository
                     continue;
                 }
 
-                if (@event.Event.EventType == EmailIndexedEvent)
+                if (@event.Event.EventType == _emailIndexedEvent)
                 {
                     throw new ConflictException("Given email is already in use.");
                 }
@@ -74,7 +79,7 @@ namespace Infrastructure.Projections.InternalProjections.Repository
         {
             var readResult = _eventStoreClient.ReadStreamAsync(
                 Direction.Backwards,
-                StreamName,
+                _streamName,
                 StreamPosition.End,
                 cancellationToken: cancellationToken
             );
@@ -83,7 +88,7 @@ namespace Infrastructure.Projections.InternalProjections.Repository
 
             if (readState == ReadState.StreamNotFound)
             {
-                throw new Exception($"Stream {StreamName} not found");
+                throw new Exception($"Stream {_streamName} not found");
             }
 
             var emailLower = indexedValue.ToLower();
@@ -99,7 +104,7 @@ namespace Infrastructure.Projections.InternalProjections.Repository
                     continue;
                 }
 
-                if (@event.Event.EventType == EmailIndexedEvent)
+                if (@event.Event.EventType == _emailIndexedEvent)
                 {
                     return eventData.OwnerId;
                 }

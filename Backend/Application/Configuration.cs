@@ -1,11 +1,15 @@
 ﻿using Application.Group;
 using Application.User;
+using Core.Common.Projections;
 using Core.User.UserToken;
+using EventStore.Client;
 using Infrastructure.EventStore.Repository;
 using Infrastructure.Projections;
+using Infrastructure.Projections.InternalProjections.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Application
 {
@@ -23,6 +27,12 @@ namespace Application
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGroupService, GroupService>();
+            services.AddScoped<IIndexProjectionRepository>(sp => new IndexProjectionRepository(
+                sp.GetRequiredService<EventStoreClient>(),
+                sp.GetRequiredService<ILogger<IndexProjectionRepository>>(),
+                streamName: $"{InternalProjectionName.EmailIndex}-res",
+                emailIndexedEvent: "UserEmailIndexed"
+            ));
 
             services.AddProjections<ApplicationContext>(config);
 

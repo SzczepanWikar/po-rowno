@@ -33,7 +33,6 @@ namespace Infrastructure.Projections
 
             services.AddHostedService<ReadModelProjector>();
             services.AddHostedService<InternalProjectionInitializer>();
-            services.AddScoped<IIndexProjectionRepository, IndexProjectionRepository>();
 
             return services;
         }
