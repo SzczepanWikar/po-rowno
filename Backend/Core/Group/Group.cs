@@ -44,7 +44,7 @@ namespace Core.Group
                     OwnerId = ownerId;
                     UsersIds.Add(ownerId);
                     break;
-                case GroupCodeGenerated(Code<GroupCodeType> code):
+                case GroupCodeGenerated(_, Code<GroupCodeType> code):
                     Codes.Push(code);
                     break;
                 default:

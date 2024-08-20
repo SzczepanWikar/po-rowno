@@ -40,7 +40,7 @@ namespace Application.Group.Commands
 
             var code = await GenerateCode(request, cancellationToken);
 
-            var @event = new GroupCodeGenerated(code);
+            var @event = new GroupCodeGenerated(group.Id, code);
 
             await _repository.Append(group.Id, @event, cancellationToken);
         }

@@ -2,5 +2,5 @@
 
 namespace Core.Group.Events
 {
-    public record GroupCodeGenerated(Code<GroupCodeType> Code);
+    public record GroupCodeGenerated(Guid GroupId, Code<GroupCodeType> Code);
 }
