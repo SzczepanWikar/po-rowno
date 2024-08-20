@@ -12,7 +12,7 @@ fromAll()
         GroupCodeGenerated: function (state, event) {
             const { data } = event;
             const eventData = { 
-                IndexedValue: data.Email?.toLowerCase(),
+                IndexedValue: data.Code.Value,
                 OwnerId: data.Id
             }
 

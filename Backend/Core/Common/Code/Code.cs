@@ -11,10 +11,12 @@ namespace Core.Common.Code
     {
         private static ReadOnlySpan<char> allowedChar =>
             "abcdefghijklmnopqrstuvwxyz0123456789".ToCharArray();
-        public string Value { get; init; }
+        public string Value { get; init; } = String.Empty;
         public T Type { get; init; }
         public DateTime? ValidTo { get; init; }
         public bool Used { get; set; } = false;
+
+        public Code() { }
 
         public Code(T type)
         {
