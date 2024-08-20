@@ -1,16 +1,15 @@
 ﻿using System.Text.Json;
 using Core.Common.Exceptions;
-using Core.Common.Projections;
 using EventStore.Client;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Projections.InternalProjections.Repository
 {
-    public class IndexProjectionRepository : IIndexProjectionRepository
+    public abstract class IndexProjectionRepository : IIndexProjectionRepository
     {
         #region Constants
-        private readonly string _streamName;
-        private readonly string _emailIndexedEvent;
+        protected abstract string StreamName { get; init; }
+        protected abstract string EmailIndexedEvent { get; init; }
         #endregion
 
         private readonly EventStoreClient _eventStoreClient;
@@ -18,16 +17,11 @@ namespace Infrastructure.Projections.InternalProjections.Repository
 
         public IndexProjectionRepository(
             EventStoreClient eventStoreClient,
-            ILogger<IndexProjectionRepository> logger,
-            string streamName,
-            string emailIndexedEvent
+            ILogger<IndexProjectionRepository> logger
         )
         {
             _eventStoreClient = eventStoreClient;
             _logger = logger;
-            _streamName = streamName ?? throw new ArgumentNullException(nameof(streamName));
-            _emailIndexedEvent =
-                emailIndexedEvent ?? throw new ArgumentNullException(nameof(emailIndexedEvent));
         }
 
         public async Task CheckAvailibility(
@@ -37,7 +31,7 @@ namespace Infrastructure.Projections.InternalProjections.Repository
         {
             var readResult = _eventStoreClient.ReadStreamAsync(
                 Direction.Backwards,
-                _streamName,
+                StreamName,
                 StreamPosition.End,
                 cancellationToken: cancellationToken
             );
@@ -45,7 +39,7 @@ namespace Infrastructure.Projections.InternalProjections.Repository
             var readState = await readResult.ReadState.ConfigureAwait(false);
             if (readState == ReadState.StreamNotFound)
             {
-                return; // If Stream not found any account has been created yet
+                return; // If Stream not found any stream has been created yet
             }
 
             var emailLower = indexedValue.ToLower();
@@ -61,7 +55,7 @@ namespace Infrastructure.Projections.InternalProjections.Repository
                     continue;
                 }
 
-                if (@event.Event.EventType == _emailIndexedEvent)
+                if (@event.Event.EventType == EmailIndexedEvent)
                 {
                     throw new ConflictException("Given email is already in use.");
                 }
@@ -79,7 +73,7 @@ namespace Infrastructure.Projections.InternalProjections.Repository
         {
             var readResult = _eventStoreClient.ReadStreamAsync(
                 Direction.Backwards,
-                _streamName,
+                StreamName,
                 StreamPosition.End,
                 cancellationToken: cancellationToken
             );
@@ -88,7 +82,7 @@ namespace Infrastructure.Projections.InternalProjections.Repository
 
             if (readState == ReadState.StreamNotFound)
             {
-                throw new Exception($"Stream {_streamName} not found");
+                throw new Exception($"Stream {StreamName} not found");
             }
 
             var emailLower = indexedValue.ToLower();
@@ -104,7 +98,7 @@ namespace Infrastructure.Projections.InternalProjections.Repository
                     continue;
                 }
 
-                if (@event.Event.EventType == _emailIndexedEvent)
+                if (@event.Event.EventType == EmailIndexedEvent)
                 {
                     return eventData.OwnerId;
                 }

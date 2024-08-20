@@ -27,12 +27,11 @@ namespace Application
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGroupService, GroupService>();
-            services.AddScoped<IIndexProjectionRepository>(sp => new IndexProjectionRepository(
-                sp.GetRequiredService<EventStoreClient>(),
-                sp.GetRequiredService<ILogger<IndexProjectionRepository>>(),
-                streamName: $"{InternalProjectionName.EmailIndex}-res",
-                emailIndexedEvent: "UserEmailIndexed"
-            ));
+
+            services.AddKeyedScoped<IIndexProjectionRepository, GroupIndexRepository>("GroupCode");
+            services.AddKeyedScoped<IIndexProjectionRepository, UserEmailIndexRepository>(
+                "UserEmail"
+            );
 
             services.AddProjections<ApplicationContext>(config);
 

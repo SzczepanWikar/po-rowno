@@ -24,6 +24,7 @@ namespace Infrastructure.Projections
             var projections = new (string Name, string FileName)[]
             {
                 (Name: InternalProjectionName.EmailIndex, FileName: "EmailIndex"),
+                (Name: InternalProjectionName.GroupCodeIndex, "GroupCodeIndex")
             };
 
             services.AddKeyedSingleton<IReadOnlyCollection<(string Name, string FileName)>>(

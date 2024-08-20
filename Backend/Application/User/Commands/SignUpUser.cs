@@ -6,6 +6,7 @@ using Infrastructure.EventStore.Repository;
 using Infrastructure.Projections.InternalProjections.Repository;
 using MediatR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.User.Commands
 {
@@ -29,7 +30,7 @@ namespace Application.User.Commands
         public SignUpUserHandler(
             IEventStoreRepository<User> repository,
             IEventStoreRepository<UserToken> tokenRepository,
-            IIndexProjectionRepository indexedEmailRepository,
+            [FromKeyedServices("UserEmail")] IIndexProjectionRepository indexedEmailRepository,
             IEmailService emailService,
             IConfiguration configuration
         )

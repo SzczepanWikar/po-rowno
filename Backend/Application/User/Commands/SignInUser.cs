@@ -7,6 +7,7 @@ using Core.User;
 using Infrastructure.Projections.InternalProjections.Repository;
 using MediatR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Application.User.Commands
@@ -22,7 +23,7 @@ namespace Application.User.Commands
         private readonly IConfiguration _configuration;
 
         public SignInUserHandler(
-            IIndexProjectionRepository emailConflictValidator,
+            [FromKeyedServices("UserEmail")] IIndexProjectionRepository emailConflictValidator,
             IConfiguration configuration,
             IUserService userService
         )
