@@ -10,7 +10,7 @@ namespace Core.Common.Code
         where T : Enum
     {
         private static ReadOnlySpan<char> allowedChar =>
-            "abcdefghijklmnopqrstuvwxyz0123456789".ToCharArray();
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
         public string Value { get; init; } = String.Empty;
         public T Type { get; init; }
         public DateTime? ValidTo { get; init; }
