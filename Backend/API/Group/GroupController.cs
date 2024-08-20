@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Group
 {
+    using User = Core.User.User;
+
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
@@ -23,7 +25,7 @@ namespace API.Group
         [HttpPost]
         public async Task<ActionResult<Guid>> Create([FromBody] CreateGroupDto dto)
         {
-            var user = HttpContext.Items["User"] as Core.User.User;
+            var user = HttpContext.Items["User"] as User;
             var request = new CreateGroup(user!, dto.Name, dto.Description, dto.Currency);
 
             var res = await _mediator.Send(request);
@@ -38,8 +40,19 @@ namespace API.Group
             [FromBody] GenerateJoinGroupCodeDto dto
         )
         {
-            var user = HttpContext.Items["User"] as Core.User.User;
+            var user = HttpContext.Items["User"] as User;
             var request = new GenerateJoinGroupCode(dto.ValidTo, id, user);
+
+            await _mediator.Send(request);
+
+            return Ok();
+        }
+
+        [HttpPatch("join")]
+        public async Task<ActionResult> JoinToGroup([FromBody] JoinGroupDto dto)
+        {
+            var user = HttpContext.Items["User"] as User;
+            var request = new JoinGroup(dto.Code, user);
 
             await _mediator.Send(request);
 

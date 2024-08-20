@@ -93,7 +93,7 @@ namespace Infrastructure.Projections.InternalProjections.Repository
                     @event.Event.Data.Span
                 );
 
-                if (eventData.IndexedValue.ToLower() != emailLower)
+                if (eventData.IndexedValue?.ToLower() != emailLower)
                 {
                     continue;
                 }

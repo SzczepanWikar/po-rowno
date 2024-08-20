@@ -47,6 +47,9 @@ namespace Core.Group
                 case GroupCodeGenerated(_, Code<GroupCodeType> code):
                     Codes.Push(code);
                     break;
+                case UserJoinedGroup(_, Guid userId):
+                    UsersIds.Add(userId);
+                    break;
                 default:
                     break;
             }
