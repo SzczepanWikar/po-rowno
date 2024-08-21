@@ -30,7 +30,8 @@ namespace API.Group
 
             var res = await _mediator.Send(request);
 
-            return Ok(res);
+            return new CreatedResult(null as string, res);
+            ;
         }
 
         [HttpPatch]
@@ -53,6 +54,18 @@ namespace API.Group
         {
             var user = HttpContext.Items["User"] as User;
             var request = new JoinGroup(dto.Code, user);
+
+            await _mediator.Send(request);
+
+            return Ok();
+        }
+
+        [HttpPatch]
+        [Route("{id}")]
+        public async Task<ActionResult> Update([FromRoute] Guid id, [FromBody] UpdateGroupDto dto)
+        {
+            var user = HttpContext.Items["User"] as User;
+            var request = new UpdateGroupData(id, user, dto.Name, dto.Description, dto.OwnerId);
 
             await _mediator.Send(request);
 

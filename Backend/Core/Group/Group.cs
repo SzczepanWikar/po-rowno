@@ -50,6 +50,11 @@ namespace Core.Group
                 case UserJoinedGroup(_, Guid userId):
                     UsersIds.Add(userId);
                     break;
+                case GroupDataUpdated(_, var name, var description, var ownerId):
+                    Name = name ?? Name;
+                    Description = description ?? Description;
+                    OwnerId = ownerId ?? OwnerId;
+                    break;
                 default:
                     break;
             }
