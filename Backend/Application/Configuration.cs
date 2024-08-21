@@ -1,15 +1,12 @@
 ﻿using Application.Group;
 using Application.User;
-using Core.Common.Projections;
 using Core.User.UserToken;
-using EventStore.Client;
 using Infrastructure.EventStore.Repository;
 using Infrastructure.Projections;
 using Infrastructure.Projections.InternalProjections.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace Application
 {
@@ -23,6 +20,7 @@ namespace Application
             services.AddEventStoreRepository<Core.Foo.Foo>();
             services.AddEventStoreRepository<Core.User.User>();
             services.AddEventStoreRepository<Core.Group.Group>();
+            services.AddEventStoreRepository<Core.Expense.Expense>();
             services.AddEventStoreRepository<UserToken>();
 
             services.AddScoped<IUserService, UserService>();
