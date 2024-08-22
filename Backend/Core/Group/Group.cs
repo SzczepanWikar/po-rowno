@@ -59,6 +59,9 @@ namespace Core.Group
                 case ExpenseAddedToGroup(_, Guid expenseId):
                     ExpensesIds.Add(expenseId);
                     break;
+                case ExpenseRemovedFromGroup(_, Guid expenseId):
+                    ExpensesIds.Remove(expenseId);
+                    break;
                 default:
                     break;
             }

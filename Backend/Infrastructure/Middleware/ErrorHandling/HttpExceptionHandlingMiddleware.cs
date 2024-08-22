@@ -3,6 +3,7 @@ using System.Net;
 using Core.Common.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Middleware.ErrorHandling
 {
@@ -43,6 +44,7 @@ namespace Infrastructure.Middleware.ErrorHandling
             {
                 ValidationException => HttpStatusCode.BadRequest,
                 HttpException httpException => httpException.StatusCode,
+                SecurityTokenExpiredException => HttpStatusCode.Unauthorized,
                 _ => HttpStatusCode.InternalServerError,
             };
     }

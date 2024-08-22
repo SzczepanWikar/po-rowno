@@ -34,6 +34,9 @@ namespace Core.Expense
                     PayerId = e.PayerId;
                     DeptorsIds = e.DeptorsIds;
                     break;
+                case ExpenseRemoved:
+                    Deleted = true;
+                    break;
             }
         }
     }
