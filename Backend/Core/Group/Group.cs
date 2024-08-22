@@ -25,6 +25,7 @@ namespace Core.Group
         public IList<Guid> UsersIds { get; init; } = new List<Guid>();
         public IList<Guid> BannedUsersIds { get; init; } = new List<Guid>();
         public Codes<GroupCodeType> Codes { get; init; } = new();
+        public IList<Guid> ExpensesIds { get; init; } = new List<Guid>();
 
         public override void When(object @event)
         {
@@ -54,6 +55,9 @@ namespace Core.Group
                     Name = name ?? Name;
                     Description = description ?? Description;
                     OwnerId = ownerId ?? OwnerId;
+                    break;
+                case ExpenseAddedToGroup(_, Guid expenseId):
+                    ExpensesIds.Add(expenseId);
                     break;
                 default:
                     break;

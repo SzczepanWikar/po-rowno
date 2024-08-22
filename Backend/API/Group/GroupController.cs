@@ -31,7 +31,6 @@ namespace API.Group
             var res = await _mediator.Send(request);
 
             return new CreatedResult(null as string, res);
-            ;
         }
 
         [HttpPatch]

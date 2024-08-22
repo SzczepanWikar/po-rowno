@@ -1,4 +1,5 @@
 ﻿using Core.Common.Aggregate;
+using Core.Expense.Events;
 using Core.Group;
 
 namespace Core.Expense
@@ -17,11 +18,23 @@ namespace Core.Expense
         public ExpenseType Type { get; private set; }
         public Guid GroupId { get; private set; }
         public Guid PayerId { get; private set; }
-        public IList<Guid> OwnersIds { get; private set; } = new List<Guid>();
+        public IList<Guid> DeptorsIds { get; private set; } = new List<Guid>();
 
         public override void When(object @event)
         {
-            throw new NotImplementedException();
+            switch (@event)
+            {
+                case ExpenseCreated e:
+                    Id = e.Id;
+                    Name = e.Name;
+                    Amount = e.Amount;
+                    Currency = e.Currency;
+                    Type = e.Type;
+                    GroupId = e.GroupId;
+                    PayerId = e.PayerId;
+                    DeptorsIds = e.DeptorsIds;
+                    break;
+            }
         }
     }
 }

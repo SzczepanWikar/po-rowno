@@ -1,18 +1,21 @@
 ﻿using Core.Common.Exceptions;
+using Core.Group.Events;
 using Infrastructure.EventStore.Repository;
 
 namespace Application.Group
 {
+    using Group = Core.Group.Group;
+
     public class GroupService : IGroupService
     {
-        private readonly IEventStoreRepository<Core.Group.Group> _repository;
+        private readonly IEventStoreRepository<Group> _repository;
 
-        public GroupService(IEventStoreRepository<Core.Group.Group> repository)
+        public GroupService(IEventStoreRepository<Group> repository)
         {
             _repository = repository;
         }
 
-        public async Task<Core.Group.Group> FindOneAsync(
+        public async Task<Group> FindOneAsync(
             Guid id,
             CancellationToken cancellationToken = default
         )
@@ -25,6 +28,15 @@ namespace Application.Group
             }
 
             return group;
+        }
+
+        public async Task Append(
+            Guid id,
+            object @event,
+            CancellationToken cancellationToken = default
+        )
+        {
+            await _repository.Append(id, @event, cancellationToken);
         }
     }
 }
