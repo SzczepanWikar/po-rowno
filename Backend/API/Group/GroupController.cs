@@ -70,5 +70,29 @@ namespace API.Group
 
             return Ok();
         }
+
+        [HttpPatch]
+        [Route("{id}/ban-user")]
+        public async Task<ActionResult> BanUser([FromRoute] Guid id, [FromBody] BanUserDto dto)
+        {
+            var user = HttpContext.Items["User"] as User;
+            var request = new BanUser(id, dto.Id, user);
+
+            await _mediator.Send(request);
+
+            return Ok();
+        }
+
+        [HttpPatch]
+        [Route("{id}/unban-user")]
+        public async Task<ActionResult> UnbanUser([FromRoute] Guid id, [FromBody] UnbanUserDto dto)
+        {
+            var user = HttpContext.Items["User"] as User;
+            var request = new UnbanUser(id, dto.Id, user);
+
+            await _mediator.Send(request);
+
+            return Ok();
+        }
     }
 }

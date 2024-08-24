@@ -62,6 +62,14 @@ namespace Core.Group
                 case ExpenseRemovedFromGroup(_, Guid expenseId):
                     ExpensesIds.Remove(expenseId);
                     break;
+                case UserBannedFromGroup(_, Guid userId):
+                    UsersIds.Remove(userId);
+                    BannedUsersIds.Add(userId);
+                    break;
+                case UserUnbannedFromGroup(_, Guid userId):
+                    BannedUsersIds.Remove(userId);
+                    UsersIds.Add(userId);
+                    break;
                 default:
                     break;
             }

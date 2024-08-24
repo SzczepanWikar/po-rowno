@@ -76,6 +76,16 @@ namespace Application.Expense.Commands
 
         private static void Validate(AddExpense request, Core.Group.Group group)
         {
+            if (!group.UsersIds.Any(e => request.User.Id == e))
+            {
+                throw new ForbiddenException();
+            }
+
+            if (group.BannedUsersIds.Any(e => request.User.Id == e))
+            {
+                throw new ForbiddenException();
+            }
+
             if (request.Amount <= 0)
             {
                 throw new BadRequestException("Amunt must be greather than 0");
@@ -84,11 +94,6 @@ namespace Application.Expense.Commands
             if (request.Currency != group.Currency)
             {
                 throw new BadRequestException("Currencies not match");
-            }
-
-            if (!group.UsersIds.Any(e => request.User.Id == e))
-            {
-                throw new BadRequestException("Payer must be part of group");
             }
 
             if (!request.DeptorsIds.ToHashSet().IsSubsetOf(group.UsersIds.ToHashSet()))

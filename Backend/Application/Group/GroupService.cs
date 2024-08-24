@@ -16,7 +16,10 @@ namespace Application.Group
             _repository = repository;
         }
 
-        public async Task<Guid> CreateAsync(CreateGroup command, CancellationToken cancellationToken = default)
+        public async Task<Guid> CreateAsync(
+            CreateGroup command,
+            CancellationToken cancellationToken = default
+        )
         {
             var id = Guid.NewGuid();
             var groupCreated = new GroupCreated(

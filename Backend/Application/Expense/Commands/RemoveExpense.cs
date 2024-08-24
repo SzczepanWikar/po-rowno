@@ -35,13 +35,34 @@ namespace Application.Expense.Commands
                 return;
             }
 
-            if (expense.PayerId != request.User.Id && expense.GroupId != request.User.Id)
+            var group = await _groupService.FindOneAsync(expense.GroupId, cancellationToken);
+
+            CheckUserPermissions(request.User.Id, expense, group);
+
+            await RemoveExpense(request, cancellationToken);
+            await RemoveFromGroup(request, expense, cancellationToken);
+        }
+
+        private static void CheckUserPermissions(
+            Guid userId,
+            Expense expense,
+            Core.Group.Group group
+        )
+        {
+            if (group.BannedUsersIds.Any(e => e == userId))
             {
                 throw new ForbiddenException();
             }
 
-            await RemoveExpense(request, cancellationToken);
-            await RemoveFromGroup(request, expense, cancellationToken);
+            if (expense.PayerId != userId)
+            {
+                throw new ForbiddenException();
+            }
+
+            if (userId != group.OwnerId)
+            {
+                throw new ForbiddenException();
+            }
         }
 
         private async Task RemoveExpense(RemoveExpense request, CancellationToken cancellationToken)

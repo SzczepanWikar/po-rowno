@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Application.User;
+﻿using Application.User;
 using Core.Common.Exceptions;
 using Core.Group.Events;
 using Infrastructure.EventStore.Repository;
