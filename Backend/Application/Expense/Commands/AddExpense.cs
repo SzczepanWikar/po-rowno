@@ -67,7 +67,7 @@ namespace Application.Expense.Commands
                 expenseCreatedEvent,
                 cancellationToken
             );
-            await _groupService.Append(
+            await _groupService.AppendAsync(
                 request.GroupId,
                 new ExpenseAddedToGroup(request.GroupId, expenseCreatedEvent.Id)
             );

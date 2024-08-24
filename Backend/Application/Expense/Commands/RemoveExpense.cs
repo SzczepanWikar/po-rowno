@@ -57,7 +57,7 @@ namespace Application.Expense.Commands
         )
         {
             var @event = new ExpenseRemovedFromGroup(expense.GroupId, request.Id);
-            await _groupService.Append(expense.GroupId, @event, cancellationToken);
+            await _groupService.AppendAsync(expense.GroupId, @event, cancellationToken);
         }
     }
 }

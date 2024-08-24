@@ -1,39 +1,23 @@
 ﻿using Core.Group;
-using Core.Group.Events;
-using Infrastructure.EventStore.Repository;
 using MediatR;
 
 namespace Application.Group.Commands
 {
-    using Group = Core.Group.Group;
-    using User = Core.User.User;
-
-    public record CreateGroup(User User, string Name, string Description, Currency Currency)
+    public record CreateGroup(Core.User.User User, string Name, string Description, Currency Currency)
         : IRequest<Guid>;
 
     public class CreateGroupHandler : IRequestHandler<CreateGroup, Guid>
     {
-        private readonly IEventStoreRepository<Group> _eventStoreRepository;
+        private readonly IGroupService _service;
 
-        public CreateGroupHandler(IEventStoreRepository<Group> eventStoreRepository)
+        public CreateGroupHandler(IGroupService service)
         {
-            _eventStoreRepository = eventStoreRepository;
+            _service = service;
         }
 
         public async Task<Guid> Handle(CreateGroup request, CancellationToken cancellationToken)
         {
-            var guid = Guid.NewGuid();
-            var groupCreated = new GroupCreated(
-                guid,
-                request.Name,
-                request.Description,
-                request.Currency,
-                request.User.Id
-            );
-
-            await _eventStoreRepository.Create(guid, groupCreated, cancellationToken);
-
-            return guid;
+            return await _service.CreateAsync(request, cancellationToken);
         }
     }
 }

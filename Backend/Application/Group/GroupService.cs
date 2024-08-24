@@ -1,4 +1,5 @@
-﻿using Core.Common.Exceptions;
+﻿using Application.Group.Commands;
+using Core.Common.Exceptions;
 using Core.Group.Events;
 using Infrastructure.EventStore.Repository;
 
@@ -13,6 +14,22 @@ namespace Application.Group
         public GroupService(IEventStoreRepository<Group> repository)
         {
             _repository = repository;
+        }
+
+        public async Task<Guid> CreateAsync(CreateGroup command, CancellationToken cancellationToken = default)
+        {
+            var id = Guid.NewGuid();
+            var groupCreated = new GroupCreated(
+                id,
+                command.Name,
+                command.Description,
+                command.Currency,
+                command.User.Id
+            );
+
+            await _repository.Create(id, groupCreated, cancellationToken);
+
+            return id;
         }
 
         public async Task<Group> FindOneAsync(
@@ -30,7 +47,7 @@ namespace Application.Group
             return group;
         }
 
-        public async Task Append(
+        public async Task AppendAsync(
             Guid id,
             object @event,
             CancellationToken cancellationToken = default
