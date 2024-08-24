@@ -21,21 +21,21 @@ namespace Application.User.Commands
 
     public class SignUpUserHandler : IRequestHandler<SignUpUser, Guid>
     {
-        private readonly IEventStoreRepository<User> _repository;
+        private readonly IUserService _service;
         private readonly IEventStoreRepository<UserToken> _tokenRepository;
         private readonly IIndexProjectionRepository _indexedEmailRepository;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
 
         public SignUpUserHandler(
-            IEventStoreRepository<User> repository,
+            IUserService service,
             IEventStoreRepository<UserToken> tokenRepository,
             [FromKeyedServices("UserEmail")] IIndexProjectionRepository indexedEmailRepository,
             IEmailService emailService,
             IConfiguration configuration
         )
         {
-            _repository = repository;
+            _service = service;
             _tokenRepository = tokenRepository;
             _indexedEmailRepository = indexedEmailRepository;
             _emailService = emailService;
@@ -51,35 +51,27 @@ namespace Application.User.Commands
 
             await _indexedEmailRepository.CheckAvailibility(request.Email, cancellationToken);
 
-            var hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password, 10);
+            var id = await _service.CreateAsync(request, cancellationToken);
 
-            var userSignedUp = new UserSignedUp(
-                Guid.NewGuid(),
-                request.Username,
-                request.Email,
-                hashedPassword
-            );
+            var token = await GenerateToken(id);
 
-            await _repository.Create(userSignedUp.Id, userSignedUp, cancellationToken);
-            var token = await GenerateToken(userSignedUp.Id);
+            await SendEmail(request.Username, request.Email, token);
 
-            await SendEmail(userSignedUp, token);
-
-            return userSignedUp.Id;
+            return id;
         }
 
-        private async Task SendEmail(UserSignedUp userSignedUp, Guid token)
+        private async Task SendEmail(string username, string emailAddress, Guid token)
         {
-            var to = new[] { new ReceiverData(userSignedUp.Username, userSignedUp.Email) };
+            var to = new[] { new ReceiverData(username, emailAddress) };
             var url = _configuration.GetValue<string>("BaseUrl");
 
-            var email = new EmailMessage(
+            var emailMessage = new EmailMessage(
                 to,
                 "Aktywacja konta",
                 $"Aby aktywować konto odwiedź podany link: {url}/AuthView/AccountActivation/{token}",
                 MimeKit.Text.TextFormat.Text
             );
-            await _emailService.SendEmailAsync(email);
+            await _emailService.SendEmailAsync(emailMessage);
         }
 
         private async Task<Guid> GenerateToken(Guid userId)

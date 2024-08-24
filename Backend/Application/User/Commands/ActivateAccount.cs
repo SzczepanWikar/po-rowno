@@ -7,21 +7,19 @@ using MediatR;
 
 namespace Application.User.Commands
 {
-    using User = Core.User.User;
-
     public record ActivateAccount(Guid Token) : IRequest;
 
     public class ActivateAccountHandler : IRequestHandler<ActivateAccount>
     {
-        private readonly IEventStoreRepository<User> _repository;
+        private readonly IUserService _service;
         private readonly IEventStoreRepository<UserToken> _tokenRepository;
 
         public ActivateAccountHandler(
-            IEventStoreRepository<User> repository,
+            IUserService service,
             IEventStoreRepository<UserToken> tokenRepository
         )
         {
-            _repository = repository;
+            _service = service;
             _tokenRepository = tokenRepository;
         }
 
@@ -30,7 +28,7 @@ namespace Application.User.Commands
             var token = await GetToken(request, cancellationToken);
             await ValidateUser(token.UserId, cancellationToken);
 
-            await _repository.Append(token.UserId, new AccountActivated(token.UserId));
+            await _service.AppendAsync(token.UserId, new AccountActivated(token.UserId));
             await _tokenRepository.Append(token.Id, new UserTokenUsed(token.Id));
         }
 
@@ -51,12 +49,7 @@ namespace Application.User.Commands
 
         private async Task ValidateUser(Guid userId, CancellationToken cancellationToken)
         {
-            var user = await _repository.Find(userId, cancellationToken);
-
-            if (user == null)
-            {
-                throw new NotFoundException("User not found.");
-            }
+            var user = await _service.FindOneAsync(userId, cancellationToken);
 
             if (user.Status != UserStatus.Inactive)
             {
