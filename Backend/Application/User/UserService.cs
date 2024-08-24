@@ -41,7 +41,7 @@ namespace Application.User
         {
             var user = await _repository.Find(id, cancellationToken);
 
-            if (user == null)
+            if (user == null || user.Deleted)
             {
                 throw new NotFoundException("User not found!");
             }

@@ -39,7 +39,7 @@ namespace Application.Group
         {
             var group = await _repository.Find(id, cancellationToken);
 
-            if (group is null)
+            if (group is null || group.Deleted)
             {
                 throw new NotFoundException("Group not found!");
             }
