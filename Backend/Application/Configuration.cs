@@ -2,12 +2,14 @@
 using Application.Group;
 using Application.User;
 using Core.Common.Projections;
+using Core.User;
 using Core.User.UserToken;
 using Infrastructure.EventStore.Repository;
 using Infrastructure.PayPal;
 using Infrastructure.Projections;
 using Infrastructure.Projections.InternalProjections.Repository;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,6 +30,7 @@ namespace Application
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGroupService, GroupService>();
+            services.AddScoped<IPasswordHasher<Core.User.User>, PasswordHasher<Core.User.User>>();
 
             services.AddKeyedScoped<IIndexProjectionRepository, GroupIndexRepository>(
                 InternalProjectionName.GroupCodeIndex

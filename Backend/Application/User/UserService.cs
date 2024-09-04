@@ -2,6 +2,7 @@
 using Core.Common.Exceptions;
 using Core.User.Events;
 using Infrastructure.EventStore.Repository;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.User
 {
@@ -10,10 +11,15 @@ namespace Application.User
     public class UserService : IUserService
     {
         private readonly IEventStoreRepository<User> _repository;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
-        public UserService(IEventStoreRepository<User> repository)
+        public UserService(
+            IEventStoreRepository<User> repository,
+            IPasswordHasher<User> passwordHasher
+        )
         {
             _repository = repository;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<Guid> CreateAsync(
@@ -21,9 +27,11 @@ namespace Application.User
             CancellationToken cancellationToken = default
         )
         {
-            var id = new Guid();
+            var id = Guid.NewGuid();
 
-            var hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(command.Password, 10);
+            var user = new User();
+
+            var hashedPassword = _passwordHasher.HashPassword(user, command.Password);
 
             var userSignedUp = new UserSignedUp(
                 id,

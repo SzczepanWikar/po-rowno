@@ -7,6 +7,7 @@ using Core.Common.Projections;
 using Core.User;
 using Infrastructure.Projections.InternalProjections.Repository;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -22,17 +23,20 @@ namespace Application.User.Commands
         private readonly IUserService _userService;
         private readonly IIndexProjectionRepository _indexedEmailRepository;
         private readonly IConfiguration _configuration;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
         public SignInUserHandler(
             [FromKeyedServices(InternalProjectionName.EmailIndex)]
                 IIndexProjectionRepository emailConflictValidator,
             IConfiguration configuration,
-            IUserService userService
+            IUserService userService,
+            IPasswordHasher<User> passwordHasher
         )
         {
             _indexedEmailRepository = emailConflictValidator;
             _configuration = configuration;
             _userService = userService;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<AppSignInResult> Handle(
@@ -59,14 +63,20 @@ namespace Application.User.Commands
             return res;
         }
 
-        private static void ValidateAuth(SignInUser request, User user)
+        private void ValidateAuth(SignInUser request, User user)
         {
             if (user.Status != UserStatus.Active)
             {
                 throw new BadRequestException("User is not active.");
             }
 
-            if (!BCrypt.Net.BCrypt.EnhancedVerify(request.Password, user.Password))
+            var passwordVerificationRes = _passwordHasher.VerifyHashedPassword(
+                user,
+                user.Password,
+                request.Password
+            );
+
+            if (passwordVerificationRes == PasswordVerificationResult.Failed)
             {
                 throw new BadRequestException("Incorrect credentials.");
             }
