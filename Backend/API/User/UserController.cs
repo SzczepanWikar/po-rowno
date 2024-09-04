@@ -1,10 +1,8 @@
 ﻿using API.User.ViewModels;
 using Application.User.Commands;
 using Core.User;
-using Core.User.Events;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace API.User
 {

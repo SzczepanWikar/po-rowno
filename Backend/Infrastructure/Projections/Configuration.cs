@@ -1,6 +1,5 @@
 ﻿using Core.Common.Projections;
 using Infrastructure.Projections.InternalProjections;
-using Infrastructure.Projections.InternalProjections.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,7 +23,8 @@ namespace Infrastructure.Projections
             var projections = new (string Name, string FileName)[]
             {
                 (Name: InternalProjectionName.EmailIndex, FileName: "EmailIndex"),
-                (Name: InternalProjectionName.GroupCodeIndex, "GroupCodeIndex")
+                (Name: InternalProjectionName.GroupCodeIndex, "GroupCodeIndex"),
+                (Name: InternalProjectionName.PayPalOrderNumberIndex, "PayPalOrderNumberIndex")
             };
 
             services.AddKeyedSingleton<IReadOnlyCollection<(string Name, string FileName)>>(

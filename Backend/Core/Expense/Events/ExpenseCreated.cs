@@ -1,4 +1,5 @@
-﻿using Core.Group;
+﻿using Core.Common.PayPal;
+using Core.Group;
 
 namespace Core.Expense.Events
 {
@@ -10,6 +11,7 @@ namespace Core.Expense.Events
         ExpenseType Type,
         Guid GroupId,
         Guid PayerId,
-        IList<Guid> DeptorsIds
+        IReadOnlyList<Guid> DeptorsIds,
+        CreatedOrder? Payment = null
     );
 }

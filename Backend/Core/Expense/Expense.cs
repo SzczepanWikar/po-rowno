@@ -1,4 +1,5 @@
 ﻿using Core.Common.Aggregate;
+using Core.Common.PayPal;
 using Core.Expense.Events;
 using Core.Group;
 
@@ -18,25 +19,40 @@ namespace Core.Expense
         public ExpenseType Type { get; private set; }
         public Guid GroupId { get; private set; }
         public Guid PayerId { get; private set; }
-        public IList<Guid> DeptorsIds { get; private set; } = new List<Guid>();
+        public IReadOnlyList<Guid> DeptorsIds { get; private set; } = new List<Guid>();
+        public Payment Payment { get; private set; } = new();
 
         public override void When(object @event)
         {
             switch (@event)
             {
                 case ExpenseCreated e:
-                    Id = e.Id;
-                    Name = e.Name;
-                    Amount = e.Amount;
-                    Currency = e.Currency;
-                    Type = e.Type;
-                    GroupId = e.GroupId;
-                    PayerId = e.PayerId;
-                    DeptorsIds = e.DeptorsIds;
+                    OnExpenseCreated(e);
+                    break;
+                case ExpensePaymentCaptured(_, CapturedOrder capturedOrder):
+                    Payment.Status = capturedOrder.Response.status;
                     break;
                 case ExpenseRemoved:
                     Deleted = true;
                     break;
+            }
+        }
+
+        private void OnExpenseCreated(ExpenseCreated e)
+        {
+            Id = e.Id;
+            Name = e.Name;
+            Amount = e.Amount;
+            Currency = e.Currency;
+            Type = e.Type;
+            GroupId = e.GroupId;
+            PayerId = e.PayerId;
+            DeptorsIds = e.DeptorsIds;
+
+            if (e.Payment is not null)
+            {
+                Payment.Status = e.Payment.Response.status;
+                Payment.Id = e.Payment.Response.id;
             }
         }
     }

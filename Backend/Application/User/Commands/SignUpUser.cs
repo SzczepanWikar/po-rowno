@@ -1,4 +1,5 @@
 ﻿using Core.Common.Exceptions;
+using Core.Common.Projections;
 using Core.User.Events;
 using Core.User.UserToken;
 using Infrastructure.Email.Service;
@@ -30,7 +31,8 @@ namespace Application.User.Commands
         public SignUpUserHandler(
             IUserService service,
             IEventStoreRepository<UserToken> tokenRepository,
-            [FromKeyedServices("UserEmail")] IIndexProjectionRepository indexedEmailRepository,
+            [FromKeyedServices(InternalProjectionName.EmailIndex)]
+                IIndexProjectionRepository indexedEmailRepository,
             IEmailService emailService,
             IConfiguration configuration
         )

@@ -3,15 +3,15 @@ using EventStore.Client;
 using Infrastructure.Projections.InternalProjections.Repository;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Group
+namespace Application.Expense
 {
-    public class GroupIndexRepository : IndexProjectionRepository
+    public sealed class PaymentIndexRepository : IndexProjectionRepository
     {
         protected override string StreamName { get; init; } =
             $"{InternalProjectionName.PayPalOrderNumberIndex}-res";
-        protected override string EmailIndexedEvent { get; init; } = "GroupCodeIndexed";
+        protected override string EmailIndexedEvent { get; init; } = "PayPalOrderNumberIndexed";
 
-        public GroupIndexRepository(
+        public PaymentIndexRepository(
             EventStoreClient eventStoreClient,
             ILogger<IndexProjectionRepository> logger
         )

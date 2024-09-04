@@ -1,7 +1,10 @@
-﻿using Application.Group;
+﻿using Application.Expense;
+using Application.Group;
 using Application.User;
+using Core.Common.Projections;
 using Core.User.UserToken;
 using Infrastructure.EventStore.Repository;
+using Infrastructure.PayPal;
 using Infrastructure.Projections;
 using Infrastructure.Projections.InternalProjections.Repository;
 using Microsoft.AspNetCore.Builder;
@@ -26,10 +29,16 @@ namespace Application
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGroupService, GroupService>();
 
-            services.AddKeyedScoped<IIndexProjectionRepository, GroupIndexRepository>("GroupCode");
-            services.AddKeyedScoped<IIndexProjectionRepository, UserEmailIndexRepository>(
-                "UserEmail"
+            services.AddKeyedScoped<IIndexProjectionRepository, GroupIndexRepository>(
+                InternalProjectionName.GroupCodeIndex
             );
+            services.AddKeyedScoped<IIndexProjectionRepository, UserEmailIndexRepository>(
+                InternalProjectionName.EmailIndex
+            );
+            services.AddKeyedScoped<IIndexProjectionRepository, PaymentIndexRepository>(
+                InternalProjectionName.PayPalOrderNumberIndex
+            );
+            services.AddPayPal(config);
 
             services.AddProjections<ApplicationContext>(config);
 

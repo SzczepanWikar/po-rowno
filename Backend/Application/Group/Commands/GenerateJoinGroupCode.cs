@@ -1,5 +1,6 @@
 ﻿using Core.Common.Code;
 using Core.Common.Exceptions;
+using Core.Common.Projections;
 using Core.Group;
 using Core.Group.Events;
 using Infrastructure.EventStore.Repository;
@@ -21,7 +22,8 @@ namespace Application.Group.Commands
         public GenerateJoinGroupCodeHandler(
             IGroupService groupService,
             IEventStoreRepository<Core.Group.Group> repository,
-            [FromKeyedServices("GroupCode")] IIndexProjectionRepository indexProjectionRepository
+            [FromKeyedServices(InternalProjectionName.GroupCodeIndex)]
+                IIndexProjectionRepository indexProjectionRepository
         )
         {
             _groupService = groupService;

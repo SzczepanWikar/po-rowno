@@ -18,7 +18,7 @@ namespace Application.Expense.Commands
         Currency Currency,
         ExpenseType Type,
         Guid GroupId,
-        IList<Guid> DeptorsIds,
+        IReadOnlyList<Guid> DeptorsIds,
         User User
     ) : IRequest<Guid>;
 

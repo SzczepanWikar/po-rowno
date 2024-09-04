@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Core.Common.Configs;
 using Core.Common.Exceptions;
+using Core.Common.Projections;
 using Core.User;
 using Infrastructure.Projections.InternalProjections.Repository;
 using MediatR;
@@ -23,7 +24,8 @@ namespace Application.User.Commands
         private readonly IConfiguration _configuration;
 
         public SignInUserHandler(
-            [FromKeyedServices("UserEmail")] IIndexProjectionRepository emailConflictValidator,
+            [FromKeyedServices(InternalProjectionName.EmailIndex)]
+                IIndexProjectionRepository emailConflictValidator,
             IConfiguration configuration,
             IUserService userService
         )
