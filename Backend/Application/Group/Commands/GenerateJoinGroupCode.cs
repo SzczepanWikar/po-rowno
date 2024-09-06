@@ -16,18 +16,15 @@ namespace Application.Group.Commands
     public class GenerateJoinGroupCodeHandler : IRequestHandler<GenerateJoinGroupCode>
     {
         private readonly IGroupService _groupService;
-        private readonly IEventStoreRepository<Core.Group.Group> _repository;
         private readonly IIndexProjectionRepository _indexProjectionRepository;
 
         public GenerateJoinGroupCodeHandler(
             IGroupService groupService,
-            IEventStoreRepository<Core.Group.Group> repository,
             [FromKeyedServices(InternalProjectionName.GroupCodeIndex)]
                 IIndexProjectionRepository indexProjectionRepository
         )
         {
             _groupService = groupService;
-            _repository = repository;
             _indexProjectionRepository = indexProjectionRepository;
         }
 
@@ -44,7 +41,7 @@ namespace Application.Group.Commands
 
             var @event = new GroupCodeGenerated(group.Id, code);
 
-            await _repository.Append(group.Id, @event, cancellationToken);
+            await _groupService.AppendAsync(group.Id, @event, cancellationToken);
         }
 
         private async Task<Code<GroupCodeType>> GenerateCode(

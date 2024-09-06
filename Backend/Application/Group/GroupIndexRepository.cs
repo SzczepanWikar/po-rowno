@@ -8,7 +8,7 @@ namespace Application.Group
     public class GroupIndexRepository : IndexProjectionRepository
     {
         protected override string StreamName { get; init; } =
-            $"{InternalProjectionName.PayPalOrderNumberIndex}-res";
+            $"{InternalProjectionName.GroupCodeIndex}-res";
         protected override string EmailIndexedEvent { get; init; } = "GroupCodeIndexed";
 
         public GroupIndexRepository(

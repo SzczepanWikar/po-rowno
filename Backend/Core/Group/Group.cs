@@ -70,6 +70,12 @@ namespace Core.Group
                     BannedUsersIds.Remove(userId);
                     UsersIds.Add(userId);
                     break;
+                case UserLeavedGroup(_, Guid userId):
+                    UsersIds.Remove(userId);
+                    break;
+                case GroupOwnerChanged(_, Guid userId):
+                    OwnerId = userId;
+                    break;
                 default:
                     break;
             }

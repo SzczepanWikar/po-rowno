@@ -94,5 +94,17 @@ namespace API.Group
 
             return Ok();
         }
+
+        [HttpPatch]
+        [Route("{id}/leave")]
+        public async Task<ActionResult> LeaveGroup([FromRoute] Guid id)
+        {
+            var user = HttpContext.Items["User"] as User;
+            var request = new LeaveGroup(id, user);
+
+            await _mediator.Send(request);
+
+            return Ok();
+        }
     }
 }
