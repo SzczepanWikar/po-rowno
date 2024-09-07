@@ -45,7 +45,7 @@ namespace API.Group
 
             await _mediator.Send(request);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpPatch("join")]
@@ -56,7 +56,7 @@ namespace API.Group
 
             await _mediator.Send(request);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpPatch]
@@ -68,7 +68,7 @@ namespace API.Group
 
             await _mediator.Send(request);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpPatch]
@@ -80,7 +80,7 @@ namespace API.Group
 
             await _mediator.Send(request);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpPatch]
@@ -92,7 +92,7 @@ namespace API.Group
 
             await _mediator.Send(request);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpPatch]
@@ -104,7 +104,20 @@ namespace API.Group
 
             await _mediator.Send(request);
 
-            return Ok();
+            return NoContent();
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult> Delete([FromRoute] Guid id)
+        {
+            var user = HttpContext.Items["User"] as User;
+
+            var request = new DeleteGroup(id, user);
+
+            await _mediator.Send(request);
+
+            return NoContent();
         }
     }
 }

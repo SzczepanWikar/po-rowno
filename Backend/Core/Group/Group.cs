@@ -1,4 +1,5 @@
-﻿using Core.Common.Aggregate;
+﻿using Core.Common;
+using Core.Common.Aggregate;
 using Core.Common.Code;
 using Core.Group.Events;
 
@@ -75,6 +76,9 @@ namespace Core.Group
                     break;
                 case GroupOwnerChanged(_, Guid userId):
                     OwnerId = userId;
+                    break;
+                case Deleted e:
+                    Deleted = true;
                     break;
                 default:
                     break;

@@ -1,8 +1,8 @@
-﻿using Core.Common.Exceptions;
+﻿using System.Threading;
+using Core.Common.Exceptions;
 using Core.Group.Events;
 using Infrastructure.EventStore.Repository;
 using MediatR;
-using System.Threading;
 
 namespace Application.Group.Commands
 {
@@ -32,13 +32,16 @@ namespace Application.Group.Commands
             var @event = new UserLeavedGroup(request.Id, request.User.Id);
             await _groupService.AppendAsync(request.Id, @event, cancellationToken);
 
-            if(group.OwnerId == request.User.Id)
+            if (group.OwnerId == request.User.Id)
             {
                 await ChangeGroupOwner(group, cancellationToken);
             }
         }
 
-        private async Task ChangeGroupOwner(Group group, CancellationToken cancellationToken = default)
+        private async Task ChangeGroupOwner(
+            Group group,
+            CancellationToken cancellationToken = default
+        )
         {
             var userId = group.UsersIds.FirstOrDefault();
 
