@@ -1,7 +1,6 @@
 ﻿using Core.Common.Exceptions;
 using Core.User;
 using Core.User.Events;
-using Core.User.UserToken;
 using Infrastructure.EventStore.Repository;
 using MediatR;
 

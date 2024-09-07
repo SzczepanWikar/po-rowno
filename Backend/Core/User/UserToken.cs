@@ -1,6 +1,6 @@
 ﻿using Core.Common.Aggregate;
 
-namespace Core.User.UserToken
+namespace Core.User
 {
     public sealed class UserToken : Aggregate
     {

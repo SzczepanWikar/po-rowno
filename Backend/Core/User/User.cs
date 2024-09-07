@@ -43,6 +43,9 @@ namespace Core.User
                 case UserSignedIn(_, string token):
                     Token = token;
                     break;
+                case UserPaswordChanged(_, string password):
+                    Password = password;
+                    break;
                 default:
                     return;
             }

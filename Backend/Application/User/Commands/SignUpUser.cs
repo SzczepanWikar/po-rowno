@@ -1,7 +1,6 @@
 ﻿using Core.Common.Exceptions;
 using Core.Common.Projections;
-using Core.User.Events;
-using Core.User.UserToken;
+using Core.User;
 using Infrastructure.Email.Service;
 using Infrastructure.EventStore.Repository;
 using Infrastructure.Projections.InternalProjections.Repository;
@@ -11,8 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.User.Commands
 {
-    using User = Core.User.User;
-
     public record SignUpUser(
         string Username,
         string Email,

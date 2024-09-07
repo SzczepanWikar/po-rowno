@@ -3,7 +3,6 @@ using Application.Group;
 using Application.User;
 using Core.Common.Projections;
 using Core.User;
-using Core.User.UserToken;
 using Infrastructure.EventStore.Repository;
 using Infrastructure.PayPal;
 using Infrastructure.Projections;

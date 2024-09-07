@@ -1,4 +1,5 @@
-﻿using API.User.ViewModels;
+﻿using API.User.DTO;
+using API.User.ViewModels;
 using Application.User.Commands;
 using Core.User;
 using MediatR;
@@ -37,6 +38,17 @@ namespace API.User
             var res = await _mediator.Send(command);
 
             return Ok(res);
+        }
+
+        [HttpPatch("change-password")]
+        public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            var user = HttpContext.Items["User"] as Core.User.User;
+
+            var command = new ChangeUserPassword(dto.OldPassword, dto.NewPassword, user);
+            await _mediator.Send(command);
+
+            return NoContent();
         }
     }
 }
