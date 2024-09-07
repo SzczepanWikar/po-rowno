@@ -44,7 +44,7 @@ namespace Application.Group.Commands
 
             var @event = new UserJoinedGroup(group.Id, userId);
 
-            await _eventStoreRepository.Append(group.Id, @event, cancellationToken);
+            await _eventStoreRepository.AppendAsync(group.Id, @event, cancellationToken);
         }
 
         private async Task<Group> FindGroupByCode(

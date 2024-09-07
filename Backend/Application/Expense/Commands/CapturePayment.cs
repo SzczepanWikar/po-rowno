@@ -52,7 +52,7 @@ namespace Application.Expense.Commands
                 throw new NotFoundException("Payment not found.");
             }
 
-            var expense = await _expenseRepository.Find(expenseId.Value, cancellationToken);
+            var expense = await _expenseRepository.FindOneAsync(expenseId.Value, cancellationToken);
 
             if (expense is null)
             {
@@ -69,14 +69,14 @@ namespace Application.Expense.Commands
                 var paymentResult = await _payPalService.Capture(request.OrderNumber);
 
                 var @event = new ExpensePaymentCaptured(expenseId.Value, paymentResult);
-                await _expenseRepository.Append(expenseId.Value, @event);
+                await _expenseRepository.AppendAsync(expenseId.Value, @event);
 
                 return paymentResult.Response;
             }
             catch (HttpRequestException ex)
             {
                 var @event = new PaymentHttpErrorOccured(expenseId.Value, ex.Message);
-                await _expenseRepository.Append(expenseId.Value, @event);
+                await _expenseRepository.AppendAsync(expenseId.Value, @event);
 
                 throw new BadGatewayException("Payment system error.");
             }

@@ -19,12 +19,12 @@ namespace Infrastructure.EventStore.Repository
             _eventTypeParser = eventTypeParser;
         }
 
-        public Task Create(Guid id, object @event, CancellationToken ct = default)
+        public Task CreateAsync(Guid id, object @event, CancellationToken ct = default)
         {
-            return Create(id, new[] { @event }, ct);
+            return CreateAsync(id, new[] { @event }, ct);
         }
 
-        public async Task Create(
+        public async Task CreateAsync(
             Guid id,
             IEnumerable<object> events,
             CancellationToken ct = default
@@ -33,12 +33,12 @@ namespace Infrastructure.EventStore.Repository
             await AppendToStream(id, events, StreamState.NoStream, ct);
         }
 
-        public Task Append(Guid id, object @event, CancellationToken ct = default)
+        public Task AppendAsync(Guid id, object @event, CancellationToken ct = default)
         {
-            return Append(id, [@event], ct);
+            return AppendAsync(id, [@event], ct);
         }
 
-        public async Task Append(
+        public async Task AppendAsync(
             Guid id,
             IEnumerable<object> @events,
             CancellationToken ct = default
@@ -47,7 +47,7 @@ namespace Infrastructure.EventStore.Repository
             await AppendToStream(id, @events, StreamState.StreamExists, ct);
         }
 
-        public async Task<T?> Find(
+        public async Task<T?> FindOneAsync(
             Guid id,
             CancellationToken cancellationToken = default,
             ulong? fromVersion = null

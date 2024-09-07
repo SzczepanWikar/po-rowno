@@ -24,7 +24,7 @@ namespace Application.Foo.Commands
         public async Task<Guid> Handle(CreateFoo request, CancellationToken cancellationToken)
         {
             var evt = new FooCreated(Guid.NewGuid(), request.Name, request.SomeNumber);
-            await _fooRepository.Create(evt.Id, evt, cancellationToken);
+            await _fooRepository.CreateAsync(evt.Id, evt, cancellationToken);
 
             //var to = new List<ReceiverData>()
             //{

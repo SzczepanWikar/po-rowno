@@ -80,7 +80,7 @@ namespace Application.User.Commands
         {
             var id = Guid.NewGuid();
             var token = new UserTokenGenerated(id, userId);
-            await _tokenRepository.Create(id, token);
+            await _tokenRepository.CreateAsync(id, token);
 
             return id;
         }

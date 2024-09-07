@@ -20,7 +20,7 @@ namespace Application.Group.Commands
 
         public async Task Handle(DeleteGroup request, CancellationToken cancellationToken)
         {
-            var group = await _repository.Find(request.Id);
+            var group = await _repository.FindOneAsync(request.Id);
 
             if (group is null)
             {
@@ -32,7 +32,7 @@ namespace Application.Group.Commands
                 throw new ForbiddenException();
             }
 
-            await _repository.Append(request.Id, new Deleted(), cancellationToken);
+            await _repository.AppendAsync(request.Id, new Deleted(), cancellationToken);
         }
     }
 }

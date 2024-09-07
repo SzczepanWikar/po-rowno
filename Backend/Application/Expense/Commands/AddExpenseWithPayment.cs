@@ -64,7 +64,7 @@ namespace Application.Expense.Commands
                     paymentResult
                 );
 
-                await _expenseRepository.Create(@event.Id, @event);
+                await _expenseRepository.CreateAsync(@event.Id, @event);
 
                 return new ExpenseWithPaymentCreatedResult(@event.Id, paymentResult.Response.id);
             }

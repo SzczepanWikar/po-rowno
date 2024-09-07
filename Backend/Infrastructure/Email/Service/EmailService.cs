@@ -101,7 +101,7 @@ namespace Infrastructure.Email.Service
                 );
             }
 
-            await _eventStoreRepository.Create(id, @event);
+            await _eventStoreRepository.CreateAsync(id, @event);
         }
     }
 }

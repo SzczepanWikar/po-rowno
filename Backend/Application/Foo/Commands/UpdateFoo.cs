@@ -19,11 +19,11 @@ namespace Application.Foo.Commands
 
         public async Task<Guid> Handle(UpdateFoo request, CancellationToken cancellationToken)
         {
-            var existing = await _fooRepository.Find(request.Id, cancellationToken);
+            var existing = await _fooRepository.FindOneAsync(request.Id, cancellationToken);
 
             var evt = new FooUpdated(request.Id, request.SomeNumber);
 
-            await _fooRepository.Append(request.Id, evt, cancellationToken);
+            await _fooRepository.AppendAsync(request.Id, evt, cancellationToken);
 
             return request.Id;
         }

@@ -21,7 +21,7 @@ namespace Infrastructure.Middleware.UserFetching
         {
             if (!_cache.TryGetValue(id, out User user))
             {
-                user = await _eventStoreRepository.Find(id);
+                user = await _eventStoreRepository.FindOneAsync(id);
 
                 if (user == null)
                 {

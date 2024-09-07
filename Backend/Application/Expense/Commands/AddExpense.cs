@@ -62,7 +62,7 @@ namespace Application.Expense.Commands
                 request.DeptorsIds
             );
 
-            await _expenseRepository.Create(
+            await _expenseRepository.CreateAsync(
                 expenseCreatedEvent.Id,
                 expenseCreatedEvent,
                 cancellationToken

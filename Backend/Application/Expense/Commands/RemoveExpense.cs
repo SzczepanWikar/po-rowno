@@ -28,7 +28,7 @@ namespace Application.Expense.Commands
 
         public async Task Handle(RemoveExpense request, CancellationToken cancellationToken)
         {
-            var expense = await _expenseRepository.Find(request.Id, cancellationToken);
+            var expense = await _expenseRepository.FindOneAsync(request.Id, cancellationToken);
 
             if (expense == null || expense.Deleted)
             {
@@ -68,7 +68,7 @@ namespace Application.Expense.Commands
         private async Task RemoveExpense(RemoveExpense request, CancellationToken cancellationToken)
         {
             var @event = new ExpenseRemoved(request.Id);
-            await _expenseRepository.Append(request.Id, @event, cancellationToken);
+            await _expenseRepository.AppendAsync(request.Id, @event, cancellationToken);
         }
 
         private async Task RemoveFromGroup(

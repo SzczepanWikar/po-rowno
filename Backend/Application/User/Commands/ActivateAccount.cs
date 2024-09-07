@@ -29,7 +29,7 @@ namespace Application.User.Commands
             await ValidateUser(token.UserId, cancellationToken);
 
             await _service.AppendAsync(token.UserId, new AccountActivated(token.UserId));
-            await _tokenRepository.Append(token.Id, new UserTokenUsed(token.Id));
+            await _tokenRepository.AppendAsync(token.Id, new UserTokenUsed(token.Id));
         }
 
         private async Task<UserToken> GetToken(
@@ -37,7 +37,7 @@ namespace Application.User.Commands
             CancellationToken cancellationToken
         )
         {
-            var token = await _tokenRepository.Find(request.Token, cancellationToken);
+            var token = await _tokenRepository.FindOneAsync(request.Token, cancellationToken);
 
             if (token == null)
             {

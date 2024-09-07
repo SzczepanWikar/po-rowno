@@ -30,7 +30,7 @@ namespace Application.Group
                 command.User.Id
             );
 
-            await _repository.Create(id, groupCreated, cancellationToken);
+            await _repository.CreateAsync(id, groupCreated, cancellationToken);
 
             return id;
         }
@@ -40,7 +40,7 @@ namespace Application.Group
             CancellationToken cancellationToken = default
         )
         {
-            var group = await _repository.Find(id, cancellationToken);
+            var group = await _repository.FindOneAsync(id, cancellationToken);
 
             if (group is null || group.Deleted)
             {
@@ -56,7 +56,7 @@ namespace Application.Group
             CancellationToken cancellationToken = default
         )
         {
-            await _repository.Append(id, @event, cancellationToken);
+            await _repository.AppendAsync(id, @event, cancellationToken);
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Application.Group.Commands
                 request.OwnerId
             );
 
-            await _eventStoreRepository.Append(request.Id, @event, cancellationToken);
+            await _eventStoreRepository.AppendAsync(request.Id, @event, cancellationToken);
         }
 
         private async Task CheckOwnerEdition(

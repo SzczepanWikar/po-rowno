@@ -40,14 +40,14 @@ namespace Application.User
                 hashedPassword
             );
 
-            await _repository.Create(id, userSignedUp, cancellationToken);
+            await _repository.CreateAsync(id, userSignedUp, cancellationToken);
 
             return id;
         }
 
         public async Task<User> FindOneAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var user = await _repository.Find(id, cancellationToken);
+            var user = await _repository.FindOneAsync(id, cancellationToken);
 
             if (user == null || user.Deleted)
             {
@@ -63,7 +63,7 @@ namespace Application.User
             CancellationToken cancellationToken = default
         )
         {
-            await _repository.Append(id, @event, cancellationToken);
+            await _repository.AppendAsync(id, @event, cancellationToken);
         }
     }
 }
