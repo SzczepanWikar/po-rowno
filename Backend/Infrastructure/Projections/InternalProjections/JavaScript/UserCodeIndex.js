@@ -1,5 +1,5 @@
 ﻿options({
-    resultStreamName: 'group-code-index-res',
+    resultStreamName: 'user-code-index-res',
     reorderEvents: false,
     processingLag: 0
 });
@@ -9,13 +9,13 @@ fromAll()
         $init: function () {
             return {};
         },
-        GroupCodeGenerated: function (state, event) {
+        UserCodeGenerated: function (state, event) {
             const { data } = event;
-            const eventData = { 
+            const eventData = {
                 IndexedValue: data.Code.Value,
                 OwnerId: data.Id
             }
 
-            emit('group-code-index-res', 'GroupCodeIndexed', eventData);
+            emit('user-code-index-res', 'UserCodeIndexed', eventData);
         },
     });

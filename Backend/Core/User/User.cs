@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Core.Common.Aggregate;
+﻿using Core.Common.Aggregate;
 using Core.Common.Code;
 using Core.User.Events;
 
@@ -14,8 +13,7 @@ namespace Core.User
 
     public enum UserCodeType
     {
-        AccountActivation,
-        PasswordReset
+        ResetPassword
     }
 
     public sealed class User : Aggregate
@@ -25,6 +23,7 @@ namespace Core.User
         public string Password { get; private set; }
         public UserStatus Status { get; private set; }
         public string Token { get; private set; }
+        public Codes<UserCodeType> Codes { get; private set; } = new();
 
         public override void When(object @event)
         {
@@ -46,9 +45,27 @@ namespace Core.User
                 case UserPaswordChanged(_, string password):
                     Password = password;
                     break;
+                case UserCodeGenerated(_, Code<UserCodeType> code):
+                    Codes.Push(code);
+                    break;
+                case UserCodeUsed(_, string code):
+                    MarkCodeAsUsed(code);
+                    break;
                 default:
                     return;
             }
+        }
+
+        private void MarkCodeAsUsed(string code)
+        {
+            var existing = Codes.FirstOrDefault(e => e.Value == code);
+
+            if (existing == null)
+            {
+                return;
+            }
+
+            existing.Used = true;
         }
     }
 }

@@ -76,7 +76,7 @@ namespace Application.User.Commands
         private async Task<Guid> GenerateToken(Guid userId)
         {
             var id = Guid.NewGuid();
-            var token = new UserTokenGenerated(id, userId);
+            var token = new UserTokenGenerated(id, userId, UserTokenType.AccountActivation);
             await _tokenRepository.CreateAsync(id, token);
 
             return id;

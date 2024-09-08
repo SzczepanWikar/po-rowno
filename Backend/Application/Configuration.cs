@@ -40,8 +40,11 @@ namespace Application
             services.AddKeyedScoped<IIndexProjectionRepository, PaymentIndexRepository>(
                 InternalProjectionName.PayPalOrderNumberIndex
             );
-            services.AddPayPal(config);
+            services.AddKeyedScoped<IIndexProjectionRepository, UserIndexRepository>(
+                InternalProjectionName.UserCodeIndex
+            );
 
+            services.AddPayPal(config);
             services.AddProjections<ApplicationContext>(config);
 
             return services;

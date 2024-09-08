@@ -10,6 +10,7 @@
     <None Remove="Projections\InternalProjections\JavaScript\EmailIndex.js" />
     <None Remove="Projections\InternalProjections\JavaScript\GroupCodeIndex.js" />
     <None Remove="Projections\InternalProjections\JavaScript\PayPalOrderNumberIndex.js" />
+    <None Remove="Projections\InternalProjections\JavaScript\UserCodeIndex.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +39,7 @@
     <EmbeddedResource Include="Projections\InternalProjections\JavaScript\PayPalOrderNumberIndex.js" />
     <EmbeddedResource Include="Projections\InternalProjections\JavaScript\GroupCodeIndex.js" />
     <EmbeddedResource Include="Projections\InternalProjections\JavaScript\EmailIndex.js" />
+    <EmbeddedResource Include="Projections\InternalProjections\JavaScript\UserCodeIndex.js" />
   </ItemGroup>
 
 </Project>

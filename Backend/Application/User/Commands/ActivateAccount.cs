@@ -43,6 +43,11 @@ namespace Application.User.Commands
                 throw new NotFoundException("User Token not found.");
             }
 
+            if (token.Type != UserTokenType.AccountActivation)
+            {
+                throw new NotFoundException("User Token not found.");
+            }
+
             return token;
         }
 

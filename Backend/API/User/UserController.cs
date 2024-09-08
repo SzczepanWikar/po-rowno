@@ -3,6 +3,7 @@ using API.User.ViewModels;
 using Application.User.Commands;
 using Core.User;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.User
@@ -12,8 +13,13 @@ namespace API.User
     public class UserController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(IMediator mediator) => _mediator = mediator;
+        public UserController(IMediator mediator, ILogger<UserController> logger)
+        {
+            _mediator = mediator;
+            _logger = logger;
+        }
 
         [HttpPost("sign-up")]
         public async Task<ActionResult<Guid>> SignUp([FromBody] SignUpDto dto)
@@ -40,7 +46,36 @@ namespace API.User
             return Ok(res);
         }
 
+        [HttpPost("request-reset-password")]
+        public async Task<ActionResult> RequestPasswordChange(
+            [FromBody] RequestPasswordResetDto dto
+        )
+        {
+            try
+            {
+                var command = new RequestPasswordReset(dto.Email);
+
+                await _mediator.Send(command);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return NoContent();
+        }
+
+        [HttpPatch("reset-password")]
+        public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
+        {
+            var command = new ResetPassword(dto.Email, dto.Password, dto.Code);
+            await _mediator.Send(command);
+
+            return NoContent();
+        }
+
         [HttpPatch("change-password")]
+        [Authorize]
         public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
         {
             var user = HttpContext.Items["User"] as Core.User.User;

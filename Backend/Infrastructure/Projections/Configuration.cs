@@ -24,7 +24,8 @@ namespace Infrastructure.Projections
             {
                 (Name: InternalProjectionName.EmailIndex, FileName: "EmailIndex"),
                 (Name: InternalProjectionName.GroupCodeIndex, "GroupCodeIndex"),
-                (Name: InternalProjectionName.PayPalOrderNumberIndex, "PayPalOrderNumberIndex")
+                (Name: InternalProjectionName.PayPalOrderNumberIndex, "PayPalOrderNumberIndex"),
+                (Name: InternalProjectionName.UserCodeIndex, "UserCodeIndex")
             };
 
             services.AddKeyedSingleton<IReadOnlyCollection<(string Name, string FileName)>>(

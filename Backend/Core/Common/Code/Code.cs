@@ -15,29 +15,33 @@ namespace Core.Common.Code
         public T Type { get; init; }
         public DateTime? ValidTo { get; init; }
         public bool Used { get; set; } = false;
+        public bool OneTime { get; set; } = false;
 
         public Code() { }
 
-        public Code(T type)
+        public Code(T type, bool oneTime = false)
         {
             Type = type;
             Value = RandomNumberGenerator.GetString(allowedChar, 8);
+            OneTime = oneTime;
         }
 
-        public Code(T type, DateTime? validTo)
+        public Code(T type, DateTime validTo, bool oneTime = false)
         {
             Type = type;
             Value = RandomNumberGenerator.GetString(allowedChar, 8);
             ValidTo = validTo;
+            OneTime = oneTime;
         }
 
         /// <param name="type"></param>
         /// <param name="duration">Code duration in seconds</param>
-        public Code(T type, uint duration)
+        public Code(T type, uint duration, bool oneTime = false)
         {
             Type = type;
             Value = RandomNumberGenerator.GetString(allowedChar, 8);
             ValidTo = DateTime.Now.AddSeconds(duration);
+            OneTime = oneTime;
         }
 
         public bool Check(string value, T type)
@@ -48,6 +52,11 @@ namespace Core.Common.Code
             }
 
             if (ValidTo != null && ValidTo < DateTime.Now)
+            {
+                return false;
+            }
+
+            if (OneTime && Used)
             {
                 return false;
             }
