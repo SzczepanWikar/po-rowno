@@ -18,11 +18,11 @@ namespace Core.User
 
     public sealed class User : Aggregate
     {
-        public string Username { get; private set; }
-        public string Email { get; private set; }
-        public string Password { get; private set; }
+        public string Username { get; private set; } = string.Empty;
+        public string Email { get; private set; } = string.Empty;
+        public string Password { get; private set; } = string.Empty;
         public UserStatus Status { get; private set; }
-        public string Token { get; private set; }
+        public IList<RefreshToken> RefreshTokens { get; private set; } = new List<RefreshToken>();
         public Codes<UserCodeType> Codes { get; private set; } = new();
 
         public override void When(object @event)
@@ -39,8 +39,8 @@ namespace Core.User
                 case AccountActivated:
                     Status = UserStatus.Active;
                     break;
-                case UserSignedIn(_, string token):
-                    Token = token;
+                case UserSignedIn e:
+                    RefreshTokens.Add(e.RefreshToken);
                     break;
                 case UserPaswordChanged(_, string password):
                     Password = password;

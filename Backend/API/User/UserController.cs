@@ -65,6 +65,16 @@ namespace API.User
             return NoContent();
         }
 
+        [HttpPost("refresh")]
+        public async Task<ActionResult<AppSignInResult>> Refresh([FromBody] RefreshDto dto)
+        {
+            var command = new RefreshAccessToken(dto.refreshToken);
+
+            var res = await _mediator.Send(command);
+
+            return Ok(res);
+        }
+
         [HttpPatch("reset-password")]
         public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
         {

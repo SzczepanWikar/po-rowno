@@ -1,4 +1,4 @@
-﻿using Application.User;
+﻿using Application.User.Services;
 using Core.Common.Exceptions;
 using Core.Group.Events;
 using Infrastructure.EventStore.Repository;

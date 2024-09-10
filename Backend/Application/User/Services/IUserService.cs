@@ -1,4 +1,4 @@
-﻿namespace Application.User
+﻿namespace Application.User.Services
 {
     using Application.User.Commands;
     using Core.User.Events;

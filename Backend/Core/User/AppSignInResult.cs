@@ -1,4 +1,9 @@
 ﻿namespace Core.User
 {
-    public record AppSignInResult(Guid Id, UserStatus status, string AccessToken);
+    public record AppSignInResult(
+        Guid Id,
+        UserStatus Status,
+        string AccessToken,
+        string RefreshToken
+    );
 }

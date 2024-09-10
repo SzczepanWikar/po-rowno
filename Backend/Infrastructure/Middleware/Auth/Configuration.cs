@@ -15,9 +15,9 @@ namespace Infrastructure.Middleware.Auth
             IConfiguration configuration
         )
         {
-            var jwtConfig = configuration.GetSection("JWT").Get<JwtConfig>();
+            var tokenConfig = configuration.GetSection("Token").Get<TokenConfig>();
 
-            if (jwtConfig == null)
+            if (tokenConfig is null)
             {
                 throw new InvalidOperationException("JWT configuration is missing");
             }
@@ -33,10 +33,10 @@ namespace Infrastructure.Middleware.Auth
                         ValidateIssuerSigningKey = true,
                         ValidateLifetime = true,
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(jwtConfig.Token)
+                            Encoding.UTF8.GetBytes(tokenConfig.Token)
                         ),
-                        ValidIssuer = jwtConfig.Issuer,
-                        ValidAudience = jwtConfig.Audience,
+                        ValidIssuer = tokenConfig.Issuer,
+                        ValidAudience = tokenConfig.Audience,
                     };
                 });
 

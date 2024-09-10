@@ -1,9 +1,10 @@
 ﻿namespace Core.Common.Configs
 {
-    public sealed record JwtConfig(
+    public sealed record TokenConfig(
         string Token,
         uint ExpiresInSeconds,
         string Issuer,
-        string Audience
+        string Audience,
+        uint RefreshExpiresInSeconds
     );
 }

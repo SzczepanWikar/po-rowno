@@ -3,7 +3,7 @@ using EventStore.Client;
 using Infrastructure.Projections.InternalProjections.Repository;
 using Microsoft.Extensions.Logging;
 
-namespace Application.User
+namespace Application.User.Repositories
 {
     internal class UserEmailIndexRepository : IndexProjectionRepository
     {

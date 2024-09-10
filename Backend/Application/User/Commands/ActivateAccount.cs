@@ -1,4 +1,5 @@
-﻿using Core.Common.Exceptions;
+﻿using Application.User.Services;
+using Core.Common.Exceptions;
 using Core.User;
 using Core.User.Events;
 using Infrastructure.EventStore.Repository;

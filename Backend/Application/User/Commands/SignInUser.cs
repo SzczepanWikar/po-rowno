@@ -1,16 +1,18 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
+using Application.User.Services;
 using Core.Common.Configs;
 using Core.Common.Exceptions;
 using Core.Common.Projections;
 using Core.User;
+using Core.User.Events;
 using Infrastructure.Projections.InternalProjections.Repository;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Application.User.Commands
 {
@@ -22,27 +24,44 @@ namespace Application.User.Commands
     {
         private readonly IUserService _userService;
         private readonly IIndexProjectionRepository _indexedEmailRepository;
-        private readonly IConfiguration _configuration;
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IAuthTokenService _authTokenService;
 
         public SignInUserHandler(
             [FromKeyedServices(InternalProjectionName.EmailIndex)]
                 IIndexProjectionRepository emailConflictValidator,
-            IConfiguration configuration,
             IUserService userService,
-            IPasswordHasher<User> passwordHasher
+            IPasswordHasher<User> passwordHasher,
+            IAuthTokenService authTokenService
         )
         {
             _indexedEmailRepository = emailConflictValidator;
-            _configuration = configuration;
             _userService = userService;
             _passwordHasher = passwordHasher;
+            _authTokenService = authTokenService;
         }
 
         public async Task<AppSignInResult> Handle(
             SignInUser request,
             CancellationToken cancellationToken
         )
+        {
+            var user = await GetUser(request, cancellationToken);
+
+            ValidateAuth(request, user);
+
+            var accessToken = _authTokenService.GenerateAccessToken(user);
+            var refreshToken = _authTokenService.GenerateRefreshToken();
+
+            var res = new AppSignInResult(user.Id, user!.Status, accessToken, refreshToken.Token);
+
+            var @event = new UserSignedIn(user.Id, accessToken, refreshToken);
+            await _userService.AppendAsync(user.Id, @event, cancellationToken);
+
+            return res;
+        }
+
+        private async Task<User> GetUser(SignInUser request, CancellationToken cancellationToken)
         {
             var userId = await _indexedEmailRepository.GetOwnerId(request.Email, cancellationToken);
 
@@ -51,16 +70,9 @@ namespace Application.User.Commands
                 throw new BadRequestException("Incorrect credentials.");
             }
 
-            var userIdVal = userId.Value;
-            var user = await _userService.FindOneAsync(userIdVal, cancellationToken);
+            var user = await _userService.FindOneAsync(userId.Value, cancellationToken);
 
-            ValidateAuth(request, user);
-
-            var token = GenerateToken(user!);
-
-            var res = new AppSignInResult(userIdVal, user!.Status, token);
-
-            return res;
+            return user;
         }
 
         private void ValidateAuth(SignInUser request, User user)
@@ -80,36 +92,6 @@ namespace Application.User.Commands
             {
                 throw new BadRequestException("Incorrect credentials.");
             }
-        }
-
-        private string GenerateToken(User user)
-        {
-            var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-            };
-
-            var jwtConfig = _configuration.GetSection("JWT").Get<JwtConfig>();
-
-            if (jwtConfig == null)
-            {
-                throw new InvalidOperationException("JWT configuration is missing");
-            }
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Token));
-            var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.Now.AddSeconds(jwtConfig.ExpiresInSeconds),
-                signingCredentials: signingCredentials,
-                issuer: jwtConfig.Issuer,
-                audience: jwtConfig.Audience
-            );
-
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-            return jwt;
         }
     }
 }

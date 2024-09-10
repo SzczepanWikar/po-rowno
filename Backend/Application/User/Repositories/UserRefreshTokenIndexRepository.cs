@@ -3,15 +3,15 @@ using EventStore.Client;
 using Infrastructure.Projections.InternalProjections.Repository;
 using Microsoft.Extensions.Logging;
 
-namespace Application.User
+namespace Application.User.Repositories
 {
-    public class UserIndexRepository : IndexProjectionRepository
+    public sealed class UserRefreshTokenIndexRepository : IndexProjectionRepository
     {
         protected override string StreamName { get; init; } =
-            $"{InternalProjectionName.UserCodeIndex}-res";
-        protected override string EmailIndexedEvent { get; init; } = "UserCodeIndexed";
+            $"{InternalProjectionName.UserRefreshTokenIndex}-res";
+        protected override string EmailIndexedEvent { get; init; } = "UserRefreshTokenIndexed";
 
-        public UserIndexRepository(
+        public UserRefreshTokenIndexRepository(
             EventStoreClient eventStoreClient,
             ILogger<IndexProjectionRepository> logger
         )

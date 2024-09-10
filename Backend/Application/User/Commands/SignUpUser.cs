@@ -1,4 +1,5 @@
-﻿using Core.Common.Exceptions;
+﻿using Application.User.Services;
+using Core.Common.Exceptions;
 using Core.Common.Projections;
 using Core.User;
 using Infrastructure.Email.Service;

@@ -1,6 +1,7 @@
 ﻿using Application.Expense;
 using Application.Group;
-using Application.User;
+using Application.User.Repositories;
+using Application.User.Services;
 using Core.Common.Projections;
 using Core.User;
 using Infrastructure.EventStore.Repository;
@@ -30,6 +31,7 @@ namespace Application
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IPasswordHasher<Core.User.User>, PasswordHasher<Core.User.User>>();
+            services.AddScoped<IAuthTokenService, AuthTokenService>();
 
             services.AddKeyedScoped<IIndexProjectionRepository, GroupIndexRepository>(
                 InternalProjectionName.GroupCodeIndex
@@ -40,8 +42,11 @@ namespace Application
             services.AddKeyedScoped<IIndexProjectionRepository, PaymentIndexRepository>(
                 InternalProjectionName.PayPalOrderNumberIndex
             );
-            services.AddKeyedScoped<IIndexProjectionRepository, UserIndexRepository>(
+            services.AddKeyedScoped<IIndexProjectionRepository, UserCodeIndexRepository>(
                 InternalProjectionName.UserCodeIndex
+            );
+            services.AddKeyedScoped<IIndexProjectionRepository, UserRefreshTokenIndexRepository>(
+                InternalProjectionName.UserRefreshTokenIndex
             );
 
             services.AddPayPal(config);

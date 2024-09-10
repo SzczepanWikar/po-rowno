@@ -4,7 +4,7 @@ using Core.User.Events;
 using Infrastructure.EventStore.Repository;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.User
+namespace Application.User.Services
 {
     using User = Core.User.User;
 
