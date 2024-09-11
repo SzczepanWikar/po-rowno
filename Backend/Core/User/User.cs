@@ -51,6 +51,9 @@ namespace Core.User
                 case UserCodeUsed(_, string code):
                     MarkCodeAsUsed(code);
                     break;
+                case RefreshTokenExpirationDateChanged(_, string token, DateTime date):
+                    ChangeRefreshTokenExpirationDate(token, date);
+                    break;
                 default:
                     return;
             }
@@ -66,6 +69,18 @@ namespace Core.User
             }
 
             existing.Used = true;
+        }
+
+        private void ChangeRefreshTokenExpirationDate(string token, DateTime date)
+        {
+            var refreshToken = RefreshTokens.LastOrDefault(e => e.Token == token);
+
+            if (refreshToken is null)
+            {
+                return;
+            }
+
+            refreshToken.ExpirationDate = date;
         }
     }
 }

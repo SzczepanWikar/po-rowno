@@ -26,7 +26,7 @@ namespace Infrastructure.EventStore.Repository
 
         public async Task CreateAsync(
             Guid id,
-            IEnumerable<object> events,
+            IReadOnlyCollection<object> events,
             CancellationToken ct = default
         )
         {
@@ -40,7 +40,7 @@ namespace Infrastructure.EventStore.Repository
 
         public async Task AppendAsync(
             Guid id,
-            IEnumerable<object> @events,
+            IReadOnlyCollection<object> @events,
             CancellationToken ct = default
         )
         {
@@ -78,14 +78,21 @@ namespace Infrastructure.EventStore.Repository
                     continue;
                 }
 
-                var eventData = JsonSerializer.Deserialize(evt.Data.Span, eventType);
+                try
+                {
+                    var eventData = JsonSerializer.Deserialize(evt.Data.Span, eventType);
 
-                if (eventData == null)
+                    if (eventData == null)
+                    {
+                        continue;
+                    }
+
+                    aggregate.When(eventData);
+                }
+                catch (Exception ex)
                 {
                     continue;
                 }
-
-                aggregate.When(eventData);
             }
 
             return aggregate;
@@ -93,7 +100,7 @@ namespace Infrastructure.EventStore.Repository
 
         private async Task AppendToStream(
             Guid id,
-            IEnumerable<object> @events,
+            IReadOnlyCollection<object> @events,
             StreamState streamState,
             CancellationToken ct = default
         )

@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Core.Common.Configs;
 using Core.User;
+using Core.User.Events;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -14,8 +15,9 @@ namespace Application.User.Services
     public class AuthTokenService : IAuthTokenService
     {
         private readonly TokenConfig _tokenConfig;
+        private readonly IUserService _userService;
 
-        public AuthTokenService(IConfiguration configuration)
+        public AuthTokenService(IConfiguration configuration, IUserService userService)
         {
             var tokenConfig = configuration.GetSection("Token").Get<TokenConfig>();
 
@@ -25,6 +27,7 @@ namespace Application.User.Services
             }
 
             _tokenConfig = tokenConfig;
+            _userService = userService;
         }
 
         public string GenerateAccessToken(User user)
@@ -60,6 +63,24 @@ namespace Application.User.Services
             var expirationDate = DateTime.Now.AddSeconds(_tokenConfig.RefreshExpiresInSeconds);
 
             return new RefreshToken(token, expirationDate);
+        }
+
+        public async Task<IEnumerable<RefreshTokenExpirationDateChanged>> BlackListRefreshTokens(
+            Guid id,
+            CancellationToken cancellationToken = default
+        )
+        {
+            var user = await _userService.FindOneAsync(id, cancellationToken);
+
+            var now = DateTime.Now;
+            var events = user
+                .RefreshTokens.Where(e => e.ExpirationDate > now)
+                .Select(e => new RefreshTokenExpirationDateChanged(user.Id, e.Token, now))
+                .ToList();
+
+            await _userService.AppendAsync(user.Id, events, cancellationToken);
+
+            return events;
         }
     }
 }

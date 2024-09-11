@@ -65,5 +65,14 @@ namespace Application.User.Services
         {
             await _repository.AppendAsync(id, @event, cancellationToken);
         }
+
+        public async Task AppendAsync(
+            Guid id,
+            IReadOnlyCollection<object> events,
+            CancellationToken cancellationToken = default
+        )
+        {
+            await _repository.AppendAsync(id, @events, cancellationToken);
+        }
     }
 }

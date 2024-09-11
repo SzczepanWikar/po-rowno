@@ -75,6 +75,18 @@ namespace API.User
             return Ok(res);
         }
 
+        [HttpPost("logout")]
+        [Authorize]
+        public async Task<ActionResult> Logout()
+        {
+            var user = HttpContext.Items["User"] as Core.User.User;
+
+            var command = new Logout(user);
+            await _mediator.Send(command);
+
+            return NoContent();
+        }
+
         [HttpPatch("reset-password")]
         public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
         {
