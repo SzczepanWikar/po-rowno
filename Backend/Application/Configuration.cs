@@ -22,7 +22,6 @@ namespace Application
             IConfiguration config
         )
         {
-            services.AddEventStoreRepository<Core.Foo.Foo>();
             services.AddEventStoreRepository<Core.User.User>();
             services.AddEventStoreRepository<Core.Group.Group>();
             services.AddEventStoreRepository<Core.Expense.Expense>();

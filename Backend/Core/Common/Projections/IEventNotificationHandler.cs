@@ -1,5 +1,4 @@
-﻿using Core.Foo;
-using MediatR;
+﻿using MediatR;
 
 namespace Core.Common.Projections
 {
