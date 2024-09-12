@@ -14,15 +14,18 @@ namespace Application.User.Commands
     public sealed class ChangeUserPasswordHandler : IRequestHandler<ChangeUserPassword>
     {
         private readonly IUserService _userService;
+        private readonly IAuthTokenService _authTokenService;
         private readonly IPasswordHasher<User> _passwordHasher;
 
         public ChangeUserPasswordHandler(
             IUserService userService,
+            IAuthTokenService authTokenService,
             IPasswordHasher<User> passwordHasher
         )
         {
             _userService = userService;
             _passwordHasher = passwordHasher;
+            _authTokenService = authTokenService;
         }
 
         public async Task Handle(ChangeUserPassword request, CancellationToken cancellationToken)
@@ -42,6 +45,8 @@ namespace Application.User.Commands
 
             var @event = new UserPaswordChanged(request.User.Id, hashedPassword);
             await _userService.AppendAsync(request.User.Id, @event, cancellationToken);
+
+            await _authTokenService.BlackListRefreshTokens(request.User.Id, cancellationToken);
         }
     }
 }

@@ -87,15 +87,6 @@ namespace API.User
             return NoContent();
         }
 
-        [HttpPatch("reset-password")]
-        public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
-        {
-            var command = new ResetPassword(dto.Email, dto.Password, dto.Code);
-            await _mediator.Send(command);
-
-            return NoContent();
-        }
-
         [HttpPatch("change-password")]
         [Authorize]
         public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
@@ -103,6 +94,15 @@ namespace API.User
             var user = HttpContext.Items["User"] as Core.User.User;
 
             var command = new ChangeUserPassword(dto.OldPassword, dto.NewPassword, user);
+            await _mediator.Send(command);
+
+            return NoContent();
+        }
+
+        [HttpPatch("reset-password")]
+        public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
+        {
+            var command = new ResetPassword(dto.Email, dto.Password, dto.Code);
             await _mediator.Send(command);
 
             return NoContent();
