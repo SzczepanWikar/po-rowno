@@ -1,6 +1,8 @@
-﻿using Core.Common.Aggregate;
+﻿using Core.Common;
+using Core.Common.Aggregate;
 using Core.Common.Code;
 using Core.User.Events;
+using Core.UserGroupEvents;
 
 namespace Core.User
 {
@@ -24,6 +26,7 @@ namespace Core.User
         public UserStatus Status { get; private set; }
         public IList<RefreshToken> RefreshTokens { get; private set; } = new List<RefreshToken>();
         public Codes<UserCodeType> Codes { get; private set; } = new();
+        public IList<Guid> GroupIds { get; private set; } = new List<Guid>();
 
         public override void When(object @event)
         {
@@ -53,6 +56,21 @@ namespace Core.User
                     break;
                 case RefreshTokenExpirationDateChanged(_, string token, DateTime date):
                     ChangeRefreshTokenExpirationDate(token, date);
+                    break;
+                case UserJoinedGroup(Guid groupId, _):
+                    GroupIds.Add(groupId);
+                    break;
+                case UserLeavedGroup(Guid groupId, _):
+                    GroupIds.Remove(groupId);
+                    break;
+                case UserBannedFromGroup(Guid groupId, _):
+                    GroupIds.Remove(groupId);
+                    break;
+                case UserUnbannedFromGroup(Guid groupId, _):
+                    GroupIds.Add(groupId);
+                    break;
+                case AccountDeleted e:
+                    Deleted = true;
                     break;
                 default:
                     return;

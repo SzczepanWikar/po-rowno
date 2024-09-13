@@ -18,7 +18,7 @@ fromAll()
 
             emit('user-email-index-res', 'UserEmailIndexed', eventData);
         },
-        UserDeleted: function (state, event) {
+        AccountDeleted: function (state, event) {
             const { data } = event;
 
             const IndexedValue = data.Email?.toLowerCase();

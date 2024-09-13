@@ -42,7 +42,7 @@ namespace Infrastructure.Projections.InternalProjections.Repository
                 return; // If Stream not found any stream has been created yet
             }
 
-            var emailLower = indexedValue.ToLower();
+            var indexedValueLower = indexedValue.ToLower();
 
             await foreach (var @event in readResult)
             {
@@ -50,7 +50,7 @@ namespace Infrastructure.Projections.InternalProjections.Repository
                     @event.Event.Data.Span
                 );
 
-                if (eventData.IndexedValue != emailLower)
+                if (eventData.IndexedValue != indexedValueLower)
                 {
                     continue;
                 }

@@ -1,6 +1,8 @@
 ﻿using Application.Group.Commands;
+using Application.User.Services;
 using Core.Common.Exceptions;
 using Core.Group.Events;
+using Core.UserGroupEvents;
 using Infrastructure.EventStore.Repository;
 
 namespace Application.Group
@@ -10,10 +12,12 @@ namespace Application.Group
     public class GroupService : IGroupService
     {
         private readonly IEventStoreRepository<Group> _repository;
+        private readonly IUserService _userService;
 
-        public GroupService(IEventStoreRepository<Group> repository)
+        public GroupService(IEventStoreRepository<Group> repository, IUserService userService)
         {
             _repository = repository;
+            _userService = userService;
         }
 
         public async Task<Guid> CreateAsync(
@@ -57,6 +61,50 @@ namespace Application.Group
         )
         {
             await _repository.AppendAsync(id, @event, cancellationToken);
+        }
+
+        public async Task LeaveGroup(
+            Guid id,
+            Core.User.User user,
+            CancellationToken cancellationToken = default
+        )
+        {
+            var group = await FindOneAsync(id, cancellationToken);
+
+            if (!group.UsersIds.Any(e => e == user.Id))
+            {
+                throw new BadRequestException("User is not part of this group.");
+            }
+
+            await AppendLeaveGroupEvents(user, group, cancellationToken);
+        }
+
+        private async Task AppendLeaveGroupEvents(
+            Core.User.User user,
+            Group group,
+            CancellationToken cancellationToken
+        )
+        {
+            var @event = new UserLeavedGroup(group.Id, user.Id);
+            await AppendAsync(group.Id, @event, cancellationToken);
+            await _userService.AppendAsync(user.Id, @event, cancellationToken);
+
+            if (group.OwnerId == user.Id)
+            {
+                await ChangeGroupOwner(group, cancellationToken);
+            }
+        }
+
+        private async Task ChangeGroupOwner(
+            Group group,
+            CancellationToken cancellationToken = default
+        )
+        {
+            var userId = group.UsersIds.FirstOrDefault();
+
+            var @event = new GroupOwnerChanged(group.Id, userId);
+
+            await AppendAsync(group.Id, @event, cancellationToken);
         }
     }
 }

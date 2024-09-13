@@ -32,7 +32,7 @@ namespace Application.Group.Commands
                 throw new ForbiddenException();
             }
 
-            await _repository.AppendAsync(request.Id, new Deleted(), cancellationToken);
+            await _repository.AppendAsync(request.Id, new Deleted(request.Id), cancellationToken);
         }
     }
 }

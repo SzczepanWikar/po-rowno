@@ -107,5 +107,17 @@ namespace API.User
 
             return NoContent();
         }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<ActionResult> Delete([FromBody] DeleteAccountDto dto)
+        {
+            var user = HttpContext.Items["User"] as Core.User.User;
+
+            var command = new DeleteAccount(dto.Password, user);
+            await _mediator.Send(command);
+
+            return NoContent();
+        }
     }
 }

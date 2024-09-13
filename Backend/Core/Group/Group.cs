@@ -2,6 +2,7 @@
 using Core.Common.Aggregate;
 using Core.Common.Code;
 using Core.Group.Events;
+using Core.UserGroupEvents;
 
 namespace Core.Group
 {

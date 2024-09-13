@@ -1,8 +1,8 @@
-﻿using Core.Common.Exceptions;
+﻿using Application.User.Services;
+using Core.Common.Exceptions;
 using Core.Common.Projections;
 using Core.Group;
-using Core.Group.Events;
-using Infrastructure.EventStore.Repository;
+using Core.UserGroupEvents;
 using Infrastructure.Projections.InternalProjections.Repository;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,23 +12,23 @@ namespace Application.Group.Commands
     using Group = Core.Group.Group;
     using User = Core.User.User;
 
-    public record JoinGroup(string code, User user) : IRequest;
+    public record JoinGroup(string Code, User User) : IRequest;
 
     public class JoinGroupHandler : IRequestHandler<JoinGroup>
     {
         private readonly IGroupService _groupService;
-        private readonly IEventStoreRepository<Group> _eventStoreRepository;
+        private readonly IUserService _userService;
         private readonly IIndexProjectionRepository _indexProjectionRepository;
 
         public JoinGroupHandler(
             IGroupService groupService,
-            IEventStoreRepository<Group> eventStoreRepository,
+            IUserService userService,
             [FromKeyedServices(InternalProjectionName.GroupCodeIndex)]
                 IIndexProjectionRepository indexProjectionRepository
         )
         {
             _groupService = groupService;
-            _eventStoreRepository = eventStoreRepository;
+            _userService = userService;
             _indexProjectionRepository = indexProjectionRepository;
         }
 
@@ -36,15 +36,13 @@ namespace Application.Group.Commands
         {
             Group group = await FindGroupByCode(request, cancellationToken);
 
-            ValidateCode(request.code, group);
+            ValidateCode(request.Code, group);
 
-            var userId = request.user.Id;
+            var userId = request.User.Id;
 
             ValidateUser(group, userId);
 
-            var @event = new UserJoinedGroup(group.Id, userId);
-
-            await _eventStoreRepository.AppendAsync(group.Id, @event, cancellationToken);
+            await AppenEvents(group, userId, cancellationToken);
         }
 
         private async Task<Group> FindGroupByCode(
@@ -53,7 +51,7 @@ namespace Application.Group.Commands
         )
         {
             var groupId = await _indexProjectionRepository.GetOwnerId(
-                request.code,
+                request.Code,
                 cancellationToken
             );
 
@@ -87,6 +85,18 @@ namespace Application.Group.Commands
             {
                 throw new BadRequestException("User is banned in this group.");
             }
+        }
+
+        private async Task AppenEvents(
+            Group group,
+            Guid userId,
+            CancellationToken cancellationToken
+        )
+        {
+            var @event = new UserJoinedGroup(group.Id, userId);
+
+            await _groupService.AppendAsync(group.Id, @event, cancellationToken);
+            await _userService.AppendAsync(userId, @event, cancellationToken);
         }
     }
 }

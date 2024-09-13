@@ -1,5 +1,5 @@
 ﻿using Core.Common.Exceptions;
-using Core.Group.Events;
+using Core.UserGroupEvents;
 using MediatR;
 
 namespace Application.Group.Commands

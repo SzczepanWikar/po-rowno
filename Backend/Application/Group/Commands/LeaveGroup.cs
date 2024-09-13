@@ -1,7 +1,7 @@
-﻿using System.Threading;
+﻿using Application.User.Services;
 using Core.Common.Exceptions;
 using Core.Group.Events;
-using Infrastructure.EventStore.Repository;
+using Core.UserGroupEvents;
 using MediatR;
 
 namespace Application.Group.Commands
@@ -22,32 +22,7 @@ namespace Application.Group.Commands
 
         public async Task Handle(LeaveGroup request, CancellationToken cancellationToken)
         {
-            var group = await _groupService.FindOneAsync(request.Id, cancellationToken);
-
-            if (!group.UsersIds.Any(e => e == request.User.Id))
-            {
-                throw new BadRequestException("User is not part of this group.");
-            }
-
-            var @event = new UserLeavedGroup(request.Id, request.User.Id);
-            await _groupService.AppendAsync(request.Id, @event, cancellationToken);
-
-            if (group.OwnerId == request.User.Id)
-            {
-                await ChangeGroupOwner(group, cancellationToken);
-            }
-        }
-
-        private async Task ChangeGroupOwner(
-            Group group,
-            CancellationToken cancellationToken = default
-        )
-        {
-            var userId = group.UsersIds.FirstOrDefault();
-
-            var @event = new GroupOwnerChanged(group.Id, userId);
-
-            await _groupService.AppendAsync(group.Id, @event, cancellationToken);
+            await _groupService.LeaveGroup(request.Id, request.User, cancellationToken);
         }
     }
 }
