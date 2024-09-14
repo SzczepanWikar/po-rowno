@@ -22,16 +22,23 @@ namespace Application
             IConfiguration config
         )
         {
-            services.AddEventStoreRepository<Core.User.User>();
-            services.AddEventStoreRepository<Core.Group.Group>();
-            services.AddEventStoreRepository<Core.Expense.Expense>();
-            services.AddEventStoreRepository<UserToken>();
+            AddRepositories(services);
+            AddServices(services);
+            AddInfrastructure(services, config);
 
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IGroupService, GroupService>();
-            services.AddScoped<IPasswordHasher<Core.User.User>, PasswordHasher<Core.User.User>>();
-            services.AddScoped<IAuthTokenService, AuthTokenService>();
+            return services;
+        }
 
+        public static WebApplication UseBusinessLogic(this WebApplication app) => app;
+
+        private static void AddRepositories(IServiceCollection services)
+        {
+            AddAggregateRepositories(services);
+            AddIndexRepositories(services);
+        }
+
+        private static void AddIndexRepositories(IServiceCollection services)
+        {
             services.AddKeyedScoped<IIndexProjectionRepository, GroupIndexRepository>(
                 InternalProjectionName.GroupCodeIndex
             );
@@ -47,13 +54,28 @@ namespace Application
             services.AddKeyedScoped<IIndexProjectionRepository, UserRefreshTokenIndexRepository>(
                 InternalProjectionName.UserRefreshTokenIndex
             );
-
-            services.AddPayPal(config);
-            services.AddProjections<ApplicationContext>(config);
-
-            return services;
         }
 
-        public static WebApplication UseBusinessLogic(this WebApplication app) => app;
+        private static void AddAggregateRepositories(IServiceCollection services)
+        {
+            services.AddEventStoreRepository<Core.User.User>();
+            services.AddEventStoreRepository<Core.Group.Group>();
+            services.AddEventStoreRepository<Core.Expense.Expense>();
+            services.AddEventStoreRepository<UserToken>();
+        }
+
+        private static void AddServices(IServiceCollection services)
+        {
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IGroupService, GroupService>();
+            services.AddScoped<IPasswordHasher<Core.User.User>, PasswordHasher<Core.User.User>>();
+            services.AddScoped<IAuthTokenService, AuthTokenService>();
+        }
+
+        private static void AddInfrastructure(IServiceCollection services, IConfiguration config)
+        {
+            services.AddPayPal(config);
+            services.AddProjections<ApplicationContext>(config);
+        }
     }
 }
