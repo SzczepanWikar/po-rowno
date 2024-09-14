@@ -1,0 +1,40 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning",
+      "Microsoft.AspNetCore.Authentication": "Debug",
+      "Microsoft.AspNetCore.Authentication.JwtBearer": "Debug"
+    }
+  },
+  "ConnectionStrings": {
+    "EventStore": "EVENT_STORE_DB_CONNECTION_STRING",
+    "ReadModel": "SQL_SERVER_DB_CONNECTION_STRING"
+  },
+  "EventStore": {
+    "SubscriptionGroup": "po_rowno"
+  },
+  "EmailConfiguration": {
+    "From": {
+      "Name": "PoRowno",
+      "Address": "EMAIL_ADDRESS"
+    },
+    "Host": "SMTP_HOST_ADDRESS",
+    "Port": 465,
+    "Login": "SMTP_LOGIN",
+    "Password": "SMTP_PASSWORD"
+  },
+  "Token": {
+    "Token": "TOKEN",
+    "ExpiresInSeconds": 1200,
+    "Issuer": "PoRowno",
+    "Audience": "PoRowno",
+    "RefreshExpiresInSeconds": 7776000
+  },
+  "PayPal": {
+    "ClientId": "PAYPAL_CLIENT_ID",
+    "ClientSecret": "PAYPAL_CLIENT_SECRET",
+    "ApiAddress": "PAYPAL_API_ADDRESS"
+  },
+  "BaseUrl": "APP_URL"
+}
