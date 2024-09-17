@@ -31,7 +31,7 @@ namespace Infrastructure.Middleware.UserFetching
                 var cacheEntryOptions = new MemoryCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = _cacheDuration,
-                    SlidingExpiration = TimeSpan.FromMinutes(5)
+                    SlidingExpiration = TimeSpan.FromMinutes(5),
                 };
 
                 _cache.Set(id, user, cacheEntryOptions);

@@ -10,18 +10,18 @@ namespace Core.Group
     {
         Dollar,
         Euro,
-        PolishZloty
+        PolishZloty,
     }
 
     public enum GroupCodeType
     {
-        Join
+        Join,
     }
 
     public sealed class Group : Aggregate
     {
-        public string Name { get; private set; }
-        public string Description { get; private set; }
+        public string Name { get; private set; } = string.Empty;
+        public string Description { get; private set; } = string.Empty;
         public Currency Currency { get; private set; }
         public Guid OwnerId { get; private set; }
         public IList<Guid> UsersIds { get; init; } = new List<Guid>();

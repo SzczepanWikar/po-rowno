@@ -75,7 +75,6 @@ namespace Application
         private static void AddInfrastructure(IServiceCollection services, IConfiguration config)
         {
             services.AddPayPal(config);
-            services.AddProjections<ApplicationContext>(config);
         }
     }
 }

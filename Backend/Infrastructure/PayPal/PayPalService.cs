@@ -23,7 +23,7 @@ namespace Infrastructure.PayPal
 
             var purchaseUnits = new List<PurchaseUnitDto>
             {
-                new PurchaseUnitDto(new AmountDto(CurrencyToCode(currency), amount))
+                new PurchaseUnitDto(new AmountDto(CurrencyToCode(currency), amount)),
             };
 
             var dto = new CreateOrderDto("CAPTURE", purchaseUnits);
@@ -34,7 +34,7 @@ namespace Infrastructure.PayPal
 
             var request = new HttpRequestMessage(HttpMethod.Post, "/v2/checkout/orders")
             {
-                Content = content
+                Content = content,
             };
 
             request.Headers.Add("Authorization", $"Bearer {accessToken}");
@@ -126,7 +126,7 @@ namespace Infrastructure.PayPal
                 Currency.Dollar => "USD",
                 Currency.Euro => "EUR",
                 Currency.PolishZloty => "PLN",
-                _ => throw new NotImplementedException("Currency not supported")
+                _ => throw new NotImplementedException("Currency not supported"),
             };
 
         internal sealed record PayPalAuthResult(

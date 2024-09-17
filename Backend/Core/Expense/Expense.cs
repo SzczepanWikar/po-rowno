@@ -8,7 +8,7 @@ namespace Core.Expense
     public enum ExpenseType
     {
         Cost = 0,
-        Settlement
+        Settlement,
     }
 
     public sealed class Expense : Aggregate

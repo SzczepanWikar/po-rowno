@@ -10,12 +10,12 @@ namespace Core.User
     {
         Inactive,
         Active,
-        Blocked
+        Blocked,
     }
 
     public enum UserCodeType
     {
-        ResetPassword
+        ResetPassword,
     }
 
     public sealed class User : Aggregate

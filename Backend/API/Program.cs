@@ -1,5 +1,6 @@
 using API.User.AuthView;
 using Application;
+using DatabaseProjections;
 using Infrastructure.CQRS;
 using Infrastructure.Email;
 using Infrastructure.EventStore;
@@ -25,6 +26,7 @@ builder.Services.AddMailing(builder.Configuration);
 builder.Services.AddHttpExceptionHandlingMiddleware();
 builder.Services.AddControllersWithViews();
 builder.Services.AddAuth(builder.Configuration);
+builder.Services.AddDatabaseProjections(builder.Configuration);
 builder.Services.AddUserFetchng();
 
 builder.Logging.ConfigureLogging();
