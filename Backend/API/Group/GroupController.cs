@@ -1,8 +1,8 @@
 ﻿using API.Group.DTO;
-using Application.Group.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WriteModel.Group.Commands;
 
 namespace API.Group
 {

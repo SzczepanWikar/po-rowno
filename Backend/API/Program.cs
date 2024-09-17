@@ -1,6 +1,4 @@
 using API.User.AuthView;
-using Application;
-using DatabaseProjections;
 using Infrastructure.CQRS;
 using Infrastructure.Email;
 using Infrastructure.EventStore;
@@ -9,6 +7,8 @@ using Infrastructure.Middleware.Auth;
 using Infrastructure.Middleware.ErrorHandling;
 using Infrastructure.Middleware.UserFetching;
 using Infrastructure.Projections;
+using ReadModel;
+using WriteModel;
 
 var builder = WebApplication.CreateBuilder(args);
 
