@@ -118,7 +118,6 @@ namespace Infrastructure.Projections
                     $"Event ${resolvedEvent.Event.EventId} from stream ${resolvedEvent.Event.EventStreamId} appered"
                 );
                 await HandleEventAsync(resolvedEvent, cancellationToken);
-                var ev = resolvedEvent.Event.EventType;
                 await subscription.Ack(resolvedEvent);
                 _logger.LogInformation(
                     $"Event ${resolvedEvent.Event.EventId} from stream ${resolvedEvent.Event.EventStreamId} proceed correctly"
@@ -142,24 +141,28 @@ namespace Infrastructure.Projections
             CancellationToken cancellationToken
         )
         {
-            using (var scope = _serviceScopeFactory.CreateScope())
+            if (resolvedEvent.Event.EventStreamId.StartsWith('$'))
             {
-                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-
-                if (resolvedEvent.Event.Data.Length == 0)
-                {
-                    return;
-                }
-
-                var notification = _eventParser.GetEventNotification(resolvedEvent.Event);
-
-                if (notification == null)
-                {
-                    return;
-                }
-
-                await mediator.Publish(notification, cancellationToken: cancellationToken);
+                _logger.LogInformation("System event skipped.");
+                return;
             }
+
+            using var scope = _serviceScopeFactory.CreateScope();
+            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
+            if (resolvedEvent.Event.Data.Length == 0)
+            {
+                return;
+            }
+
+            var notification = _eventParser.GetEventNotification(resolvedEvent.Event);
+
+            if (notification == null)
+            {
+                return;
+            }
+
+            await mediator.Publish(notification, cancellationToken: cancellationToken);
         }
 
         private void OnSubscriptionDropped(
