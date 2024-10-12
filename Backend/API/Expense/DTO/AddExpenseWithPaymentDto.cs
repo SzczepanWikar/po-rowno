@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Core.Expense;
 using Core.Group;
 
 namespace API.Expense.DTO

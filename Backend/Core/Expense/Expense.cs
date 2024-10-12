@@ -19,7 +19,7 @@ namespace Core.Expense
         public ExpenseType Type { get; private set; }
         public Guid GroupId { get; private set; }
         public Guid PayerId { get; private set; }
-        public IReadOnlyList<Guid> DeptorsIds { get; private set; } = new List<Guid>();
+        public IReadOnlyList<Deptor> Deptors { get; private set; } = new List<Deptor>();
         public Payment Payment { get; private set; } = new();
 
         public override void When(object @event)
@@ -47,7 +47,7 @@ namespace Core.Expense
             Type = e.Type;
             GroupId = e.GroupId;
             PayerId = e.PayerId;
-            DeptorsIds = e.DeptorsIds;
+            Deptors = e.Deptors;
 
             if (e.Payment is not null)
             {

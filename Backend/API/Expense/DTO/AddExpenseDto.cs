@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Core.Expense;
+using Core.Expense.Events;
 using Core.Group;
 
 namespace API.Expense.DTO
@@ -24,6 +24,6 @@ namespace API.Expense.DTO
         public Guid GroupId { get; init; }
 
         [Required, MinLength(1)]
-        public IReadOnlyList<Guid> DeptorsIds { get; init; }
+        public IReadOnlyList<Deptor> Deptors { get; init; }
     }
 }

@@ -11,7 +11,7 @@ namespace Core.Expense.Events
         ExpenseType Type,
         Guid GroupId,
         Guid PayerId,
-        IReadOnlyList<Guid> DeptorsIds,
+        IReadOnlyList<Deptor> Deptors,
         CreatedOrder? Payment = null
     );
 }

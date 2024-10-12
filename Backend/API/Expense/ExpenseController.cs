@@ -33,7 +33,7 @@ namespace API.Expense
                 dto.Currency,
                 dto.Type,
                 dto.GroupId,
-                dto.DeptorsIds,
+                dto.Deptors,
                 user
             );
 

@@ -80,5 +80,13 @@ namespace ReadModel
                 .OnDelete(DeleteBehavior.Cascade);
 
         }
+
+        private void OnBalanceCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<BalanceEntity>()
+                .HasIndex(e => new { e.PayerId, e.GroupId, e.DeptorId })
+                .IsUnique();
+        }
     }
 }

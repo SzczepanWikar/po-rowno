@@ -55,7 +55,7 @@ namespace Tests.Infrastructure
                 {
                     { "type", "" },
                     { "created", "123" },
-                    { "content-type", "" }
+                    { "content-type", "" },
                 },
                 readOnlyMemory,
                 new ReadOnlyMemory<byte>()
@@ -82,7 +82,7 @@ namespace Tests.Infrastructure
                 {
                     { "type", nameof(TestEvent) },
                     { "created", "123" },
-                    { "content-type", "" }
+                    { "content-type", "" },
                 },
                 readOnlyMemory,
                 new ReadOnlyMemory<byte>()
@@ -109,7 +109,7 @@ namespace Tests.Infrastructure
                 {
                     { "type", nameof(TestEvent) },
                     { "created", "123" },
-                    { "content-type", "" }
+                    { "content-type", "" },
                 },
                 readOnlyMemory,
                 new ReadOnlyMemory<byte>()
@@ -136,7 +136,7 @@ namespace Tests.Infrastructure
                 {
                     { "type", nameof(TestEvent) },
                     { "created", "123" },
-                    { "content-type", "" }
+                    { "content-type", "" },
                 },
                 readOnlyMemory,
                 new ReadOnlyMemory<byte>()

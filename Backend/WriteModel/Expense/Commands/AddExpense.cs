@@ -18,7 +18,7 @@ namespace WriteModel.Expense.Commands
         Currency Currency,
         ExpenseType Type,
         Guid GroupId,
-        IReadOnlyList<Guid> DeptorsIds,
+        IReadOnlyList<Deptor> Deptors,
         User User
     ) : IRequest<Guid>;
 
@@ -59,7 +59,7 @@ namespace WriteModel.Expense.Commands
                 request.Type,
                 request.GroupId,
                 request.User.Id,
-                request.DeptorsIds
+                request.Deptors
             );
 
             await _expenseRepository.CreateAsync(
@@ -67,10 +67,12 @@ namespace WriteModel.Expense.Commands
                 expenseCreatedEvent,
                 cancellationToken
             );
+
             await _groupService.AppendAsync(
                 request.GroupId,
                 new ExpenseAddedToGroup(request.GroupId, expenseCreatedEvent.Id)
             );
+
             return expenseCreatedEvent.Id;
         }
 
@@ -88,27 +90,44 @@ namespace WriteModel.Expense.Commands
 
             if (request.Amount <= 0)
             {
-                throw new BadRequestException("Amunt must be greather than 0");
+                throw new BadRequestException("Amunt must be greather than 0.");
             }
 
             if (request.Currency != group.Currency)
             {
-                throw new BadRequestException("Currencies not match");
+                throw new BadRequestException("Currencies not match.");
             }
 
-            if (!request.DeptorsIds.ToHashSet().IsSubsetOf(group.UsersIds.ToHashSet()))
+            ValidateDeptors(request, group);
+        }
+
+        private static void ValidateDeptors(AddExpense request, Core.Group.Group group)
+        {
+            var deptors = request.Deptors;
+            var dept = deptors.Aggregate<Deptor, decimal, decimal>(
+                0,
+                (acc, curr) => acc + curr.Amount,
+                acc => acc
+            );
+
+            if (dept > request.Amount)
             {
-                throw new BadRequestException("All deptors must be part of group");
+                throw new BadRequestException("Deptors cannot pay more than amount.");
             }
 
-            if (request.DeptorsIds.Any(e => request.User.Id == e))
+            if (!deptors.Select(e => e.UserId).ToHashSet().IsSubsetOf(group.UsersIds.ToHashSet()))
             {
-                throw new BadRequestException("Payer cannot be deptors");
+                throw new BadRequestException("All deptors must be part of group.");
             }
 
-            if (request.Type == ExpenseType.Settlement && request.DeptorsIds.Count != 1)
+            if (deptors.Any(e => request.User.Id == e.UserId))
             {
-                throw new BadRequestException("Settlement require only one deptor");
+                throw new BadRequestException("Payer cannot be a deptor.");
+            }
+
+            if (request.Type == ExpenseType.Settlement && deptors.Count != 1)
+            {
+                throw new BadRequestException("Settlement require only one deptor.");
             }
         }
     }

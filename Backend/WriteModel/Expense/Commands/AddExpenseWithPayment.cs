@@ -60,7 +60,7 @@ namespace WriteModel.Expense.Commands
                     ExpenseType.Settlement,
                     request.GroupId,
                     request.User.Id,
-                    [request.ReceiverId],
+                    [new Deptor(request.ReceiverId, request.Amount)],
                     paymentResult
                 );
 
