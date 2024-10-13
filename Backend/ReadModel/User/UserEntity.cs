@@ -28,6 +28,21 @@ namespace ReadModel.User
             Password = string.Empty;
             Status = UserStatus.Blocked;
             Deleted = false;
+
+            if(UserGroups is null)
+            {
+                return;
+            }
+
+            if(UserGroups.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var userGroup in UserGroups)
+            {
+                userGroup.Status = UserGroupStatus.Leaved;
+            }
         }
     }
 }
