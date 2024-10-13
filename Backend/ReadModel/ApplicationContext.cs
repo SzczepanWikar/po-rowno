@@ -2,6 +2,7 @@
 using ReadModel.Expense;
 using ReadModel.Group;
 using ReadModel.User;
+using ReadModel.UserGroup;
 
 namespace ReadModel
 {

@@ -1,6 +1,7 @@
-﻿using ReadModel.User;
+﻿using ReadModel.Group;
+using ReadModel.User;
 
-namespace ReadModel.Group
+namespace ReadModel.UserGroup
 {
     public enum UserGroupStatus
     {

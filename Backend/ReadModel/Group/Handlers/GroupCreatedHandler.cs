@@ -2,6 +2,7 @@
 using Core.Group.Events;
 using Microsoft.EntityFrameworkCore;
 using ReadModel.User;
+using ReadModel.UserGroup;
 
 namespace ReadModel.Group.Handlers
 {

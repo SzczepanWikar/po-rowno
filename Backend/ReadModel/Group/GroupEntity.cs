@@ -1,6 +1,7 @@
 ﻿using Core.Group;
 using ReadModel.Expense;
 using ReadModel.User;
+using ReadModel.UserGroup;
 
 namespace ReadModel.Group
 {
