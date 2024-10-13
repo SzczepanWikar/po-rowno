@@ -48,13 +48,13 @@ namespace Core.Common.DataStructures
         {
             List<(Guid, Guid, T)> res = new();
 
-            foreach(var row in _matrix)
+            foreach (var row in _matrix)
             {
-                foreach(var cell in row.Value)
+                foreach (var cell in row.Value)
                 {
-                    if(cell.Value != T.Zero)
+                    if (cell.Value != T.Zero)
                     {
-                        res.Add(new (row.Key, cell.Key, cell.Value));
+                        res.Add(new(row.Key, cell.Key, cell.Value));
                     }
                 }
             }

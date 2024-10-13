@@ -5,7 +5,8 @@ namespace ReadModel.Group
     public enum UserGroupStatus
     {
         Active,
-        Banned
+        Banned,
+        Leaved
     }
 
     public class UserGroupEntity

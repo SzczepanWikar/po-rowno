@@ -1,7 +1,7 @@
-﻿using ReadModel.Expense;
+﻿using Microsoft.EntityFrameworkCore;
+using ReadModel.Expense;
 using ReadModel.Group;
 using ReadModel.User;
-using Microsoft.EntityFrameworkCore;
 
 namespace ReadModel
 {
@@ -16,7 +16,14 @@ namespace ReadModel
             OnGroupCreating(modelBuilder);
             OnUserGroupCreating(modelBuilder);
             OnExpenseCreating(modelBuilder);
+            OnBalanceCreating(modelBuilder);
             base.OnModelCreating(modelBuilder);
+        }
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            base.ConfigureConventions(configurationBuilder);
+            configurationBuilder.Properties<decimal>().HavePrecision(13, 4);
         }
 
         private void OnUserCreating(ModelBuilder modelBuilder)
@@ -27,6 +34,12 @@ namespace ReadModel
         private void OnGroupCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GroupEntity>().Property(e => e.Id).ValueGeneratedNever();
+            modelBuilder
+                .Entity<GroupEntity>()
+                .HasOne(e => e.Owner)
+                .WithMany(e => e.OwnedGroups)
+                .HasForeignKey(e => e.OwnerId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         private void OnUserGroupCreating(ModelBuilder modelBuilder)
@@ -38,14 +51,14 @@ namespace ReadModel
                 .HasOne(e => e.User)
                 .WithMany(e => e.UserGroups)
                 .HasForeignKey(e => e.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder
                 .Entity<UserGroupEntity>()
                 .HasOne(e => e.Group)
                 .WithMany(e => e.UserGroups)
                 .HasForeignKey(e => e.GroupId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         private void OnExpenseCreating(ModelBuilder modelBuilder)
@@ -62,7 +75,6 @@ namespace ReadModel
             modelBuilder
                 .Entity<ExpenseDeptorEntity>()
                 .HasIndex(e => new { e.UserId, e.ExpenseId })
-                .HasFilter($"{nameof(ExpenseDeptorEntity.UserId)} IS NOT NULL")
                 .IsUnique();
 
             modelBuilder
@@ -70,7 +82,7 @@ namespace ReadModel
                 .HasOne(e => e.User)
                 .WithMany(e => e.Depts)
                 .HasForeignKey(e => e.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder
                 .Entity<ExpenseDeptorEntity>()
@@ -79,14 +91,46 @@ namespace ReadModel
                 .HasForeignKey(e => e.ExpenseId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder
+                .Entity<ExpenseEntity>()
+                .HasOne(e => e.Group)
+                .WithMany(e => e.Expenses)
+                .HasForeignKey(e => e.GroupId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         private void OnBalanceCreating(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .Entity<BalanceEntity>()
-                .HasIndex(e => new { e.PayerId, e.GroupId, e.DeptorId })
+                .HasIndex(e => new
+                {
+                    e.PayerId,
+                    e.GroupId,
+                    e.DeptorId,
+                })
                 .IsUnique();
+
+            modelBuilder
+                .Entity<BalanceEntity>()
+                .HasOne(e => e.Group)
+                .WithMany(e => e.Balances)
+                .HasForeignKey(e => e.GroupId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder
+                .Entity<BalanceEntity>()
+                .HasOne(e => e.Payer)
+                .WithMany(e => e.CreditBalances)
+                .HasForeignKey(e => e.PayerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder
+                .Entity<BalanceEntity>()
+                .HasOne(e => e.Deptor)
+                .WithMany(e => e.DeptBalances)
+                .HasForeignKey(e => e.DeptorId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

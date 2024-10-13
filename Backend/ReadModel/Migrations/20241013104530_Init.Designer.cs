@@ -12,8 +12,8 @@ using ReadModel;
 namespace ReadModel.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240918183724_GroupJoinCode")]
-    partial class GroupJoinCode
+    [Migration("20241013104530_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,16 +25,51 @@ namespace ReadModel.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ReadModel.Expense.BalanceEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Balance")
+                        .HasPrecision(13, 4)
+                        .HasColumnType("decimal(13,4)");
+
+                    b.Property<Guid>("DeptorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PayerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeptorId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("PayerId", "GroupId", "DeptorId")
+                        .IsUnique();
+
+                    b.ToTable("BalanceEntity");
+                });
+
             modelBuilder.Entity("ReadModel.Expense.ExpenseDeptorEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(13, 4)
+                        .HasColumnType("decimal(13,4)");
+
                     b.Property<Guid>("ExpenseId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -42,8 +77,7 @@ namespace ReadModel.Migrations
                     b.HasIndex("ExpenseId");
 
                     b.HasIndex("UserId", "ExpenseId")
-                        .IsUnique()
-                        .HasFilter("UserId IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("ExpenseDeptorEntity");
                 });
@@ -54,7 +88,8 @@ namespace ReadModel.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(13, 4)
+                        .HasColumnType("decimal(13,4)");
 
                     b.Property<int>("Currency")
                         .HasColumnType("int");
@@ -66,7 +101,7 @@ namespace ReadModel.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("PayerId")
+                    b.Property<Guid>("PayerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PaymentId")
@@ -162,6 +197,33 @@ namespace ReadModel.Migrations
                     b.ToTable("UserEntity");
                 });
 
+            modelBuilder.Entity("ReadModel.Expense.BalanceEntity", b =>
+                {
+                    b.HasOne("ReadModel.User.UserEntity", "Deptor")
+                        .WithMany("DeptBalances")
+                        .HasForeignKey("DeptorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ReadModel.Group.GroupEntity", "Group")
+                        .WithMany("Balances")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ReadModel.User.UserEntity", "Payer")
+                        .WithMany("CreditBalances")
+                        .HasForeignKey("PayerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Deptor");
+
+                    b.Navigation("Group");
+
+                    b.Navigation("Payer");
+                });
+
             modelBuilder.Entity("ReadModel.Expense.ExpenseDeptorEntity", b =>
                 {
                     b.HasOne("ReadModel.Expense.ExpenseEntity", "Expense")
@@ -173,7 +235,8 @@ namespace ReadModel.Migrations
                     b.HasOne("ReadModel.User.UserEntity", "User")
                         .WithMany("Depts")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Expense");
 
@@ -183,7 +246,7 @@ namespace ReadModel.Migrations
             modelBuilder.Entity("ReadModel.Expense.ExpenseEntity", b =>
                 {
                     b.HasOne("ReadModel.Group.GroupEntity", "Group")
-                        .WithMany()
+                        .WithMany("Expenses")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -191,7 +254,8 @@ namespace ReadModel.Migrations
                     b.HasOne("ReadModel.User.UserEntity", "Payer")
                         .WithMany("Expenses")
                         .HasForeignKey("PayerId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Group");
 
@@ -201,9 +265,9 @@ namespace ReadModel.Migrations
             modelBuilder.Entity("ReadModel.Group.GroupEntity", b =>
                 {
                     b.HasOne("ReadModel.User.UserEntity", "Owner")
-                        .WithMany()
+                        .WithMany("OwnedGroups")
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Owner");
@@ -214,13 +278,13 @@ namespace ReadModel.Migrations
                     b.HasOne("ReadModel.Group.GroupEntity", "Group")
                         .WithMany("UserGroups")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ReadModel.User.UserEntity", "User")
                         .WithMany("UserGroups")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Group");
@@ -235,14 +299,24 @@ namespace ReadModel.Migrations
 
             modelBuilder.Entity("ReadModel.Group.GroupEntity", b =>
                 {
+                    b.Navigation("Balances");
+
+                    b.Navigation("Expenses");
+
                     b.Navigation("UserGroups");
                 });
 
             modelBuilder.Entity("ReadModel.User.UserEntity", b =>
                 {
+                    b.Navigation("CreditBalances");
+
+                    b.Navigation("DeptBalances");
+
                     b.Navigation("Depts");
 
                     b.Navigation("Expenses");
+
+                    b.Navigation("OwnedGroups");
 
                     b.Navigation("UserGroups");
                 });

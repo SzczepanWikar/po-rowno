@@ -12,11 +12,12 @@ namespace ReadModel.Expense
         public decimal Amount { get; set; }
         public Currency Currency { get; set; }
         public ExpenseType Type { get; set; }
-        public Guid? PayerId { get; set; }
+        public Guid PayerId { get; set; }
+        public Guid GroupId { get; set; }
         public string? PaymentId { get; set; }
         public string? PaymentStatus { get; set; }
         public GroupEntity Group { get; set; }
-        public UserEntity? Payer { get; set; } // Can be null because if the user leaves the group, the expense will still be in the group
+        public UserEntity Payer { get; set; }
         public ICollection<ExpenseDeptorEntity> Deptors { get; set; }
     }
 }

@@ -2,7 +2,6 @@
 using Core.Common.Projections;
 using Core.Expense.Events;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Security;
 using ReadModel.User;
 
 namespace ReadModel.Expense.Handler

@@ -33,6 +33,8 @@ namespace ReadModel.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JoinCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    JoinCodeValidTo = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Currency = table.Column<int>(type: "int", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -44,7 +46,40 @@ namespace ReadModel.Migrations
                         column: x => x.OwnerId,
                         principalTable: "UserEntity",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BalanceEntity",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PayerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DeptorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Balance = table.Column<decimal>(type: "decimal(13,4)", precision: 13, scale: 4, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BalanceEntity", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BalanceEntity_GroupEntity_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "GroupEntity",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BalanceEntity_UserEntity_DeptorId",
+                        column: x => x.DeptorId,
+                        principalTable: "UserEntity",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BalanceEntity_UserEntity_PayerId",
+                        column: x => x.PayerId,
+                        principalTable: "UserEntity",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -53,13 +88,13 @@ namespace ReadModel.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(13,4)", precision: 13, scale: 4, nullable: false),
                     Currency = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    PayerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PayerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PaymentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PaymentStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    PaymentStatus = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -94,13 +129,13 @@ namespace ReadModel.Migrations
                         column: x => x.GroupId,
                         principalTable: "GroupEntity",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserGroupEntity_UserEntity_UserId",
                         column: x => x.UserId,
                         principalTable: "UserEntity",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -109,7 +144,8 @@ namespace ReadModel.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ExpenseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Amount = table.Column<decimal>(type: "decimal(13,4)", precision: 13, scale: 4, nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -125,8 +161,24 @@ namespace ReadModel.Migrations
                         column: x => x.UserId,
                         principalTable: "UserEntity",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BalanceEntity_DeptorId",
+                table: "BalanceEntity",
+                column: "DeptorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BalanceEntity_GroupId",
+                table: "BalanceEntity",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BalanceEntity_PayerId_GroupId_DeptorId",
+                table: "BalanceEntity",
+                columns: new[] { "PayerId", "GroupId", "DeptorId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExpenseDeptorEntity_ExpenseId",
@@ -137,8 +189,7 @@ namespace ReadModel.Migrations
                 name: "IX_ExpenseDeptorEntity_UserId_ExpenseId",
                 table: "ExpenseDeptorEntity",
                 columns: new[] { "UserId", "ExpenseId" },
-                unique: true,
-                filter: "UserId IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExpenseEntity_GroupId",
@@ -164,6 +215,9 @@ namespace ReadModel.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "BalanceEntity");
+
             migrationBuilder.DropTable(
                 name: "ExpenseDeptorEntity");
 
