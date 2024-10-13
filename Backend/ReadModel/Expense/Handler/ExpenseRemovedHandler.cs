@@ -14,11 +14,17 @@ namespace ReadModel.Expense.Handler
             _context = context;
         }
 
-        public async Task Handle(EventNotification<ExpenseRemoved> notification, CancellationToken cancellationToken)
+        public async Task Handle(
+            EventNotification<ExpenseRemoved> notification,
+            CancellationToken cancellationToken
+        )
         {
             var @event = notification.Event;
 
-            var expense = await _context.Set<ExpenseEntity>().Where(e => e.Id == @event.Id).FirstOrDefaultAsync();
+            var expense = await _context
+                .Set<ExpenseEntity>()
+                .Where(e => e.Id == @event.Id)
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (expense is null)
             {
@@ -28,16 +34,19 @@ namespace ReadModel.Expense.Handler
             var balances = await _context
                 .Set<BalanceEntity>()
                 .Where(e => e.GroupId == expense.GroupId)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             var graph = BuildBalancesGraph(expense, balances);
             UpdateBalances(balances, graph);
 
             _context.Set<ExpenseEntity>().Remove(expense);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        private static Graph<decimal> BuildBalancesGraph(ExpenseEntity expense, List<BalanceEntity> balances)
+        private static Graph<decimal> BuildBalancesGraph(
+            ExpenseEntity expense,
+            List<BalanceEntity> balances
+        )
         {
             Graph<decimal> graph = new();
 

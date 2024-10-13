@@ -33,10 +33,10 @@ namespace ReadModel.Expense.Handler
                 PaymentStatus = @event.Payment?.Response.status,
             };
 
-            var payer = _context
+            var payer = await _context
                 .Set<UserEntity>()
                 .Where(e => e.Id == @event.PayerId)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (payer is null)
             {
@@ -61,12 +61,15 @@ namespace ReadModel.Expense.Handler
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        private async Task CalcBalancesAsync(ExpenseCreated @event, CancellationToken cancellationToken)
+        private async Task CalcBalancesAsync(
+            ExpenseCreated @event,
+            CancellationToken cancellationToken
+        )
         {
             var currentBalances = await _context
                 .Set<BalanceEntity>()
                 .Where(e => e.GroupId == @event.GroupId)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             if (currentBalances.Count == 0)
             {
@@ -86,11 +89,15 @@ namespace ReadModel.Expense.Handler
             var balancesGraph = GenerateBalancesGraph(@event, currentBalances);
 
             balancesGraph.MinimizeEdges();
-            
+
             UpdateBalances(@event, currentBalances, balancesGraph);
         }
 
-        private static void UpdateBalances(ExpenseCreated @event, List<BalanceEntity> currentBalances, Graph<decimal> balancesGraph)
+        private static void UpdateBalances(
+            ExpenseCreated @event,
+            List<BalanceEntity> currentBalances,
+            Graph<decimal> balancesGraph
+        )
         {
             var reducedBalances = balancesGraph.GetEdges();
 
@@ -112,20 +119,24 @@ namespace ReadModel.Expense.Handler
 
             foreach (var balance in reducedBalances)
             {
-                var current = currentBalances.FirstOrDefault(e => e.DeptorId == balance.Row && e.PayerId == balance.Column);
+                var current = currentBalances.FirstOrDefault(e =>
+                    e.DeptorId == balance.Row && e.PayerId == balance.Column
+                );
 
                 if (current is null)
                 {
-                    BalanceEntity newBalance = new()
-                    {
-                        PayerId = balance.Column,
-                        DeptorId = balance.Row,
-                        GroupId = @event.GroupId,
-                        Balance = balance.Weight,
-                    };
+                    BalanceEntity newBalance =
+                        new()
+                        {
+                            PayerId = balance.Column,
+                            DeptorId = balance.Row,
+                            GroupId = @event.GroupId,
+                            Balance = balance.Weight,
+                        };
 
                     currentBalances.Add(newBalance);
-                };
+                }
+                ;
             }
         }
 

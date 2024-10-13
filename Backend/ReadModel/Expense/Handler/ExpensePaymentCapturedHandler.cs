@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ReadModel.Expense.Handler
 {
-    public sealed class ExpensePaymentCapturedHandler : IEventNotificationHandler<ExpensePaymentCaptured>
+    public sealed class ExpensePaymentCapturedHandler
+        : IEventNotificationHandler<ExpensePaymentCaptured>
     {
         private readonly ApplicationContext _context;
 
@@ -13,9 +14,15 @@ namespace ReadModel.Expense.Handler
             _context = context;
         }
 
-        public async Task Handle(EventNotification<ExpensePaymentCaptured> notification, CancellationToken cancellationToken)
+        public async Task Handle(
+            EventNotification<ExpensePaymentCaptured> notification,
+            CancellationToken cancellationToken
+        )
         {
-            var expense = await _context.Set<ExpenseEntity>().Where(e => e.Id == notification.Event.Id).FirstOrDefaultAsync(cancellationToken);
+            var expense = await _context
+                .Set<ExpenseEntity>()
+                .Where(e => e.Id == notification.Event.Id)
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (expense is null)
             {

@@ -21,7 +21,7 @@ namespace ReadModel.User.Handlers
             var user = await _context
                 .Set<UserEntity>()
                 .Where(e => e.Id == notification.Event.Id)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (user is null)
             {
@@ -30,7 +30,7 @@ namespace ReadModel.User.Handlers
 
             user.Password = notification.Event.Password;
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

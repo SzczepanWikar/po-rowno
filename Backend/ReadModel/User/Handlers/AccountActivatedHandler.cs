@@ -22,7 +22,7 @@ namespace ReadModel.User.Handlers
             var user = await _context
                 .Set<UserEntity>()
                 .Where(e => e.Id == notification.Event.Id)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (user is null)
             {

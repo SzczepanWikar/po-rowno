@@ -6,7 +6,7 @@ namespace ReadModel.Group
     {
         Active,
         Banned,
-        Leaved
+        Leaved,
     }
 
     public class UserGroupEntity

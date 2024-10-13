@@ -19,10 +19,10 @@ namespace ReadModel.Group.Handlers
             CancellationToken cancellationToken
         )
         {
-            var user = _context
+            var user = await _context
                 .Set<UserEntity>()
                 .Where(e => e.Id == notification.Event.Id)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (user is null)
             {
@@ -32,7 +32,7 @@ namespace ReadModel.Group.Handlers
             var group = await _context
                 .Set<GroupEntity>()
                 .Where(e => e.Id == notification.Event.Id)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (group is null)
             {

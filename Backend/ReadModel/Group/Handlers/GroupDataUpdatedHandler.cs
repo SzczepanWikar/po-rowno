@@ -14,9 +14,15 @@ namespace ReadModel.Group.Handlers
             _context = context;
         }
 
-        public async Task Handle(EventNotification<GroupDataUpdated> notification, CancellationToken cancellationToken)
+        public async Task Handle(
+            EventNotification<GroupDataUpdated> notification,
+            CancellationToken cancellationToken
+        )
         {
-            var group = await _context.Set<GroupEntity>().Where(e => e.Id == notification.Event.Id).FirstOrDefaultAsync();
+            var group = await _context
+                .Set<GroupEntity>()
+                .Where(e => e.Id == notification.Event.Id)
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (group is null)
             {
@@ -26,17 +32,24 @@ namespace ReadModel.Group.Handlers
             group.Name = notification.Event.Name ?? group.Name;
             group.Description = notification.Event.Description ?? group.Description;
 
-            if(notification.Event.OwnerId.HasValue)
+            if (notification.Event.OwnerId.HasValue)
             {
-                await SetOwner(notification.Event.OwnerId.Value, group);
+                await SetOwner(notification.Event.OwnerId.Value, group, cancellationToken);
             }
 
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        private async Task SetOwner(Guid ownerId, GroupEntity group)
+        private async Task SetOwner(
+            Guid ownerId,
+            GroupEntity group,
+            CancellationToken cancellationToken
+        )
         {
-            var owner = await _context.Set<UserEntity>().Where(e => e.Id == ownerId).FirstOrDefaultAsync();
+            var owner = await _context
+                .Set<UserEntity>()
+                .Where(e => e.Id == ownerId)
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (owner is null)
             {

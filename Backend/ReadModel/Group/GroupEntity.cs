@@ -15,7 +15,7 @@ namespace ReadModel.Group
         public Guid OwnerId { get; set; }
         public UserEntity Owner { get; set; }
         public ICollection<UserGroupEntity> UserGroups { get; set; }
-        public ICollection<ExpenseEntity> Expenses {  get; set; } 
+        public ICollection<ExpenseEntity> Expenses { get; set; }
         public ICollection<BalanceEntity> Balances { get; set; }
     }
 }

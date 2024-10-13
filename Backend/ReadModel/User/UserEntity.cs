@@ -20,7 +20,7 @@ namespace ReadModel.User
         public ICollection<BalanceEntity> CreditBalances { get; set; }
         public ICollection<BalanceEntity> DeptBalances { get; set; }
 
-        public void Delete() 
+        public void Delete()
         {
             Username = "USER_DELETED";
             Email = string.Empty;

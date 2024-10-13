@@ -13,9 +13,15 @@ namespace ReadModel.Group.Handlers
             _context = context;
         }
 
-        public async Task Handle(EventNotification<GroupCodeGenerated> notification, CancellationToken cancellationToken)
+        public async Task Handle(
+            EventNotification<GroupCodeGenerated> notification,
+            CancellationToken cancellationToken
+        )
         {
-            var group = await _context.Set<GroupEntity>().Where(e => e.Id == notification.Event.GroupId).FirstOrDefaultAsync(cancellationToken);
+            var group = await _context
+                .Set<GroupEntity>()
+                .Where(e => e.Id == notification.Event.GroupId)
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (group is null)
             {

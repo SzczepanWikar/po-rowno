@@ -13,7 +13,10 @@ namespace ReadModel.User.Handlers
             _context = context;
         }
 
-        public async Task Handle(EventNotification<UserSignedUp> notification, CancellationToken cancellationToken)
+        public async Task Handle(
+            EventNotification<UserSignedUp> notification,
+            CancellationToken cancellationToken
+        )
         {
             var user = new UserEntity
             {
