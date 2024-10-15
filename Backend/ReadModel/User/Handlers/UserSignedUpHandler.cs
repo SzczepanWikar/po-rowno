@@ -23,7 +23,6 @@ namespace ReadModel.User.Handlers
                 Id = notification.Event.Id,
                 Username = notification.Event.Username,
                 Email = notification.Event.Email,
-                Password = notification.Event.Password,
                 Status = UserStatus.Inactive,
             };
 

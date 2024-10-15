@@ -12,7 +12,7 @@ using ReadModel;
 namespace ReadModel.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20241013104530_Init")]
+    [Migration("20241015184341_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -154,7 +154,31 @@ namespace ReadModel.Migrations
                     b.ToTable("GroupEntity");
                 });
 
-            modelBuilder.Entity("ReadModel.Group.UserGroupEntity", b =>
+            modelBuilder.Entity("ReadModel.User.UserEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserEntity");
+                });
+
+            modelBuilder.Entity("ReadModel.UserGroup.UserGroupEntity", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -170,31 +194,6 @@ namespace ReadModel.Migrations
                     b.HasIndex("GroupId");
 
                     b.ToTable("UserGroupEntity");
-                });
-
-            modelBuilder.Entity("ReadModel.User.UserEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserEntity");
                 });
 
             modelBuilder.Entity("ReadModel.Expense.BalanceEntity", b =>
@@ -273,7 +272,7 @@ namespace ReadModel.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("ReadModel.Group.UserGroupEntity", b =>
+            modelBuilder.Entity("ReadModel.UserGroup.UserGroupEntity", b =>
                 {
                     b.HasOne("ReadModel.Group.GroupEntity", "Group")
                         .WithMany("UserGroups")

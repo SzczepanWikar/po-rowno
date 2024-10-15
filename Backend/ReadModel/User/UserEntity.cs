@@ -10,7 +10,6 @@ namespace ReadModel.User
         public Guid Id { get; set; }
         public string Username { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
         public UserStatus Status { get; set; }
         public bool Deleted { get; set; } = false;
         public ICollection<UserGroupEntity> UserGroups { get; set; }
@@ -24,16 +23,15 @@ namespace ReadModel.User
         {
             Username = "USER_DELETED";
             Email = string.Empty;
-            Password = string.Empty;
             Status = UserStatus.Blocked;
             Deleted = false;
 
-            if(UserGroups is null)
+            if (UserGroups is null)
             {
                 return;
             }
 
-            if(UserGroups.Count == 0)
+            if (UserGroups.Count == 0)
             {
                 return;
             }
