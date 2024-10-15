@@ -24,7 +24,7 @@ namespace ReadModel.User
             Username = "USER_DELETED";
             Email = string.Empty;
             Status = UserStatus.Blocked;
-            Deleted = false;
+            Deleted = true;
 
             if (UserGroups is null)
             {

@@ -13,7 +13,7 @@ fromAll()
             const { data } = event;
             const eventData = { 
                 IndexedValue: data.Code.Value,
-                OwnerId: data.Id
+                OwnerId: data.GroupId
             }
 
             emit('group-code-index-res', 'GroupCodeIndexed', eventData);

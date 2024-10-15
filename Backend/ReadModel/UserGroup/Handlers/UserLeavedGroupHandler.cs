@@ -13,7 +13,10 @@ namespace ReadModel.UserGroup.Handlers
             _context = context;
         }
 
-        public async Task Handle(EventNotification<UserLeavedGroup> notification, CancellationToken cancellationToken)
+        public async Task Handle(
+            EventNotification<UserLeavedGroup> notification,
+            CancellationToken cancellationToken
+        )
         {
             var @event = notification.Event;
             var userGroup = await _context

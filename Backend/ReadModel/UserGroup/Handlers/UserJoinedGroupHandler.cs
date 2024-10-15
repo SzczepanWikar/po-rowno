@@ -56,7 +56,8 @@ namespace ReadModel.UserGroup.Handlers
                 };
 
                 await _context.AddAsync(userGroup, cancellationToken);
-            } else
+            }
+            else
             {
                 userGroup.Status = UserGroupStatus.Active;
             }
