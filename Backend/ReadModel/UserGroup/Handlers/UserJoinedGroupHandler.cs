@@ -1,5 +1,4 @@
 ﻿using Core.Common.Projections;
-using Core.User;
 using Core.UserGroupEvents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -36,14 +35,32 @@ namespace ReadModel.UserGroup.Handlers
                 return;
             }
 
-            var userGroup = new UserGroupEntity
-            {
-                UserId = @event.UserId,
-                GroupId = @event.GroupId,
-                Status = UserGroupStatus.Active,
-            };
+            UserGroupEntity? userGroup;
 
-            await _context.AddAsync(userGroup, cancellationToken);
+            userGroup = await _context
+                .Set<UserGroupEntity>()
+                .Where(e =>
+                    e.UserId == @event.UserId
+                    && e.GroupId == @event.GroupId
+                    && e.Status == UserGroupStatus.Leaved
+                )
+                .FirstOrDefaultAsync();
+
+            if (userGroup is null)
+            {
+                userGroup = new UserGroupEntity
+                {
+                    UserId = @event.UserId,
+                    GroupId = @event.GroupId,
+                    Status = UserGroupStatus.Active,
+                };
+
+                await _context.AddAsync(userGroup, cancellationToken);
+            } else
+            {
+                userGroup.Status = UserGroupStatus.Active;
+            }
+
             await _context.SaveChangesAsync(cancellationToken);
         }
 
@@ -77,7 +94,11 @@ namespace ReadModel.UserGroup.Handlers
 
             var alreadyExists = await _context
                 .Set<UserGroupEntity>()
-                .Where(e => e.UserId == @event.UserId && e.GroupId == @event.GroupId)
+                .Where(e =>
+                    e.UserId == @event.UserId
+                    && e.GroupId == @event.GroupId
+                    && e.Status != UserGroupStatus.Leaved
+                )
                 .AnyAsync(cancellationToken);
 
             if (alreadyExists)

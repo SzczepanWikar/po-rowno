@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ReadModel.UserGroup.Handlers
 {
-    public sealed class UserUnbannedFromGroupHandler : IEventNotificationHandler<UserUnbannedFromGroup>
+    public sealed class UserUnbannedFromGroupHandler
+        : IEventNotificationHandler<UserUnbannedFromGroup>
     {
         private readonly ApplicationContext _context;
 
