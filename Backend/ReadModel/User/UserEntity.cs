@@ -1,5 +1,4 @@
-﻿using Azure.Identity;
-using Core.User;
+﻿using Core.User;
 using ReadModel.Expense;
 using ReadModel.Group;
 using ReadModel.UserGroup;

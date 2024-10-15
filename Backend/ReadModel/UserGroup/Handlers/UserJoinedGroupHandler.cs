@@ -40,6 +40,7 @@ namespace ReadModel.UserGroup.Handlers
             {
                 UserId = @event.UserId,
                 GroupId = @event.GroupId,
+                Status = UserGroupStatus.Active,
             };
 
             await _context.AddAsync(userGroup, cancellationToken);
