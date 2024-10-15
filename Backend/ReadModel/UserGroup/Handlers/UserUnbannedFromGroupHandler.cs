@@ -4,17 +4,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ReadModel.UserGroup.Handlers
 {
-    public sealed class UserBannedFromGroupHandler : IEventNotificationHandler<UserBannedFromGroup>
+    public sealed class UserUnbannedFromGroupHandler : IEventNotificationHandler<UserUnbannedFromGroup>
     {
         private readonly ApplicationContext _context;
 
-        public UserBannedFromGroupHandler(ApplicationContext context)
+        public UserUnbannedFromGroupHandler(ApplicationContext context)
         {
             _context = context;
         }
 
         public async Task Handle(
-            EventNotification<UserBannedFromGroup> notification,
+            EventNotification<UserUnbannedFromGroup> notification,
             CancellationToken cancellationToken
         )
         {
@@ -24,7 +24,7 @@ namespace ReadModel.UserGroup.Handlers
                 .Where(e =>
                     e.GroupId == @event.GroupId
                     && e.UserId == @event.UserId
-                    && e.Status == UserGroupStatus.Active
+                    && e.Status == UserGroupStatus.Banned
                 )
                 .FirstOrDefaultAsync(cancellationToken);
 
@@ -33,7 +33,7 @@ namespace ReadModel.UserGroup.Handlers
                 return;
             }
 
-            userGroup.Status = UserGroupStatus.Banned;
+            userGroup.Status = UserGroupStatus.Active;
 
             await _context.SaveChangesAsync(cancellationToken);
         }
