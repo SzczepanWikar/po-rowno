@@ -31,5 +31,40 @@ namespace API.User.DTO
 
             return user;
         }
+
+        public static UserDto FromGroupRelatedEntity(UserEntity entity)
+        {
+            UserDto user =
+                new()
+                {
+                    Id = entity.Id,
+                    Username = entity.Username,
+                    Email = entity.Email,
+                    Status = entity.Status,
+                };
+
+            if (entity.UserGroups?.Count > 0)
+            {
+                user.UserGroups = entity
+                    .UserGroups.Select(UserGroupDto.FromEntityWithoutRelations)
+                    .ToArray();
+            }
+
+            return user;
+        }
+
+        public static UserDto FromUserGroupRelatedEntity(UserEntity entity)
+        {
+            UserDto user =
+                new()
+                {
+                    Id = entity.Id,
+                    Username = entity.Username,
+                    Email = entity.Email,
+                    Status = entity.Status,
+                };
+
+            return user;
+        }
     }
 }

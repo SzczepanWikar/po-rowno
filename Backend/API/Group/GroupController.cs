@@ -48,6 +48,19 @@ namespace API.Group
             return Ok(res);
         }
 
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetOne([FromRoute] Guid id)
+        {
+            var user = HttpContext.Items["User"] as User;
+            var request = new GetGroup(id, user!);
+
+            var group = await _mediator.Send(request);
+            var res = GroupDto.FromEntity(group);
+
+            return Ok(res);
+        }
+
         [HttpPatch]
         [Route("{id}/join-code")]
         public async Task<ActionResult> GenerateJoinGroupCode(

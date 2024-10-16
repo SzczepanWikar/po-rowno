@@ -37,6 +37,7 @@ namespace ReadModel.Group.Handlers
                         )
                         .ToList(),
                 })
+                .AsNoTracking()
                 .ToListAsync();
 
             return groups;

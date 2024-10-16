@@ -36,19 +36,46 @@ namespace API.Group.DTO
 
             if (entity.Owner is not null)
             {
-                dto.Owner = UserDto.FromEntity(entity.Owner);
+                dto.Owner = UserDto.FromGroupRelatedEntity(entity.Owner);
             }
 
             if (entity.UserGroups?.Count > 0)
             {
                 dto.UserGroups = entity
-                    .UserGroups.Select(e => UserGroupDto.FromEntity(e))
+                    .UserGroups.Select(UserGroupDto.FromGroupRelatedEntity)
                     .ToArray();
             }
 
             if (entity.Balances?.Count > 0)
             {
-                dto.Balances = entity.Balances.Select(e => BalanceDto.FromEntity(e)).ToArray();
+                dto.Balances = entity.Balances.Select(BalanceDto.FromEntity).ToArray();
+            }
+
+            return dto;
+        }
+
+        public static GroupDto FromUserGroupRelatedEntity(GroupEntity entity)
+        {
+            GroupDto dto =
+                new()
+                {
+                    Id = entity.Id,
+                    Name = entity.Name,
+                    Description = entity.Description,
+                    JoinCode = entity.JoinCode,
+                    JoinCodeValidTo = entity.JoinCodeValidTo,
+                    Currency = entity.Currency,
+                    OwnerId = entity.OwnerId,
+                };
+
+            if (entity.Owner is not null)
+            {
+                dto.Owner = UserDto.FromGroupRelatedEntity(entity.Owner);
+            }
+
+            if (entity.Balances?.Count > 0)
+            {
+                dto.Balances = entity.Balances.Select(BalanceDto.FromEntity).ToArray();
             }
 
             return dto;
