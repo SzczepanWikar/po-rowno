@@ -39,14 +39,14 @@ namespace API.Group.DTO
                 dto.Owner = UserDto.FromEntity(entity.Owner);
             }
 
-            if (entity.UserGroups.Count > 0)
+            if (entity.UserGroups?.Count > 0)
             {
                 dto.UserGroups = entity
                     .UserGroups.Select(e => UserGroupDto.FromEntity(e))
                     .ToArray();
             }
 
-            if (entity.Balances.Count > 0)
+            if (entity.Balances?.Count > 0)
             {
                 dto.Balances = entity.Balances.Select(e => BalanceDto.FromEntity(e)).ToArray();
             }

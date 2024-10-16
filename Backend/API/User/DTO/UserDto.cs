@@ -1,8 +1,5 @@
-﻿using Core.Common;
-using Core.User;
-using ReadModel.Group;
+﻿using Core.User;
 using ReadModel.User;
-using ReadModel.UserGroup;
 
 namespace API.User.DTO
 {
@@ -25,7 +22,7 @@ namespace API.User.DTO
                     Status = entity.Status,
                 };
 
-            if (entity.UserGroups.Count > 0)
+            if (entity.UserGroups?.Count > 0)
             {
                 user.UserGroups = entity
                     .UserGroups.Select(e => UserGroupDto.FromEntity(e))

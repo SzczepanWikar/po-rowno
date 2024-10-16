@@ -1,7 +1,9 @@
 ﻿using API.Group.DTO;
+using API.User.DTO;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ReadModel.Group.Handlers;
 using WriteModel.Group.Commands;
 
 namespace API.Group
@@ -31,6 +33,19 @@ namespace API.Group
             var res = await _mediator.Send(request);
 
             return new CreatedResult(null as string, res);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
+        {
+            var user = HttpContext.Items["User"] as User;
+            var request = new GetGroups(user!);
+
+            var groups = await _mediator.Send(request);
+            var res = groups.Select(e => GroupDto.FromEntity(e));
+
+            return Ok(res);
         }
 
         [HttpPatch]

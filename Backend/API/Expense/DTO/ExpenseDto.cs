@@ -47,7 +47,7 @@ namespace API.Expense.DTO
                 dto.Payer = UserDto.FromEntity(entity.Payer);
             }
 
-            if (entity.Deptors.Count > 0)
+            if (entity.Deptors?.Count > 0)
             {
                 dto.Deptors = entity.Deptors.Select(e => DeptorDto.FromEntity(e)).ToArray();
             }
