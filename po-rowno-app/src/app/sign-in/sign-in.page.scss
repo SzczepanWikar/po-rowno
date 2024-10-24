@@ -1,4 +1,9 @@
 .sign-in {
+    &__header {
+        font-size: 72px;
+        display: flex;
+        justify-content: center;
+    }
     &__container {
         display: flex;
         justify-content: center;
