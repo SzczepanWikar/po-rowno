@@ -10,12 +10,22 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from '../_common/constants';
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly url = environment.apiUrl;
+  private readonly url = environment.apiUrl + 'User/';
   constructor(private readonly http: HttpClient) {}
 
   signIn(dto: SignInDto): Observable<AppSignInResult> {
     return this.http
-      .post<AppSignInResult>(this.url + 'User/sign-in', dto)
+      .post<AppSignInResult>(this.url + 'sign-in', dto)
+      .pipe(tap(this.saveTokensInStorage));
+  }
+
+  refresh(): Observable<AppSignInResult> {
+    const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+
+    return this.http
+      .post<AppSignInResult>(this.url + 'refrsh', {
+        refreshToken,
+      })
       .pipe(tap(this.saveTokensInStorage));
   }
 
