@@ -1,0 +1,29 @@
+<ion-content [fullscreen]="true">
+  <div class="sign-in__container">
+    <form
+      (ngSubmit)="onSubmit($event)"
+      [formGroup]="authForm"
+      class="sign-in__form"
+    >
+      <h2>{{'AUTH.SIGN_IN' | translate}}</h2>
+      <ion-input
+        formControlName="email"
+        type="email"
+        class="app-input"
+        label="E-mail"
+      ></ion-input>
+      <ion-input
+        formControlName="password"
+        type="password"
+        class="app-input"
+        label="Hasło"
+      ></ion-input>
+      <ion-button
+        [disabled]="!(authForm.valid && authForm.touched)"
+        color="primary"
+        type="submit"
+        >{{'AUTH.SIGN_IN' | translate}}</ion-button
+      >
+    </form>
+  </div>
+</ion-content>

@@ -20,6 +20,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddEventStore(builder.Configuration);
+builder.Services.AddCors(opt =>
+{
+    opt.AddDefaultPolicy(p => p.AllowAnyHeader().AllowAnyHeader().AllowAnyOrigin());
+});
 builder.Services.AddCQRS();
 builder.Services.AddBusinessLogic(builder.Configuration);
 builder.Services.AddMailing(builder.Configuration);
@@ -40,6 +44,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors();
 app.UseHttpExceptionHandlingMiddleware();
 app.UseRouting();
 app.UseAuth();

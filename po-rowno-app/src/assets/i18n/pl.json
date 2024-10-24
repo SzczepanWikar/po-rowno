@@ -1,5 +1,8 @@
 {
     "GROUPS": {
         "GROUPS": "Grupy"
+    },
+    "AUTH": {
+        "SIGN_IN": "Zaloguj się"
     }
 }

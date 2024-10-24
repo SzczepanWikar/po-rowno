@@ -35,3 +35,10 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+.app-input {
+    border-radius: 0.5em;
+    background-color: #fff;
+    padding-left: 0.5em !important;
+    padding-right: 0.5em !important;
+}
