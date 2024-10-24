@@ -1,14 +1,13 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
 import { SignInPageRoutingModule } from './sign-in-routing.module';
 
-import { SignInPage } from './sign-in.page';
 import { TranslateModule } from '@ngx-translate/core';
-import { provideHttpClient } from '@angular/common/http';
+import { SignInPage } from './sign-in.page';
 
 @NgModule({
   imports: [
@@ -19,7 +18,7 @@ import { provideHttpClient } from '@angular/common/http';
     TranslateModule,
     ReactiveFormsModule,
   ],
-  providers: [provideHttpClient()],
+  providers: [],
   declarations: [SignInPage],
 })
 export class SignInPageModule {}

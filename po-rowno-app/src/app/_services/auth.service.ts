@@ -4,6 +4,7 @@ import { SignInDto } from '../sign-in/dto/sign-in.dto';
 import { HttpClient } from '@angular/common/http';
 import { AppSignInResult } from '../sign-in/dto/sign-in-result';
 import { Observable, tap } from 'rxjs';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../_common/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,7 @@ export class AuthService {
   }
 
   private saveTokensInStorage(result: AppSignInResult): void {
-    localStorage.setItem('auth_token', result.accessToken);
-    localStorage.setItem('refresh_token', result.refreshToken);
+    localStorage.setItem(ACCESS_TOKEN, result.accessToken);
+    localStorage.setItem(REFRESH_TOKEN, result.refreshToken);
   }
 }
