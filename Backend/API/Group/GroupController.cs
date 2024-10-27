@@ -37,7 +37,7 @@ namespace API.Group
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<GroupDto>>> GetAll()
         {
             var user = HttpContext.Items["User"] as User;
             var request = new GetGroups(user!);
@@ -50,7 +50,7 @@ namespace API.Group
 
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetOne([FromRoute] Guid id)
+        public async Task<ActionResult<IEnumerable<GroupDto>>> GetOne([FromRoute] Guid id)
         {
             var user = HttpContext.Items["User"] as User;
             var request = new GetGroup(id, user!);
