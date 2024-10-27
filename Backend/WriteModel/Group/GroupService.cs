@@ -1,6 +1,8 @@
 ﻿using Core.Common.Exceptions;
+using Core.Group;
 using Core.Group.Events;
 using Core.UserGroupEvents;
+using Google.Protobuf.WellKnownTypes;
 using Infrastructure.EventStore.Repository;
 using WriteModel.Group.Commands;
 using WriteModel.User.Services;
@@ -25,6 +27,11 @@ namespace WriteModel.Group
             CancellationToken cancellationToken = default
         )
         {
+            if (!Currency.IsDefined(command.Currency))
+            {
+                throw new BadRequestException("Incorrect currency!");
+            }
+
             var id = Guid.NewGuid();
             var groupCreated = new GroupCreated(
                 id,
