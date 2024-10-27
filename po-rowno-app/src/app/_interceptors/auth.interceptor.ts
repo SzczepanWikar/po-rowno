@@ -6,7 +6,7 @@ import {
 import { inject } from '@angular/core';
 import { catchError, switchMap, throwError } from 'rxjs';
 import { ACCESS_TOKEN } from '../_common/constants';
-import { AuthService } from '../_services/auth.service';
+import { AuthService } from '../_services/auth/auth.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN);

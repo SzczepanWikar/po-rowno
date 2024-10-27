@@ -1,0 +1,25 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{ 'SUCCESS' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">{{ 'SUCCESS' | translate }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="sign-up-success__container">
+    <div class="inner-container">
+      <h1>{{ 'AUTH.SIGN_UP_SUCCESS' | translate }}</h1>
+      <p>
+        {{ 'AUTH.SIGN_UP_SUCCESS_INFO' | translate }}
+      </p>
+      <ion-button href="sign-in" color="primary">
+        {{ 'AUTH.SIGN_IN' | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

@@ -1,8 +1,30 @@
 {
-    "GROUPS": {
-        "GROUPS": "Grupy"
-    },
-    "AUTH": {
-        "SIGN_IN": "Zaloguj się"
-    }
+  "SUCCESS": "Sukces",
+  "SAVING": "Zapisywanie",
+  "CLOSE": "Zamknij",
+  "VALIDATION": {
+    "REQUItrRED": "Pole jest wymagene.",
+    "EMAIL_ERROR": "Adres e-mail jest nie poprawny.",
+    "ERROR_OCCURED": "Wystąpił błąd",
+    "PASSWORD_LENGTH": "Hasło musi mieć długość przynajmniej 12 znaków.",
+    "NO_NUMBER": "Hasło musi zawierać zawierać liczbę.",
+    "NO_UPPERCASE_CHAR": "Hasło musi zawierać przynajmniej jedną wielką literę.",
+    "NO_LOWER_CHAR": "Hasło musi zawierać przynajmniej jedną małą literę.",
+    "NO_SPECIAL_CHARACTER": "Hasło musi zawierać przynajmniej znak specjalny.",
+    "PASSWORDS_MISMATCH": "Podane hasła nie są identyczne."
+  },
+  "GROUPS": {
+    "GROUPS": "Grupy"
+  },
+  "AUTH": {
+    "SIGN_IN": "Zaloguj się",
+    "PASSWORD": "Hasło",
+    "REPEAT_PASSWORD": "Powtórz hasło",
+    "SIGN_UP": "Zarejestruj się",
+    "SIGN_UP_SUCCESS": "Rejestracja przebiegła poprawnie",
+    "SIGN_UP_SUCCESS_INFO": "Wysłaliśmy do Ciebie wiadomość e-mail z linkiem aktywacyjnym twoje konto. Po odwiedzeniu tego linku zalogowanie się będzie już możliwe.",
+    "USERNAME": "Nazwa użytkownika",
+    "EMAIL_ALREADY_IN_USE": "Adres e-mail jest już w użyciu.",
+    "DONT_HAVE_ACCOUNT": "Nie masz jeszcze konta?"
+  }
 }

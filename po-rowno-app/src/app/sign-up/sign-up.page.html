@@ -1,0 +1,111 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-back-button defaultHref="sign-in" slot="start"></ion-back-button>
+    <ion-title>{{ 'AUTH.SIGN_UP' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">{{ 'AUTH.SIGN_UP' | translate }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="sign-up__container">
+    <form
+      class="inner-container"
+      [formGroup]="signUpForm"
+      (ngSubmit)="onSubmit($event)"
+    >
+      <ion-input
+        formControlName="username"
+        label="{{ 'AUTH.USERNAME' | translate }}"
+        class="app-input"
+      ></ion-input>
+      @if (
+        signUpForm.get('username')?.touched &&
+        !signUpForm.get('username')?.valid
+      ) {
+        @if (signUpForm.get('username')?.hasError('required')) {
+          <app-error-label error="VALIDATION.REQUIRED" />
+        }
+      }
+      <ion-input
+        formControlName="email"
+        label="E-mail"
+        class="app-input"
+        type="email"
+      ></ion-input>
+      @if (
+        signUpForm.get('email')?.touched && !signUpForm.get('email')?.valid
+      ) {
+        @if (signUpForm.get('email')?.hasError('required')) {
+          <app-error-label error="VALIDATION.REQUIRED" />
+        }
+        @if (signUpForm.get('email')?.hasError('email')) {
+          <app-error-label error="VALIDATION.EMAIL_ERROR" />
+        }
+      }
+      <ion-input
+        formControlName="password"
+        label="{{ 'AUTH.PASSWORD' | translate }}"
+        class="app-input"
+        type="password"
+      ></ion-input>
+      @if (
+        signUpForm.get('password')?.touched &&
+        !signUpForm.get('password')?.valid
+      ) {
+        @if (signUpForm.get('password')?.hasError('required')) {
+          <app-error-label error="{{ 'VALIDATION.REQUIRED' | translate }}" />
+        }
+        @for (
+          key of object.keys(signUpForm.get('password')!.errors!);
+          track $index
+        ) {
+          @if (key !== 'required') {
+            <app-error-label
+              [error]="signUpForm.get('password')!.errors![key]"
+            />
+          }
+        }
+      }
+      <ion-input
+        formControlName="reapetedPassword"
+        label="{{ 'AUTH.REPEAT_PASSWORD' | translate }}"
+        class="app-input"
+        type="password"
+      ></ion-input>
+      @if (
+        signUpForm.get('reapetedPassword')?.touched &&
+        !signUpForm.get('reapetedPassword')?.valid
+      ) {
+        @if (signUpForm.get('reapetedPassword')?.hasError('required')) {
+          <app-error-label error="{{ 'VALIDATION.REQUIRED' | translate }}" />
+        }
+      }
+      @if (signUpForm.hasError('fieldsMismatch')) {
+        <app-error-label error="VALIDATION.PASSWORDS_MISMATCH" />
+      }
+      <ion-button
+        [disabled]="!(signUpForm.valid && signUpForm.touched) || saving"
+        color="primary"
+        type="submit"
+      >
+        @if (saving) {
+          {{ 'SAVING' | translate }}
+        } @else {
+          {{ 'AUTH.SIGN_UP' | translate }}
+        }
+      </ion-button>
+    </form>
+  </div>
+</ion-content>
+<ion-alert
+  [isOpen]="showErrorAlert"
+  [header]="errorAlertTitle"
+  [message]="errorAlertContent"
+  [buttons]="errorAlertButtons"
+  (didDismiss)="hideErrorAlert()"
+></ion-alert>

@@ -1,18 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from '../_services/auth.service';
+import { AuthService } from '../_services/auth/auth.service';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.page.html',
   styleUrls: ['./sign-in.page.scss'],
 })
-export class SignInPage implements OnInit {
+export class SignInPage implements OnDestroy {
   protected authForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
   });
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -20,18 +23,22 @@ export class SignInPage implements OnInit {
     private readonly router: Router,
   ) {}
 
-  ngOnInit() {}
-
   onSubmit($event: SubmitEvent) {
     this.authService
       .signIn({
         email: this.authForm.value.email!,
         password: this.authForm.value.password!,
       })
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
-          this.router.navigate(['app']);
+        next: async () => {
+          await this.router.navigate(['app']);
         },
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

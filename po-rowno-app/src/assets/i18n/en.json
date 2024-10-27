@@ -1,8 +1,30 @@
 {
-    "GROUPS": {
-        "GROUPS": "Groups"
-    },
-    "AUTH": {
-        "SIGN_IN": "Sign in"
-    }
+  "SUCCESS": "Success",
+  "SAVING": "Saving",
+  "CLOSE": "Close",
+  "VALIDATION": {
+    "REQUIRED": "Field is required.",
+    "EMAIL_ERROR": "Email address is invalid.",
+    "ERROR_OCCURED": "An error occurred",
+    "PASSWORD_LENGTH": "Password must be at least 12 characters long.",
+    "NO_NUMBER": "Password must contain a number.",
+    "NO_UPPERCASE_CHAR": "Password must contain at least one uppercase letter.",
+    "NO_LOWER_CHAR": "Password must contain at least one lowercase letter.",
+    "NO_SPECIAL_CHARACTER": "Password must contain at least one special character.",
+    "PASSWORDS_MISMATCH": "The passwords provided are not identical."
+  },
+  "GROUPS": {
+    "GROUPS": "Groups"
+  },
+  "AUTH": {
+    "SIGN_IN": "Sign in",
+    "PASSWORD": "Password",
+    "REPEAT_PASSWORD": "Repeat password",
+    "SIGN_UP": "Sign up",
+    "SIGN_UP_SUCCESS": "Registration was successful",
+    "SIGN_UP_SUCCESS_INFO": "We have sent you an email with an activation link for your account. After visiting this link, you will be able to log in.",
+    "USERNAME": "Username",
+    "EMAIL_ALREADY_IN_USE": "Email address is already in use.",
+    "DONT_HAVE_ACCOUNT": "Don't have an account yet?"
+  }
 }

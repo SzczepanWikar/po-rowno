@@ -1,0 +1,13 @@
+.sign-up-success {
+  &__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    .inner-container {
+      max-width: 700px;
+      margin: 0.5em;
+    }
+  }
+}
