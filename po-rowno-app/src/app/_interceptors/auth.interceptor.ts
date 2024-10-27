@@ -7,9 +7,11 @@ import { inject } from '@angular/core';
 import { catchError, switchMap, throwError } from 'rxjs';
 import { ACCESS_TOKEN } from '../_common/constants';
 import { AuthService } from '../_services/auth/auth.service';
+import { Router } from '@angular/router';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
+  const router = inject(Router);
 
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
 
@@ -19,7 +21,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(cloned).pipe(
       catchError((error) => {
         if (error.status === 401 && accessToken) {
-          return handleUnauthorized(req, next, authService);
+          return handleUnauthorized(req, next, authService, router);
         }
 
         return throwError(() => error);
@@ -43,12 +45,16 @@ function handleUnauthorized(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn,
   authService: AuthService,
+  router: Router,
 ) {
   return authService.refresh().pipe(
     switchMap((e) => {
       const cloned = addToken(req, e.accessToken);
       return next(cloned);
     }),
-    catchError((error) => throwError(() => error)),
+    catchError((error) => {
+      router.navigate(['sign-in']);
+      return throwError(() => error);
+    }),
   );
 }

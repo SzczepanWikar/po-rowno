@@ -1,5 +1,10 @@
 .groups {
   &__group-list-item {
+    div {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
     ion-label {
       p {
         overflow: hidden;

@@ -44,6 +44,7 @@ namespace ReadModel.Group.Handlers
                 Description = notification.Event.Description,
                 Owner = owner,
                 UserGroups = new List<UserGroupEntity> { userGroup },
+                Currency = notification.Event.Currency,
             };
 
             await _context.AddAsync(group);
