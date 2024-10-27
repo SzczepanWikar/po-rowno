@@ -9,6 +9,8 @@ import { ACCESS_TOKEN } from '../_common/constants';
 import { AuthService } from '../_services/auth/auth.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
+
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
 
   if (accessToken) {
@@ -17,7 +19,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(cloned).pipe(
       catchError((error) => {
         if (error.status === 401 && accessToken) {
-          return handleUnauthorized(req, next);
+          return handleUnauthorized(req, next, authService);
         }
 
         return throwError(() => error);
@@ -37,9 +39,11 @@ function addToken(
   });
 }
 
-function handleUnauthorized(req: HttpRequest<unknown>, next: HttpHandlerFn) {
-  const authService = inject(AuthService);
-
+function handleUnauthorized(
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn,
+  authService: AuthService,
+) {
   return authService.refresh().pipe(
     switchMap((e) => {
       const cloned = addToken(req, e.accessToken);

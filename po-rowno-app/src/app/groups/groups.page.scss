@@ -1,0 +1,11 @@
+.groups {
+  &__group-list-item {
+    ion-label {
+      p {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}

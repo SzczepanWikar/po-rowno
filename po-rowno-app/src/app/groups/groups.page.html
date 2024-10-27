@@ -1,13 +1,33 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>{{"GROUPS.GROUPS" | translate}}</ion-title>
+    <ion-title>{{ 'GROUPS.GROUPS' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">{{"GROUPS.GROUPS" | translate}}</ion-title>
+      <ion-title size="large">{{ 'GROUPS.GROUPS' | translate }}</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  @if ((groups$ | async)?.length) {
+    <ion-list>
+      @for (group of groups$ | async; track $index) {
+        <ion-item
+          class="groups__group-list-item"
+          href="app/groups{{ group.id }}"
+        >
+          <ion-label>
+            {{ group.name }}
+            <p>
+              {{ group.description }}
+            </p>
+          </ion-label>
+        </ion-item>
+      }
+    </ion-list>
+  } @else {
+    <h1>Nie należysz do żadnej z grup.</h1>
+  }
 </ion-content>
