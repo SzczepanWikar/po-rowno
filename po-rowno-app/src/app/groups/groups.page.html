@@ -17,7 +17,7 @@
         <ion-item
           [detail]="true"
           class="groups__group-list-item"
-          href="app/groups{{ group.id }}"
+          href="app/groups/{{ group.id }}"
         >
           <ion-label slot="start">
             {{ group.name }}
@@ -29,7 +29,9 @@
         </ion-item>
       }
     </ion-list>
-  } @else {
+  } @else if ((loading$ | async) === false) {
     <h1>Nie należysz do żadnej z grup.</h1>
+  } @else {
+    <ion-loading isOpen="{{ loading$ | async }}"></ion-loading>
   }
 </ion-content>

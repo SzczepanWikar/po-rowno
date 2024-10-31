@@ -1,0 +1,10 @@
+.group-details {
+  &__containers {
+    padding: 0.5rem;
+  }
+  &__balances {
+    strong {
+      color: var(--ion-color-primary);
+    }
+  }
+}

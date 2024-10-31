@@ -3,6 +3,7 @@ using Core.Common.Projections;
 using Core.Expense.Events;
 using Microsoft.EntityFrameworkCore;
 using ReadModel.User;
+using static Grpc.Core.Metadata;
 
 namespace ReadModel.Expense.Handler
 {
@@ -31,6 +32,7 @@ namespace ReadModel.Expense.Handler
                 PayerId = @event.PayerId,
                 PaymentId = @event.Payment?.Response.id,
                 PaymentStatus = @event.Payment?.Response.status,
+                GroupId = @event.GroupId,
             };
 
             var payer = await _context
@@ -48,6 +50,7 @@ namespace ReadModel.Expense.Handler
             var deptors = @event
                 .Deptors.Select(e => new ExpenseDeptorEntity
                 {
+                    Id = Guid.NewGuid(),
                     ExpenseId = @event.Id,
                     UserId = e.UserId,
                     Amount = e.Amount,
@@ -57,8 +60,8 @@ namespace ReadModel.Expense.Handler
             expense.Deptors = deptors;
 
             await _context.AddAsync(expense, cancellationToken);
-            await CalcBalancesAsync(@event, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
+            await CalcBalancesAsync(@event, cancellationToken);
         }
 
         private async Task CalcBalancesAsync(
@@ -75,6 +78,7 @@ namespace ReadModel.Expense.Handler
             {
                 var newBalances = @event.Deptors.Select(e => new BalanceEntity
                 {
+                    Id = Guid.NewGuid(),
                     PayerId = @event.PayerId,
                     DeptorId = e.UserId,
                     GroupId = @event.GroupId,
@@ -82,7 +86,8 @@ namespace ReadModel.Expense.Handler
                 });
 
                 currentBalances.AddRange(newBalances);
-
+                await _context.AddRangeAsync(currentBalances);
+                await _context.SaveChangesAsync(cancellationToken);
                 return;
             }
 
@@ -90,10 +95,19 @@ namespace ReadModel.Expense.Handler
 
             balancesGraph.MinimizeEdges();
 
-            UpdateBalances(@event, currentBalances, balancesGraph);
+            var balances = await UpdateBalances(@event, currentBalances, balancesGraph);
+
+            foreach (var balance in balances)
+            {
+                if (_context.Entry(balance).State == EntityState.Detached)
+                {
+                    await _context.AddAsync(balance);
+                }
+            }
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        private static void UpdateBalances(
+        private static async Task<List<BalanceEntity>> UpdateBalances(
             ExpenseCreated @event,
             List<BalanceEntity> currentBalances,
             Graph<decimal> balancesGraph
@@ -128,6 +142,7 @@ namespace ReadModel.Expense.Handler
                     BalanceEntity newBalance =
                         new()
                         {
+                            Id = Guid.NewGuid(),
                             PayerId = balance.Column,
                             DeptorId = balance.Row,
                             GroupId = @event.GroupId,
@@ -136,8 +151,9 @@ namespace ReadModel.Expense.Handler
 
                     currentBalances.Add(newBalance);
                 }
-                ;
             }
+
+            return currentBalances;
         }
 
         private static Graph<decimal> GenerateBalancesGraph(

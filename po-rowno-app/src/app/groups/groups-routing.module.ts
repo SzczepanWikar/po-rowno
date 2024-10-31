@@ -6,8 +6,15 @@ import { GroupsPage } from './groups.page';
 const routes: Routes = [
   {
     path: '',
-    component: GroupsPage
-  }
+    component: GroupsPage,
+  },
+  {
+    path: ':id',
+    loadChildren: () =>
+      import('./group-details/group-details.module').then(
+        (m) => m.GroupDetailsPageModule,
+      ),
+  },
 ];
 
 @NgModule({
