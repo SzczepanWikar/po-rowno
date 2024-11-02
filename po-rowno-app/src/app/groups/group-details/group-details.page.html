@@ -1,25 +1,19 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-back-button slot="start" defaultHref="app/groups"></ion-back-button>
-    <ion-title>{{ group?.name ?? '' }}</ion-title>
+    <ion-title>{{ groupService.group?.name ?? '' }}</ion-title>
   </ion-toolbar>
   <ion-segment
     (ionChange)="onSegmentChanged($event.target)"
     [value]="currentSegment"
   >
-    <ion-segment-button
-      [disabled]="currentSegment === 'details'"
-      value="details"
-    >
+    <ion-segment-button value="details">
       <ion-icon name="list-circle-outline"></ion-icon>
     </ion-segment-button>
-    <ion-segment-button [disabled]="currentSegment === 'users'" value="users">
+    <ion-segment-button value="users">
       <ion-icon name="people-outline"></ion-icon>
     </ion-segment-button>
-    <ion-segment-button
-      [disabled]="currentSegment === 'expenses'"
-      value="expenses"
-    >
+    <ion-segment-button value="expenses">
       <ion-icon name="cash-outline"></ion-icon>
     </ion-segment-button>
   </ion-segment>
@@ -28,13 +22,13 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">{{ group?.name ?? '' }}</ion-title>
+      <ion-title size="large">{{ groupService.group?.name ?? '' }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
   @switch (currentSegment) {
     @case ('details') {
-      @if (group) {
+      @if (groupService.group) {
         <div class="group-details__containers">
           <div class="group-details__buttons">
             <ion-button (click)="openJoinCodeModal()" color="tertiary"
@@ -47,11 +41,11 @@
             </ion-button>
           </div>
           <p class="inner-container">
-            {{ group.description }}
+            {{ groupService.group.description }}
           </p>
           <h2>Bilans</h2>
           <div class="group-details__balances">
-            @for (balance of balances; track $index) {
+            @for (balance of groupService.balances; track $index) {
               <div class="inner-container">
                 <span>
                   <strong>
@@ -62,7 +56,7 @@
                     {{ balance.payer.username }}
                   </strong>
                   {{ balance.balance.balance }}
-                  {{ currencySymbol }}
+                  {{ groupService.currencySymbol }}
                 </span>
               </div>
             } @empty {
