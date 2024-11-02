@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { GroupService } from '../../_services/group/group.service';
 import { Group } from 'src/app/_common/models/group';
-import { map } from 'rxjs';
+import { concatMap, map } from 'rxjs';
 import { Balance } from 'src/app/_common/models/balance';
 import { User } from 'src/app/_common/models/user';
 import { getCurrencySymbol } from 'src/app/_common/helpers/get-currency-symbol';
+import { UserStatus } from 'src/app/_common/enums/user-status.enum';
 
 type BalanceUser = {
   balance: Balance;
@@ -35,9 +36,38 @@ export class GroupDetailsService {
   }
 
   refreshJoinCode(validTo: Date) {
-    return this.groupService.refreshJoinCode(this.groupId, validTo).pipe(() => {
-      return this.getGroup(this.groupId);
-    });
+    return this.groupService.refreshJoinCode(this.groupId, validTo).pipe(
+      concatMap(() => {
+        return this.getGroup(this.groupId);
+      }),
+    );
+  }
+
+  banUser(id: string) {
+    return this.groupService.banUser(this.groupId, id).pipe(
+      concatMap(() => {
+        return this.getGroup(this.groupId);
+      }),
+    );
+  }
+
+  unbanUser(id: string) {
+    return this.groupService.unbanUser(this.groupId, id).pipe(
+      concatMap(() => {
+        return this.getGroup(this.groupId);
+      }),
+    );
+  }
+
+  leave() {
+    return this.groupService.leave(this.groupId);
+  }
+
+  clearState() {
+    this.group = undefined;
+    this.balances = [];
+    this.groupId = '';
+    this.currencySymbol = '';
   }
 
   private mapBalances(balances?: Balance[]): BalanceUser[] {
@@ -58,22 +88,24 @@ export class GroupDetailsService {
       }
 
       const payer = users.get(balance.payerId);
-      if (!payer) {
-        continue;
-      }
-
       const deptor = users.get(balance.deptorId);
-      if (!deptor) {
-        continue;
-      }
 
       res.push({
         balance,
-        payer,
-        deptor,
+        payer: payer ?? this.createNullUser(balance.payerId),
+        deptor: deptor ?? this.createNullUser(balance.payerId),
       });
     }
 
     return res;
+  }
+
+  private createNullUser(id: string): User {
+    return {
+      id,
+      username: 'GROUP.USER_LEAVED',
+      email: '',
+      status: UserStatus.Inactive,
+    };
   }
 }

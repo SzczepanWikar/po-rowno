@@ -1,3 +1,54 @@
-<p>
-  group-users works!
-</p>
+<div class="group-users__container">
+  <ion-button
+    class="group-users__leave-button"
+    size="medium"
+    fill="outline"
+    color="primary"
+  >
+    <ion-icon slot="icon-only" name="exit-outline"></ion-icon>
+    <ion-label> Opuść grupę </ion-label>
+  </ion-button>
+  <h2>Aktywni użytkowicy</h2>
+  <ion-list>
+    @for (ug of activeUsers; track $index) {
+      <ion-item lines="full">
+        <ion-label slot="start">
+          @if (ug.userId === groupService.group?.ownerId) {
+            <ion-icon name="ribbon-outline"></ion-icon>
+          }
+          {{ ug.user?.username }}
+        </ion-label>
+        @if (userId === groupService.group?.ownerId && userId !== ug.userId) {
+          <ion-button
+            (click)="banUser(ug.userId)"
+            slot="end"
+            size="medium"
+            color="warning"
+          >
+            <ion-icon name="ban-outline"></ion-icon>
+          </ion-button>
+        }
+      </ion-item>
+    }
+  </ion-list>
+  <h2>Zablokowani użytkownicy</h2>
+  <ion-list>
+    @for (ug of bannedUsers; track $index) {
+      <ion-item lines="full">
+        <ion-label slot="start">
+          {{ ug.user?.username }}
+        </ion-label>
+        @if (userId === groupService.group?.ownerId) {
+          <ion-button
+            (click)="unbanUser(ug.userId)"
+            slot="end"
+            color="success"
+            size="medium"
+          >
+            <ion-icon name="arrow-undo-outline"></ion-icon>
+          </ion-button>
+        }
+      </ion-item>
+    }
+  </ion-list>
+</div>

@@ -22,7 +22,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddEventStore(builder.Configuration);
 builder.Services.AddCors(opt =>
 {
-    opt.AddDefaultPolicy(p => p.AllowAnyHeader().AllowAnyHeader().AllowAnyOrigin());
+    opt.AddDefaultPolicy(p =>
+        p.AllowAnyHeader().AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod()
+    );
 });
 builder.Services.AddCQRS();
 builder.Services.AddBusinessLogic(builder.Configuration);

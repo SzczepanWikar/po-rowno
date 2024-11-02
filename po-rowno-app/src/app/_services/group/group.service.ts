@@ -24,4 +24,20 @@ export class GroupService {
       validTo,
     });
   }
+
+  banUser(id: string, userId: string): Observable<unknown> {
+    return this.http.patch(`${this.url}/${id}/ban-user`, {
+      id: userId,
+    });
+  }
+
+  unbanUser(id: string, userId: string): Observable<unknown> {
+    return this.http.patch(`${this.url}/${id}/unban-user`, {
+      id: userId,
+    });
+  }
+
+  leave(id: string): Observable<unknown> {
+    return this.http.patch(`${this.url}/${id}/leave`, {});
+  }
 }
