@@ -3,14 +3,23 @@
     <ion-back-button slot="start" defaultHref="app/groups"></ion-back-button>
     <ion-title>{{ group?.name ?? '' }}</ion-title>
   </ion-toolbar>
-  <ion-segment>
-    <ion-segment-button value="details">
+  <ion-segment
+    (ionChange)="onSegmentChanged($event.target)"
+    [value]="currentSegment"
+  >
+    <ion-segment-button
+      [disabled]="currentSegment === 'details'"
+      value="details"
+    >
       <ion-label>Szczegóły</ion-label>
     </ion-segment-button>
-    <ion-segment-button value="users">
+    <ion-segment-button [disabled]="currentSegment === 'users'" value="users">
       <ion-label>Użytkownicy</ion-label>
     </ion-segment-button>
-    <ion-segment-button value="expenses">
+    <ion-segment-button
+      [disabled]="currentSegment === 'expenses'"
+      value="expenses"
+    >
       <ion-label>Wydatki</ion-label>
     </ion-segment-button>
   </ion-segment>
@@ -23,43 +32,53 @@
     </ion-toolbar>
   </ion-header>
 
-  @if (group) {
-    <div class="group-details__containers">
-      <div class="group-details__buttons">
-        <ion-button color="tertiary"
-          ><ion-icon slot="icon-only" name="person-add-outline"></ion-icon>
-          Zaproś
-        </ion-button>
-        <ion-button color="secondary">
-          <ion-icon slot="icon-only" name="create-outline"></ion-icon>
-          Edytuj
-        </ion-button>
-      </div>
-      <p class="inner-container">
-        {{ group.description }}
-      </p>
-      <h2>Bilans</h2>
-      <div class="group-details__balances">
-        @for (balance of balances; track $index) {
-          <div class="inner-container">
-            <span>
-              <strong>
-                {{ balance.deptor.username }}
-              </strong>
-              jest winny
-              <strong>
-                {{ balance.payer.username }}
-              </strong>
-              {{ balance.balance.balance }}
-              {{ currencySymbol }}
-            </span>
+  @switch (currentSegment) {
+    @case ('details') {
+      @if (group) {
+        <div class="group-details__containers">
+          <div class="group-details__buttons">
+            <ion-button color="tertiary"
+              ><ion-icon slot="icon-only" name="person-add-outline"></ion-icon>
+              Zaproś
+            </ion-button>
+            <ion-button color="secondary">
+              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+              Edytuj
+            </ion-button>
           </div>
-        } @empty {
-          <span class="inner-container ion-text-center"> Brak </span>
-        }
-      </div>
-    </div>
-  } @else {
-    <ion-loading isOpen="{{ loading$ | async }}"></ion-loading>
+          <p class="inner-container">
+            {{ group.description }}
+          </p>
+          <h2>Bilans</h2>
+          <div class="group-details__balances">
+            @for (balance of balances; track $index) {
+              <div class="inner-container">
+                <span>
+                  <strong>
+                    {{ balance.deptor.username }}
+                  </strong>
+                  jest winny
+                  <strong>
+                    {{ balance.payer.username }}
+                  </strong>
+                  {{ balance.balance.balance }}
+                  {{ currencySymbol }}
+                </span>
+              </div>
+            } @empty {
+              <span class="inner-container ion-text-center"> Brak </span>
+            }
+          </div>
+        </div>
+      } @else {
+        <ion-loading isOpen="{{ loading$ | async }}"></ion-loading>
+      }
+    }
+    @case ('users') {
+      <app-group-users></app-group-users>
+    }
+    @case ('expenses') {
+      <app-group-expenses></app-group-expenses>
+    }
   }
 </ion-content>

@@ -8,6 +8,7 @@ import { Group } from 'src/app/_common/models/group';
 import { User } from 'src/app/_common/models/user';
 import { GroupService } from 'src/app/_services/group/group.service';
 import { GroupDetailsService } from './group-details.service';
+import { SegmentChangeEventDetail, SegmentValue } from '@ionic/angular';
 
 @Component({
   selector: 'app-group-details',
@@ -21,6 +22,7 @@ export class GroupDetailsPage implements OnInit, OnDestroy {
   protected group?: Group;
   protected balances: BalanceUser[] = [];
   protected currencySymbol: string = '';
+  protected currentSegment: SegmentValue = 'details';
 
   constructor(
     private readonly groupService: GroupDetailsService,
@@ -30,7 +32,6 @@ export class GroupDetailsPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((e) => {
-      console.log(e);
       this.groupService
         .getGroup(e['id'])
         .pipe(takeUntil(this.destroy$))
@@ -48,12 +49,16 @@ export class GroupDetailsPage implements OnInit, OnDestroy {
     });
   }
 
+  onSegmentChanged($event: SegmentChangeEventDetail): void {
+    this.currentSegment = $event.value ?? 'details';
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  mapBalances(balances?: Balance[]): BalanceUser[] {
+  private mapBalances(balances?: Balance[]): BalanceUser[] {
     if (!balances?.length) {
       return [];
     }

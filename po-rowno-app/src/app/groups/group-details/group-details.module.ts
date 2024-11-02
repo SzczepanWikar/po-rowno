@@ -8,6 +8,8 @@ import { GroupDetailsPageRoutingModule } from './group-details-routing.module';
 
 import { GroupDetailsPage } from './group-details.page';
 import { GroupDetailsService } from './group-details.service';
+import { GroupUsersComponent } from './group-users/group-users.component';
+import { GroupExpensesComponent } from './group-expenses/group-expenses.component';
 
 @NgModule({
   imports: [
@@ -17,6 +19,6 @@ import { GroupDetailsService } from './group-details.service';
     GroupDetailsPageRoutingModule,
   ],
   providers: [GroupDetailsService],
-  declarations: [GroupDetailsPage],
+  declarations: [GroupDetailsPage, GroupUsersComponent, GroupExpensesComponent],
 })
 export class GroupDetailsPageModule {}
