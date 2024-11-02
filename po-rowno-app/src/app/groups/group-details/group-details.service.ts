@@ -6,10 +6,12 @@ import { map } from 'rxjs';
 @Injectable()
 export class GroupDetailsService {
   group?: Group;
+  groupId?: string;
 
   constructor(private readonly groupService: GroupService) {}
 
   getGroup(id: string) {
+    this.groupId = id;
     return this.groupService.getOne(id).pipe(
       map((e) => {
         this.group = e;
@@ -17,5 +19,13 @@ export class GroupDetailsService {
         return e;
       }),
     );
+  }
+
+  refreshJoinCode(validTo: Date) {
+    return this.groupService
+      .refreshJoinCode(this.groupId ?? '', validTo)
+      .pipe(() => {
+        return this.getGroup(this.groupId ?? '');
+      });
   }
 }

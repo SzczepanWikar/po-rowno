@@ -18,4 +18,10 @@ export class GroupService {
   getOne(id: string): Observable<Group> {
     return this.http.get<Group>(`${this.url}/${id}`);
   }
+
+  refreshJoinCode(id: string, validTo: Date): Observable<Object> {
+    return this.http.patch(`${this.url}/${id}/join-code`, {
+      validTo,
+    });
+  }
 }

@@ -37,7 +37,7 @@
       @if (group) {
         <div class="group-details__containers">
           <div class="group-details__buttons">
-            <ion-button color="tertiary"
+            <ion-button (click)="openJoinCodeModal()" color="tertiary"
               ><ion-icon slot="icon-only" name="person-add-outline"></ion-icon>
               Zaproś
             </ion-button>

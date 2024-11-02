@@ -10,6 +10,7 @@ import { GroupDetailsPage } from './group-details.page';
 import { GroupDetailsService } from './group-details.service';
 import { GroupUsersComponent } from './group-users/group-users.component';
 import { GroupExpensesComponent } from './group-expenses/group-expenses.component';
+import { GroupCodeComponent } from './group-code/group-code.component';
 
 @NgModule({
   imports: [
@@ -19,6 +20,11 @@ import { GroupExpensesComponent } from './group-expenses/group-expenses.componen
     GroupDetailsPageRoutingModule,
   ],
   providers: [GroupDetailsService],
-  declarations: [GroupDetailsPage, GroupUsersComponent, GroupExpensesComponent],
+  declarations: [
+    GroupDetailsPage,
+    GroupUsersComponent,
+    GroupExpensesComponent,
+    GroupCodeComponent,
+  ],
 })
 export class GroupDetailsPageModule {}

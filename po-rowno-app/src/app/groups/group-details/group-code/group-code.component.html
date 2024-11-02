@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Zaproś użytkownka do grupy</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="join_code__container">
+    <div class="inner-container join_code__code">{{ code }}</div>
+    <div class="join_code__valid-to">
+      Kod ważny do:
+      {{
+        validTo?.toLocaleString(undefined, {
+          dateStyle: 'short',
+          timeStyle: 'short',
+        })
+      }}
+    </div>
+
+    <div class="join_code__button-container">
+      <ion-button (click)="copyCode()" color="primary"> Kopiuj kod</ion-button>
+      <ion-button (click)="cancel()" color="secondary"> Zamknij </ion-button>
+    </div>
+  </div>
+</ion-content>

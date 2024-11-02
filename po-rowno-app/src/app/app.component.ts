@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
+import localePl from '@angular/common/locales/pl';
+import localeEn from '@angular/common/locales/en';
+import { registerLocaleData } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -20,5 +23,7 @@ export class AppComponent {
     translate.addLangs(['en', 'pl']);
     translate.setDefaultLang('en');
     translate.use(navigator.language === 'pl-PL' ? 'pl' : 'en');
+    registerLocaleData(localePl);
+    registerLocaleData(localeEn);
   }
 }
