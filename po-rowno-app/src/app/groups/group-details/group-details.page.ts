@@ -7,6 +7,7 @@ import { Balance } from 'src/app/_common/models/balance';
 import { Group } from 'src/app/_common/models/group';
 import { User } from 'src/app/_common/models/user';
 import { GroupService } from 'src/app/_services/group/group.service';
+import { GroupDetailsService } from './group-details.service';
 
 @Component({
   selector: 'app-group-details',
@@ -22,15 +23,16 @@ export class GroupDetailsPage implements OnInit, OnDestroy {
   protected currencySymbol: string = '';
 
   constructor(
-    private readonly groupService: GroupService,
+    private readonly groupService: GroupDetailsService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
   ) {}
 
   ngOnInit() {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((e) => {
+      console.log(e);
       this.groupService
-        .getOne(e['id'])
+        .getGroup(e['id'])
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (e) => {

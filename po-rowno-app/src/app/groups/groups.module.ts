@@ -15,8 +15,8 @@ import { TranslateModule } from '@ngx-translate/core';
     FormsModule,
     IonicModule,
     GroupsPageRoutingModule,
-    TranslateModule
+    TranslateModule,
   ],
-  declarations: [GroupsPage]
+  declarations: [GroupsPage],
 })
 export class GroupsPageModule {}

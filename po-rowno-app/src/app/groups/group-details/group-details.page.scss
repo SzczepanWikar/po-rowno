@@ -2,6 +2,12 @@
   &__containers {
     padding: 0.5rem;
   }
+  &__buttons {
+    ion-button {
+      --padding-top: 0.5em;
+      --padding-bottom: 0.5em;
+    }
+  }
   &__balances {
     strong {
       color: var(--ion-color-primary);

@@ -3,6 +3,17 @@
     <ion-back-button slot="start" defaultHref="app/groups"></ion-back-button>
     <ion-title>{{ group?.name ?? '' }}</ion-title>
   </ion-toolbar>
+  <ion-segment>
+    <ion-segment-button value="details">
+      <ion-label>Szczegóły</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="users">
+      <ion-label>Użytkownicy</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="expenses">
+      <ion-label>Wydatki</ion-label>
+    </ion-segment-button>
+  </ion-segment>
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -14,10 +25,20 @@
 
   @if (group) {
     <div class="group-details__containers">
+      <div class="group-details__buttons">
+        <ion-button color="tertiary"
+          ><ion-icon slot="icon-only" name="person-add-outline"></ion-icon>
+          Zaproś
+        </ion-button>
+        <ion-button color="secondary">
+          <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+          Edytuj
+        </ion-button>
+      </div>
       <p class="inner-container">
         {{ group.description }}
       </p>
-      <h2>Balans</h2>
+      <h2>Bilans</h2>
       <div class="group-details__balances">
         @for (balance of balances; track $index) {
           <div class="inner-container">
