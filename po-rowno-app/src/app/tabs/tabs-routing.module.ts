@@ -9,20 +9,28 @@ const routes: Routes = [
     children: [
       {
         path: 'groups',
-        loadChildren: () => import('../groups/groups.module').then(m => m.GroupsPageModule)
+        loadChildren: () =>
+          import('../groups/groups.module').then((m) => m.GroupsPageModule),
+      },
+      {
+        path: 'add-view',
+        loadChildren: () =>
+          import('../add-view/add-view.module').then(
+            (m) => m.AddViewPageModule,
+          ),
       },
       {
         path: '',
         redirectTo: '/app/groups',
-        pathMatch: 'full'
-      }
-    ]
+        pathMatch: 'full',
+      },
+    ],
   },
   {
     path: '',
     redirectTo: '/app/groups',
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({
