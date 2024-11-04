@@ -13,21 +13,27 @@ import { Expense } from 'src/app/_common/models/expense';
 export class GroupExpensesComponent implements OnInit {
   currentPage$ = new BehaviorSubject<number>(1);
   #currentInfiniteEvent?: InfiniteScrollCustomEvent;
+  expenses: Expense[] = [];
+  wasLastApiCallEmpty = false;
 
   currentPageData$: Observable<Expense[]> = this.currentPage$.pipe(
     switchMap((p) =>
       this.expenseService.getAll({
         GroupId: this.groupService.groupId,
-        Take: 20,
+        Take: 10,
         Page: p,
         Ascending: false,
       }),
     ),
-    tap(() => {
+    tap((e) => {
+      this.expenses.push(...e);
+
       if (this.#currentInfiniteEvent) {
         this.#currentInfiniteEvent.target.complete();
         this.#currentInfiniteEvent = undefined;
       }
+
+      this.wasLastApiCallEmpty = e.length === 0;
     }),
   );
 
@@ -36,10 +42,16 @@ export class GroupExpensesComponent implements OnInit {
     protected readonly groupService: GroupDetailsService,
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.currentPageData$.subscribe();
+  }
 
   protected loadData(event: Event) {
     this.#currentInfiniteEvent = event as InfiniteScrollCustomEvent;
-    this.currentPage$.next(this.currentPage$.value + 1);
+    this.currentPage$.next(
+      this.wasLastApiCallEmpty
+        ? this.currentPage$.value
+        : this.currentPage$.value + 1,
+    );
   }
 }
