@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GroupService } from '../../_services/group/group.service';
 import { Group } from 'src/app/_common/models/group';
-import { concatMap, map } from 'rxjs';
+import { concatMap, delay, EMPTY, map } from 'rxjs';
 import { Balance } from 'src/app/_common/models/balance';
 import { User } from 'src/app/_common/models/user';
 import { getCurrencySymbol } from 'src/app/_common/helpers/get-currency-symbol';
@@ -45,6 +45,7 @@ export class GroupDetailsService {
 
   banUser(id: string) {
     return this.groupService.banUser(this.groupId, id).pipe(
+      delay(20),
       concatMap(() => {
         return this.getGroup(this.groupId);
       }),
@@ -53,6 +54,7 @@ export class GroupDetailsService {
 
   unbanUser(id: string) {
     return this.groupService.unbanUser(this.groupId, id).pipe(
+      delay(20),
       concatMap(() => {
         return this.getGroup(this.groupId);
       }),
