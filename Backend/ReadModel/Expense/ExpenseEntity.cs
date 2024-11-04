@@ -16,6 +16,7 @@ namespace ReadModel.Expense
         public Guid GroupId { get; set; }
         public string? PaymentId { get; set; }
         public string? PaymentStatus { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public GroupEntity Group { get; set; }
         public UserEntity Payer { get; set; }
         public ICollection<ExpenseDeptorEntity> Deptors { get; set; }

@@ -49,7 +49,7 @@ namespace API.Expense.DTO
 
             if (entity.Deptors?.Count > 0)
             {
-                dto.Deptors = entity.Deptors.Select(e => DeptorDto.FromEntity(e)).ToArray();
+                dto.Deptors = entity.Deptors.Select(e => DeptorDto.FromDeptorEntity(e)).ToArray();
             }
 
             return dto;

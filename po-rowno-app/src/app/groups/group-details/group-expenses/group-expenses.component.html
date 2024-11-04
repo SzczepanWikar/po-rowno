@@ -1,3 +1,16 @@
-<p>
-  group-expenses works!
-</p>
+<h2>Wydatki</h2>
+<div>
+  <ion-list>
+    @for (expense of currentPageData$ | async; track $index) {
+      <ion-item>
+        <ion-label>
+          {{ expense.name }} - {{ expense.amount }}
+          {{ groupService.currencySymbol }}
+        </ion-label>
+      </ion-item>
+    }
+  </ion-list>
+  <ion-infinite-scroll>
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</div>

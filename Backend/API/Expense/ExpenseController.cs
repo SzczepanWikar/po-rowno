@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using ReadModel.Expense.Handler;
 using WriteModel.Expense.Commands;
 
 namespace API.Expense
@@ -20,6 +21,28 @@ namespace API.Expense
         public ExpenseController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ExpenseDto>>> GetAll(
+            [FromQuery] GetExpensesQueryDto queryDto
+        )
+        {
+            var user = HttpContext.Items["User"] as User;
+
+            var query = new GetExpenses(
+                queryDto.GroupId,
+                user,
+                queryDto.Page,
+                queryDto.Take,
+                queryDto.Ascending
+            );
+
+            var expenses = await _mediator.Send(query);
+            var res =
+                expenses.Select(ExpenseDto.FromEntity).AsEnumerable() ?? new List<ExpenseDto>();
+
+            return Ok(res);
         }
 
         [HttpPost]

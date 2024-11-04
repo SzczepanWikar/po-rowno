@@ -35,5 +35,24 @@ namespace API.Expense.DTO
 
             return dto;
         }
+
+        public static DeptorDto FromDeptorEntity(ExpenseDeptorEntity entity)
+        {
+            DeptorDto dto =
+                new()
+                {
+                    Id = entity.Id,
+                    Amount = entity.Amount,
+                    UserId = entity.UserId,
+                    ExpenseId = entity.ExpenseId,
+                };
+
+            if (entity.User is not null)
+            {
+                dto.User = UserDto.FromEntity(entity.User);
+            }
+
+            return dto;
+        }
     }
 }
