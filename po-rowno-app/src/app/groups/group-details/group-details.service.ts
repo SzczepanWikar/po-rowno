@@ -37,6 +37,7 @@ export class GroupDetailsService {
 
   refreshJoinCode(validTo: Date) {
     return this.groupService.refreshJoinCode(this.groupId, validTo).pipe(
+      delay(20),
       concatMap(() => {
         return this.getGroup(this.groupId);
       }),
