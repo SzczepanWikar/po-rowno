@@ -1,6 +1,7 @@
 {
   "SUCCESS": "Success",
   "SAVING": "Saving",
+  "SAVE": "Save",
   "CLOSE": "Close",
   "VALIDATION": {
     "REQUIRED": "Field is required.",

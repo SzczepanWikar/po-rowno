@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
-import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, switchMap, tap } from 'rxjs';
 import { ExpenseService } from 'src/app/_services/expense/expense.service';
 import { GroupDetailsService } from '../group-details.service';
 import { Expense } from 'src/app/_common/models/expense';
@@ -10,11 +10,12 @@ import { Expense } from 'src/app/_common/models/expense';
   templateUrl: './group-expenses.component.html',
   styleUrls: ['./group-expenses.component.scss'],
 })
-export class GroupExpensesComponent implements OnInit {
+export class GroupExpensesComponent implements OnInit, OnDestroy {
   currentPage$ = new BehaviorSubject<number>(1);
   #currentInfiniteEvent?: InfiniteScrollCustomEvent;
   expenses: Expense[] = [];
   wasLastApiCallEmpty = false;
+  #destroy$: Subject<void> = new Subject();
 
   currentPageData$: Observable<Expense[]> = this.currentPage$.pipe(
     switchMap((p) =>
@@ -53,5 +54,10 @@ export class GroupExpensesComponent implements OnInit {
         ? this.currentPage$.value
         : this.currentPage$.value + 1,
     );
+  }
+
+  ngOnDestroy(): void {
+    this.#destroy$.next();
+    this.#destroy$.complete();
   }
 }

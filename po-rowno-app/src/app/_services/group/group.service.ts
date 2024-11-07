@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Group } from 'src/app/_common/models/group';
 import { environment } from 'src/environments/environment';
+import { CreateGroupDto } from './dto/create-group.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,10 @@ export class GroupService {
 
   getOne(id: string): Observable<Group> {
     return this.http.get<Group>(`${this.url}/${id}`);
+  }
+
+  create(dto: CreateGroupDto): Observable<string> {
+    return this.http.post<string>(this.url, dto);
   }
 
   refreshJoinCode(id: string, validTo: Date): Observable<Object> {

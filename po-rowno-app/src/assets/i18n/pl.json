@@ -1,9 +1,10 @@
 {
   "SUCCESS": "Sukces",
   "SAVING": "Zapisywanie",
+  "SAVE": "Zapisz",
   "CLOSE": "Zamknij",
   "VALIDATION": {
-    "REQUItrRED": "Pole jest wymagene.",
+    "REQUIRED": "Pole jest wymagene.",
     "EMAIL_ERROR": "Adres e-mail jest nie poprawny.",
     "ERROR_OCCURED": "Wystąpił błąd",
     "PASSWORD_LENGTH": "Hasło musi mieć długość przynajmniej 12 znaków.",
@@ -11,7 +12,10 @@
     "NO_UPPERCASE_CHAR": "Hasło musi zawierać przynajmniej jedną wielką literę.",
     "NO_LOWER_CHAR": "Hasło musi zawierać przynajmniej jedną małą literę.",
     "NO_SPECIAL_CHARACTER": "Hasło musi zawierać przynajmniej znak specjalny.",
-    "PASSWORDS_MISMATCH": "Podane hasła nie są identyczne."
+    "PASSWORDS_MISMATCH": "Podane hasła nie są identyczne.",
+    "VALIDATION.MIN_LENGTH_1": "Minimalna długość wynosi 1.",
+    "VALIDATION.MAX_LENGTH_50": "Maksymalna długość wynosi 50.",
+    "VALIDATION.MAX_LENGTH_400": "Maksymalna długość wynosi 400."
   },
   "GROUPS": {
     "GROUPS": "Grupy"

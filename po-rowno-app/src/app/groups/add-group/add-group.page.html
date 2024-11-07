@@ -1,0 +1,89 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Dodaj grupę</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Dodaj grupę</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div class="container">
+    <form
+      class="inner-container"
+      [formGroup]="form"
+      (ngSubmit)="onSubmit($event)"
+    >
+      <ion-input
+        formControlName="name"
+        label="Nazwa"
+        class="app-input"
+      ></ion-input>
+      @if (form.get('name')?.touched && !form.get('name')?.valid) {
+        @if (form.get('name')?.hasError('required')) {
+          <app-error-label error="VALIDATION.REQUIRED" />
+        }
+        @if (form.get('name')?.hasError('minlength')) {
+          <app-error-label error="VALIDATION.MIN_LENGTH_1" />
+        }
+        @if (form.get('name')?.hasError('maxlength')) {
+          <app-error-label error="VALIDATION.MAX_LENGTH_50" />
+        }
+      }
+      <ion-textarea
+        formControlName="description"
+        label="Opis"
+        class="app-input"
+        autoGrow="true"
+        rows="3"
+      ></ion-textarea>
+      @if (
+        form.get('description')?.touched && !form.get('description')?.valid
+      ) {
+        @if (form.get('description')?.hasError('required')) {
+          <app-error-label error="VALIDATION.REQUIRED" />
+        }
+        @if (form.get('description')?.hasError('minlength')) {
+          <app-error-label error="VALIDATION.MIN_LENGTH_1" />
+        }
+        @if (form.get('description')?.hasError('maxlength')) {
+          <app-error-label error="VALIDATION.MAX_LENGTH_400" />
+        }
+      }
+      <ion-select class="app-input" label="Waluta" formControlName="currency">
+        @for (currency of currencies; track $index) {
+          <ion-select-option value="{{ currency[0] }}">{{
+            currency[1] | translate
+          }}</ion-select-option>
+        }
+      </ion-select>
+      @if (form.get('currency')?.touched && !form.get('currency')?.valid) {
+        @if (form.get('currency')?.hasError('required')) {
+          <app-error-label error="VALIDATION.REQUIRED" />
+        }
+      }
+
+      <ion-button
+        [disabled]="!(form.valid && form.touched) || saving"
+        color="primary"
+        type="submit"
+      >
+        @if (saving) {
+          {{ 'SAVING' | translate }}
+        } @else {
+          {{ 'SAVE' | translate }}
+        }
+      </ion-button>
+    </form>
+  </div>
+</ion-content>
+
+<ion-alert
+  [isOpen]="showErrorAlert"
+  header="{{ 'ERROR_OCCURED' | translate }}"
+  message="{{ 'ERROR_OCCURED' | translate }}"
+  [buttons]="errorAlertButtons"
+  (didDismiss)="hideErrorAlert()"
+></ion-alert>
