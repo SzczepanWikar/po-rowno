@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Group } from 'src/app/_common/models/group';
 import { environment } from 'src/environments/environment';
 import { CreateGroupDto } from './dto/create-group.dto';
+import { UpdateGroupDto } from './dto/update-group.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +23,10 @@ export class GroupService {
 
   create(dto: CreateGroupDto): Observable<string> {
     return this.http.post<string>(this.url, dto);
+  }
+
+  update(id: string, dto: UpdateGroupDto): Observable<void> {
+    return this.http.patch<void>(`${this.url}/${id}`, dto);
   }
 
   refreshJoinCode(id: string, validTo: Date): Observable<Object> {

@@ -20,6 +20,13 @@ const routes: Routes = [
         (m) => m.GroupDetailsPageModule,
       ),
   },
+  {
+    path: ':id/edit',
+    loadChildren: () =>
+      import('./edit-group/edit-group.module').then(
+        (m) => m.EditGroupPageModule,
+      ),
+  },
 ];
 
 @NgModule({

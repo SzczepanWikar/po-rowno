@@ -6,6 +6,7 @@ import { Balance } from 'src/app/_common/models/balance';
 import { User } from 'src/app/_common/models/user';
 import { getCurrencySymbol } from 'src/app/_common/helpers/get-currency-symbol';
 import { UserStatus } from 'src/app/_common/enums/user-status.enum';
+import { USER_ID } from 'src/app/_common/constants';
 
 type BalanceUser = {
   balance: Balance;
@@ -19,6 +20,7 @@ export class GroupDetailsService {
   groupId: string = '';
   balances: BalanceUser[] = [];
   currencySymbol: string = '';
+  currentUserId = localStorage.getItem(USER_ID);
 
   constructor(private readonly groupService: GroupService) {}
 
@@ -71,6 +73,7 @@ export class GroupDetailsService {
     this.balances = [];
     this.groupId = '';
     this.currencySymbol = '';
+    this.currentUserId = null;
   }
 
   private mapBalances(balances?: Balance[]): BalanceUser[] {

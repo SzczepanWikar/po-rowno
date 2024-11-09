@@ -35,10 +35,15 @@
               ><ion-icon slot="icon-only" name="person-add-outline"></ion-icon>
               Zaproś
             </ion-button>
-            <ion-button color="secondary">
-              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
-              Edytuj
-            </ion-button>
+            @if (groupService.currentUserId === groupService.group.ownerId) {
+              <ion-button
+                href="/app/groups/{{ groupService.group.id }}/edit"
+                color="secondary"
+              >
+                <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+                Edytuj
+              </ion-button>
+            }
           </div>
           <p class="inner-container">
             {{ groupService.group.description }}
