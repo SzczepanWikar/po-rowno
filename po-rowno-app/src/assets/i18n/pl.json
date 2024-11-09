@@ -13,9 +13,9 @@
     "NO_LOWER_CHAR": "Hasło musi zawierać przynajmniej jedną małą literę.",
     "NO_SPECIAL_CHARACTER": "Hasło musi zawierać przynajmniej znak specjalny.",
     "PASSWORDS_MISMATCH": "Podane hasła nie są identyczne.",
-    "VALIDATION.MIN_LENGTH_1": "Minimalna długość wynosi 1.",
-    "VALIDATION.MAX_LENGTH_50": "Maksymalna długość wynosi 50.",
-    "VALIDATION.MAX_LENGTH_400": "Maksymalna długość wynosi 400."
+    "MIN_LENGTH_1": "Minimalna długość wynosi 1.",
+    "MAX_LENGTH_50": "Maksymalna długość wynosi 50.",
+    "MAX_LENGTH_400": "Maksymalna długość wynosi 400."
   },
   "GROUPS": {
     "GROUPS": "Grupy"

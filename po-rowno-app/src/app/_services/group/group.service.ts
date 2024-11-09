@@ -35,6 +35,10 @@ export class GroupService {
     });
   }
 
+  join(code: string): Observable<void> {
+    return this.http.patch<void>(`${this.url}/join`, { code });
+  }
+
   banUser(id: string, userId: string): Observable<unknown> {
     return this.http.patch(`${this.url}/${id}/ban-user`, {
       id: userId,

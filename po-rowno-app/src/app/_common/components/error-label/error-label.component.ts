@@ -10,7 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class ErrorLabelComponent {
   @Input()
-  error: string = 'ERROR_OCCURED';
+  error: string = 'VALIDATION.ERROR_OCCURED';
 
   constructor() {}
 }

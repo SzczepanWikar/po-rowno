@@ -1,0 +1,43 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Dołącz do grupy</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Dołącz do grupy</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div class="join__container">
+    <form class="inner-container" (submit)="onSubmit()" [formGroup]="form">
+      <ion-input formControlName="code" label="Kod" class="app-input">
+      </ion-input>
+      @if (form.get('code')?.touched && !form.get('code')?.valid) {
+        @if (form.get('code')?.hasError('required')) {
+          <app-error-label error="VALIDATION.REQUIRED" />
+        }
+      }
+      <ion-button
+        [disabled]="!(form.valid && form.touched) || saving"
+        color="primary"
+        type="submit"
+      >
+        @if (saving) {
+          Dołączanie
+        } @else {
+          Dołącz
+        }
+      </ion-button>
+    </form>
+  </div>
+</ion-content>
+
+<ion-alert
+  [isOpen]="showErrorAlert"
+  header="{{ 'VALIDATION.ERROR_OCCURED' | translate }}"
+  message="Kod jest niepoprawny, lub należysz już do tej grupy."
+  [buttons]="errorAlertButtons"
+  (didDismiss)="hideErrorAlert()"
+></ion-alert>

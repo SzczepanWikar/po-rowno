@@ -14,6 +14,11 @@ const routes: Routes = [
       import('./add-group/add-group.module').then((m) => m.AddGroupPageModule),
   },
   {
+    path: 'join',
+    loadChildren: () =>
+      import('./join/join.module').then((m) => m.JoinPageModule),
+  },
+  {
     path: ':id',
     loadChildren: () =>
       import('./group-details/group-details.module').then(

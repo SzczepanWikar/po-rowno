@@ -1,0 +1,9 @@
+.join {
+  &__container {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0.5em;
+  }
+}
