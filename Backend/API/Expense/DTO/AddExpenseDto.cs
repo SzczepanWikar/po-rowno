@@ -6,7 +6,7 @@ namespace API.Expense.DTO
 {
     public sealed record AddExpenseDto
     {
-        [Required]
+        [Required, MinLength(1), MaxLength(50)]
         public string Name { get; init; }
 
         [Required]

@@ -1,0 +1,121 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>add-expense</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">add-expense</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div class="container">
+    <form
+      class="inner-container"
+      [formGroup]="form"
+      (ngSubmit)="onSubmit($event)"
+    >
+      <ion-input
+        formControlName="name"
+        label="Nazwa"
+        class="app-input"
+      ></ion-input>
+      @if (form.get('name')?.touched && !form.get('name')?.valid) {
+        @if (form.get('name')?.hasError('required')) {
+          <app-error-label error="VALIDATION.REQUIRED" />
+        }
+        @if (form.get('name')?.hasError('minlength')) {
+          <app-error-label error="VALIDATION.MIN_LENGTH_1" />
+        }
+        @if (form.get('name')?.hasError('maxlength')) {
+          <app-error-label error="VALIDATION.MAX_LENGTH_50" />
+        }
+      }
+
+      <ion-input
+        formControlName="amount"
+        label="Kwota"
+        class="app-input"
+        type="number"
+      ></ion-input>
+      @if (form.get('amount')?.touched && !form.get('amount')?.valid) {
+        @if (form.get('amount')?.hasError('required')) {
+          <app-error-label error="VALIDATION.REQUIRED" />
+        }
+        @if (form.get('amount')?.hasError('min')) {
+          <app-error-label error="VALIDATION.MIN_0_02" />
+        }
+      }
+
+      <ion-radio-group
+        class="app-input"
+        label="Rodzaj wydatku"
+        formControlName="type"
+      >
+        @for (type of expenseTypes | keyvalue; track $index) {
+          <ion-item>
+            <ion-radio value="{{ type.key }}">{{
+              type.value | translate
+            }}</ion-radio>
+          </ion-item>
+        }
+      </ion-radio-group>
+      @if (form.get('type')?.touched && !form.get('type')?.valid) {
+        @if (form.get('type')?.hasError('required')) {
+          <app-error-label error="VALIDATION.REQUIRED" />
+        }
+      }
+
+      <ion-select
+        class="app-input"
+        label="Grupa"
+        formControlName="groupId"
+        (ionChange)="onGroupSet()"
+      >
+        @for (group of groups$ | async; track $index) {
+          <ion-select-option [value]="group.id">
+            {{ group.name }}
+          </ion-select-option>
+        }
+      </ion-select>
+      @if (form.get('groupId')?.touched && !form.get('groupId')?.valid) {
+        @if (form.get('groupId')?.hasError('required')) {
+          <app-error-label error="VALIDATION.REQUIRED" />
+        }
+      }
+
+      <ion-select
+        class="app-input"
+        label="Dłużnicy"
+        (ionChange)="onGroupSet()"
+        formControlName="userIds"
+        [multiple]="true"
+      >
+        @for (user of users$ | async; track $index) {
+          <ion-select-option [value]="user.id">
+            {{ user.username }}
+          </ion-select-option>
+        }
+      </ion-select>
+      @if (form.get('userIds')?.touched && !form.get('userIds')?.valid) {
+        @if (form.get('userIds')?.hasError('required')) {
+          <app-error-label error="VALIDATION.REQUIRED" />
+        }
+      }
+      <ion-button
+        [disabled]="!(form.valid && form.touched) || saving"
+        color="primary"
+        type="submit"
+      >
+        @if (saving) {
+          {{ 'SAVING' | translate }}
+        } @else {
+          {{ 'SAVE' | translate }}
+        }
+      </ion-button>
+    </form>
+  </div>
+</ion-content>
+
+<ion-loading [isOpen]="loading$ | async"></ion-loading>
