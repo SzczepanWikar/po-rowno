@@ -44,8 +44,8 @@ namespace Infrastructure.PayPal
                             }}
                         ],
                         ""redirect_urls"": {{
-                            ""return_url"": ""{_webConfig.BaseUrl}/Payment/Success"",
-                            ""cancel_url"": ""{_webConfig.BaseUrl}/Payment/Cancel""
+                            ""return_url"": ""{_webConfig.BaseUrl}/payment/success"",
+                            ""cancel_url"": ""{_webConfig.BaseUrl}/payment/cancel""
                         }}
                     }}
                 ",

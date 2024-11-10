@@ -86,9 +86,7 @@ namespace API.Expense
         }
 
         [HttpPatch("payment/{orderId}/capture")]
-        public async Task<ActionResult<OrderCapturedResponse>> Capture(
-            [FromRoute] string orderId
-        )
+        public async Task<ActionResult<OrderCapturedResponse>> Capture([FromRoute] string orderId)
         {
             var user = HttpContext.Items["User"] as User;
 

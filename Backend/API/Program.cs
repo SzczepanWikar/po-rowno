@@ -1,3 +1,4 @@
+using API.Expense.PaymentView;
 using API.User.AuthView;
 using Infrastructure.CQRS;
 using Infrastructure.Email;
@@ -52,6 +53,7 @@ app.UseRouting();
 app.UseAuth();
 app.UseUserFetching();
 app.UseAuthViews();
+app.UsePaymentViews();
 app.UseHttpsRedirection();
 app.UseEventStore();
 app.UseCQRS();

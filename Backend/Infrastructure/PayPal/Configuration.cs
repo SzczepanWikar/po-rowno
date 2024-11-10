@@ -20,7 +20,8 @@ namespace Infrastructure.PayPal
 
             var url = config.GetValue<string>("BaseUrl");
 
-            if (url is null) {
+            if (url is null)
+            {
                 throw new InvalidOperationException("BaseUrl configuration is missing");
             }
 
@@ -28,7 +29,7 @@ namespace Infrastructure.PayPal
 
             services.AddSingleton<PayPalConfig>(payPalConfig);
             services.AddSingleton<WebConfig>(webConfig);
-            
+
             services.AddHttpClient(
                 "PayPal",
                 httpClient =>

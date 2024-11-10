@@ -55,8 +55,12 @@ namespace WriteModel.Expense.Commands
 
             try
             {
-                var receiver = await _userService.FindOneAsync(request.ReceiverId, cancellationToken);
-                NewOrder newOrder = new(request.Amount, request.Currency, receiver.Email, "PoRowno");
+                var receiver = await _userService.FindOneAsync(
+                    request.ReceiverId,
+                    cancellationToken
+                );
+                NewOrder newOrder =
+                    new(request.Amount, request.Currency, receiver.Email, "PoRowno");
                 var paymentResult = await _payPalService.Create(newOrder);
 
                 var @event = new ExpenseCreated(
