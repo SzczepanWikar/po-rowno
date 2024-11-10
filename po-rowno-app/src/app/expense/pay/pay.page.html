@@ -1,13 +1,13 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Nowy wydatek</ion-title>
+    <ion-title>Przelej środki</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Nowy wydatek</ion-title>
+      <ion-title size="large">Przelej środki</ion-title>
     </ion-toolbar>
   </ion-header>
   <div class="container">
@@ -45,26 +45,7 @@
           <app-error-label error="VALIDATION.REQUIRED" />
         }
         @if (form.get('amount')?.hasError('min')) {
-          <app-error-label error="VALIDATION.MIN_0_02" />
-        }
-      }
-
-      <ion-radio-group
-        class="app-input"
-        label="Rodzaj wydatku"
-        formControlName="type"
-      >
-        @for (type of expenseTypes | keyvalue; track $index) {
-          <ion-item>
-            <ion-radio value="{{ type.key }}">{{
-              type.value | translate
-            }}</ion-radio>
-          </ion-item>
-        }
-      </ion-radio-group>
-      @if (form.get('type')?.touched && !form.get('type')?.valid) {
-        @if (form.get('type')?.hasError('required')) {
-          <app-error-label error="VALIDATION.REQUIRED" />
+          <app-error-label error="VALIDATION.MIN_0_01" />
         }
       }
 
@@ -86,20 +67,15 @@
         }
       }
 
-      <ion-select
-        class="app-input"
-        label="Dłużnicy"
-        formControlName="userIds"
-        [multiple]="true"
-      >
+      <ion-select class="app-input" label="Odbiorca" formControlName="userId">
         @for (user of users$ | async; track $index) {
           <ion-select-option [value]="user.id">
             {{ user.username }}
           </ion-select-option>
         }
       </ion-select>
-      @if (form.get('userIds')?.touched && !form.get('userIds')?.valid) {
-        @if (form.get('userIds')?.hasError('required')) {
+      @if (form.get('userId')?.touched && !form.get('userId')?.valid) {
+        @if (form.get('userId')?.hasError('required')) {
           <app-error-label error="VALIDATION.REQUIRED" />
         }
       }

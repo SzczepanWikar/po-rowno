@@ -6,6 +6,7 @@ namespace Core.Common.PayPal
         decimal Amount,
         Currency Currency,
         string PayeeEmail,
+        Guid ExpenseId,
         string Description
     );
 }

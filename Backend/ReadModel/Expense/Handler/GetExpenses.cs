@@ -33,6 +33,7 @@ namespace ReadModel.Expense.Handler
                 .Where(e =>
                     e.GroupId == request.GroupId
                     && e.Group.UserGroups.Any(ug => ug.UserId == request.User.Id)
+                    && (e.PaymentStatus == "COMPLETED" || e.PaymentStatus == null)
                 );
 
             if (request.Ascending)

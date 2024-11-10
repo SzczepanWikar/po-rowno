@@ -55,16 +55,17 @@ namespace WriteModel.Expense.Commands
 
             try
             {
+                var id = Guid.NewGuid();
                 var receiver = await _userService.FindOneAsync(
                     request.ReceiverId,
                     cancellationToken
                 );
                 NewOrder newOrder =
-                    new(request.Amount, request.Currency, receiver.Email, "PoRowno");
+                    new(request.Amount, request.Currency, receiver.Email, id, "PoRowno");
                 var paymentResult = await _payPalService.Create(newOrder);
 
                 var @event = new ExpenseCreated(
-                    Guid.NewGuid(),
+                    id,
                     "",
                     request.Amount,
                     request.Currency,
@@ -77,7 +78,11 @@ namespace WriteModel.Expense.Commands
 
                 await _expenseRepository.CreateAsync(@event.Id, @event);
 
-                return new ExpenseWithPaymentCreatedResult(@event.Id, paymentResult.Response.id);
+                return new ExpenseWithPaymentCreatedResult(
+                    @event.Id,
+                    paymentResult.Response.id,
+                    paymentResult.Response.links
+                );
             }
             catch (HttpRequestException ex)
             {

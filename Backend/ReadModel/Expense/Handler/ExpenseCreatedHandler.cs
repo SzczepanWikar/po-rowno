@@ -61,7 +61,11 @@ namespace ReadModel.Expense.Handler
 
             await _context.AddAsync(expense, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-            await CalcBalancesAsync(@event, cancellationToken);
+
+            if (expense.PaymentStatus is null || expense.PaymentStatus == "COMPLETED")
+            {
+                await CalcBalancesAsync(@event, cancellationToken);
+            }
         }
 
         private async Task CalcBalancesAsync(

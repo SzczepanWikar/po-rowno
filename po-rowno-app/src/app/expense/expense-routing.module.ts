@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AddExpensePage } from './add-expense/add-expense.page';
 
 const routes: Routes = [
   {
@@ -9,6 +8,10 @@ const routes: Routes = [
       import('./add-expense/add-expense.module').then(
         (m) => m.AddExpensePageModule,
       ),
+  },
+  {
+    path: 'pay',
+    loadChildren: () => import('./pay/pay.module').then((m) => m.PayPageModule),
   },
 ];
 

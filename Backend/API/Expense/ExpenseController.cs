@@ -1,5 +1,6 @@
 ﻿using API.Expense.DTO;
 using Core.Common.PayPal;
+using Core.Expense;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -45,6 +46,19 @@ namespace API.Expense
             return Ok(res);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ExpenseDto>> GetOne(Guid id)
+        {
+            var user = HttpContext.Items["User"] as User;
+
+            var query = new GetOneExpense(id, user);
+
+            var expense = await _mediator.Send(query);
+            var res = ExpenseDto.FromEntity(expense);
+
+            return Ok(res);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Guid>> Create([FromBody] AddExpenseDto dto)
         {
@@ -66,7 +80,7 @@ namespace API.Expense
         }
 
         [HttpPost("payment")]
-        public async Task<ActionResult<Guid>> CreateWithPayment(
+        public async Task<ActionResult<ExpenseWithPaymentCreatedResult>> CreateWithPayment(
             [FromBody] AddExpenseWithPaymentDto dto
         )
         {

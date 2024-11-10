@@ -3,6 +3,7 @@ using System.Text.Json;
 using Core.Common.Configs;
 using Core.Common.PayPal;
 using Core.Group;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.PayPal
 {
@@ -11,6 +12,7 @@ namespace Infrastructure.PayPal
         private readonly PayPalConfig _payPalConfig;
         private readonly WebConfig _webConfig;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ILogger<PayPalService> _logger;
 
         public PayPalService(
             PayPalConfig payPalConfig,
@@ -26,32 +28,28 @@ namespace Infrastructure.PayPal
         public async Task<CreatedOrder> Create(NewOrder newOrder)
         {
             var accessToken = await GetAccessToken();
-
-            var requestContent = new StringContent(
-                $@"
-                    {{
-                        ""intent"": ""CAPTURE"",
-                        ""transactions"": [
-                            {{
-                                ""amount"": {{
-                                    ""total"": ""{newOrder.Amount}"",
-                                    ""currency"": ""{CurrencyToCode(newOrder.Currency)}""
-                                }},
-                                ""payee"": {{
-                                    ""email"": ""{newOrder.PayeeEmail}""
-                                }},
-                                ""description"": ""{newOrder.Description}""
-                            }}
-                        ],
-                        ""redirect_urls"": {{
-                            ""return_url"": ""{_webConfig.BaseUrl}/payment/success"",
-                            ""cancel_url"": ""{_webConfig.BaseUrl}/payment/cancel""
+            var payload =
+                $@" {{
+                    ""intent"": ""CAPTURE"",
+                    ""purchase_units"": [
+                        {{
+                            ""amount"": {{
+                                ""currency_code"": ""{CurrencyToCode(newOrder.Currency)}"",
+                                ""value"": ""{newOrder.Amount.ToString().Replace(',', '.')}""
+                            }},
+                            ""payee"": {{
+                                ""email_address"": ""{newOrder.PayeeEmail}""
+                            }},
+                            ""description"": ""{newOrder.Description}""
                         }}
+                    ],
+                    ""application_context"": {{
+                        ""return_url"": ""{_webConfig.BaseUrl}/payment/{newOrder.ExpenseId}/success"",
+                        ""cancel_url"": ""{_webConfig.BaseUrl}/payment/{newOrder.ExpenseId}/cancel""
                     }}
-                ",
-                Encoding.UTF8,
-                "application/json"
-            );
+                }}";
+
+            var requestContent = new StringContent(payload, Encoding.UTF8, "application/json");
 
             var httpClient = _httpClientFactory.CreateClient("PayPal");
 

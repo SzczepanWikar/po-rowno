@@ -3,15 +3,17 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertButton } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { set } from 'date-fns';
 import {
   BehaviorSubject,
+  catchError,
   delay,
+  interval,
   Observable,
   of,
   Subject,
   switchMap,
   takeUntil,
+  takeWhile,
   tap,
 } from 'rxjs';
 import { USER_ID } from 'src/app/_common/constants';
@@ -21,17 +23,16 @@ import { UserGroupStatus } from 'src/app/_common/enums/user-group-status.enum';
 import { getExpenseTypeTranslateKey } from 'src/app/_common/helpers/get-expense-translate-key';
 import { Group } from 'src/app/_common/models/group';
 import { User } from 'src/app/_common/models/user';
-import { AddExpenseDto } from 'src/app/_services/expense/dto/add-expense.dto';
-import { ExpenseDeptorDto } from 'src/app/_services/expense/dto/expense-deptor.dto';
+import { AddExpenseWithPaymentDto } from 'src/app/_services/expense/dto/add-expense-with-payment.dto';
 import { ExpenseService } from 'src/app/_services/expense/expense.service';
 import { GroupService } from 'src/app/_services/group/group.service';
 
 @Component({
-  selector: 'app-add-expense',
-  templateUrl: './add-expense.page.html',
-  styleUrls: ['./add-expense.page.scss'],
+  selector: 'app-pay',
+  templateUrl: './pay.page.html',
+  styleUrls: ['./pay.page.scss'],
 })
-export class AddExpensePage implements OnInit, OnDestroy {
+export class PayPage implements OnInit, OnDestroy {
   protected saving = false;
   protected readonly defaultType = ExpenseType.Cost;
 
@@ -48,17 +49,14 @@ export class AddExpensePage implements OnInit, OnDestroy {
       '',
       [Validators.required, Validators.minLength(1), Validators.maxLength(50)],
     ],
-    amount: ['', [Validators.required, Validators.min(0.02)]],
-    type: new FormControl<ExpenseType | undefined>(undefined, {
-      validators: [Validators.required],
-    }),
+    amount: ['', [Validators.required, Validators.min(0.01)]],
     groupId: new FormControl<string>(
       { value: '', disabled: true },
       { validators: [Validators.required] },
     ),
-    userIds: new FormControl<string[]>(
+    userId: new FormControl<string>(
       {
-        value: [],
+        value: '',
         disabled: true,
       },
       {
@@ -94,7 +92,7 @@ export class AddExpensePage implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.#destroy$),
         switchMap((e) => {
-          this.form.controls.userIds.disable();
+          this.form.controls.userId.disable();
           if (this.#downladedGroups.has(e)) {
             return of(this.#downladedGroups.get(e)!);
           }
@@ -153,22 +151,39 @@ export class AddExpensePage implements OnInit, OnDestroy {
     this.saving = true;
     this.loading$.next(true);
 
-    const { name, amount, groupId, userIds, type } = this.form.value;
-    const deptors = this.#calcDeptors(userIds!, +amount!);
-    const dto: AddExpenseDto = {
-      name: name!,
+    const { amount, userId, groupId } = this.form.value;
+
+    const dto: AddExpenseWithPaymentDto = {
       amount: +amount!,
-      groupId: groupId!,
       currency: this.#currentCurrency!,
-      type: +type!,
-      deptors,
+      groupId: groupId!,
+      receiverId: userId!,
     };
 
+    let orderId = '';
     this.expenseService
-      .create(dto)
+      .pay(dto)
       .pipe(
+        takeUntil(this.#destroy$),
+        tap((e) => (orderId = e.orderId)),
+        tap((e) => window.open(e.links.find((f) => f.rel === 'approve')?.href)),
+        switchMap((e) =>
+          interval(2000).pipe(
+            switchMap(() => this.expenseService.getOne(e.id)),
+            takeWhile((f) => f.paymentStatus === 'CREATED', true),
+            switchMap((f) => {
+              if (f.paymentStatus === 'APPROVED') {
+                return this.expenseService.capture(orderId);
+              }
+              return [];
+            }),
+            catchError(() => {
+              this.showErrorAlert = true;
+              return [];
+            }),
+          ),
+        ),
         tap(() => {
-          this.saving = false;
           this.loading$.next(false);
         }),
         delay(0),
@@ -177,9 +192,7 @@ export class AddExpensePage implements OnInit, OnDestroy {
         next: () => {
           this.router.navigate([`app/groups/${groupId}`]);
         },
-        error: () => {
-          this.showErrorAlert = true;
-        },
+        error: () => {},
       });
   }
 
@@ -200,23 +213,16 @@ export class AddExpensePage implements OnInit, OnDestroy {
     this.users$.next(users ?? []);
 
     if (users?.length) {
-      this.form.controls.userIds.enable();
+      this.form.controls.userId.enable();
     }
 
     this.loading$.next(false);
   }
 
-  #calcDeptors(userIds: string[], amount: number): ExpenseDeptorDto[] {
-    const rawDept = amount / (userIds.length + 1);
-    const dept = Math.floor(rawDept * 100) / 100;
-
-    return userIds.map((e) => ({
-      amount: dept,
-      userId: e,
-    }));
-  }
-
   hideErrorAlert() {
     this.showErrorAlert = false;
+    setTimeout(() => {
+      this.router.navigate([`app/groups/${this.form.value.groupId}`]);
+    });
   }
 }

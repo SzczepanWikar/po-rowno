@@ -16,7 +16,8 @@
     "MIN_LENGTH_1": "Minimalna długość wynosi 1.",
     "MAX_LENGTH_50": "Maksymalna długość wynosi 50.",
     "MAX_LENGTH_400": "Maksymalna długość wynosi 400.",
-    "VALIDATION.MIN_0_02": "Minimalna wartośc wynosi 0,02."
+    "MIN_0_02": "Minimalna wartośc wynosi 0,02.",
+    "MIN_0_01": "Minimalna wartośc wynosi 0,01."
   },
   "GROUPS": {
     "GROUPS": "Grupy"

@@ -4,6 +4,8 @@ import { Deptor } from './deptor';
 import { Group } from './group';
 import { User } from './user';
 
+export type PaymentStatus = 'CREATED' | 'APPROVED' | 'CANCELED' | 'COMPLETED';
+
 export interface Expense {
   id: string;
   name: string;
@@ -12,7 +14,7 @@ export interface Expense {
   groupId: string;
   type: ExpenseType;
   payerId?: string;
-  paymentStatus?: string;
+  paymentStatus?: PaymentStatus;
   group?: Group;
   payer?: User;
   deptors?: Deptor[];

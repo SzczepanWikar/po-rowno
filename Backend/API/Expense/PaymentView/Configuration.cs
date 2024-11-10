@@ -8,13 +8,13 @@
             {
                 endpoints.MapControllerRoute(
                     name: "payment-success",
-                    pattern: "payment/success",
+                    pattern: "payment/{id}/success",
                     defaults: new { controller = "PaymentView", action = "Success" }
                 );
 
                 endpoints.MapControllerRoute(
                     name: "payment-cancel",
-                    pattern: "payment/cancel",
+                    pattern: "payment/{id}/cancel",
                     defaults: new { controller = "PaymentView", action = "Cancel" }
                 );
             });

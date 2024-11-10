@@ -5,6 +5,9 @@ import { ExportQuery } from './dto/expense.query';
 import { Expense } from 'src/app/_common/models/expense';
 import { AddExpenseDto } from './dto/add-expense.dto';
 import { Observable } from 'rxjs';
+import { AddExpenseWithPaymentDto } from './dto/add-expense-with-payment.dto';
+import { PaymentCreatedDto } from './dto/payment-created.dto';
+import { PaymentCapturedDto } from './dto/payment-captured.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +23,22 @@ export class ExpenseService {
     });
   }
 
+  getOne(id: string) {
+    return this.http.get<Expense>(`${this.url}/${id}`);
+  }
+
   create(dto: AddExpenseDto): Observable<string> {
     return this.http.post<string>(this.url, dto);
+  }
+
+  pay(dto: AddExpenseWithPaymentDto): Observable<PaymentCreatedDto> {
+    return this.http.post<PaymentCreatedDto>(`${this.url}/payment`, dto);
+  }
+
+  capture(orderId: string): Observable<PaymentCapturedDto> {
+    return this.http.patch<PaymentCapturedDto>(
+      `${this.url}/payment/${orderId}/capture`,
+      {},
+    );
   }
 }

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using ReadModel.UserGroup;
 
 namespace ReadModel.Group.Handlers
 {
@@ -22,6 +23,11 @@ namespace ReadModel.Group.Handlers
             var userId = request.User.Id;
             var groups = await _context
                 .Set<GroupEntity>()
+                .Where(g =>
+                    g.UserGroups.Any(ug =>
+                        ug.UserId == userId && ug.Status == UserGroupStatus.Active
+                    )
+                )
                 .Select(g => new GroupEntity
                 {
                     Id = g.Id,
@@ -31,11 +37,6 @@ namespace ReadModel.Group.Handlers
                     JoinCodeValidTo = g.JoinCodeValidTo,
                     Name = g.Name,
                     OwnerId = g.OwnerId,
-                    Balances = g
-                        .Balances.Where(b =>
-                            b.Balance != 0 && (b.PayerId == userId || b.DeptorId == userId)
-                        )
-                        .ToList(),
                 })
                 .AsNoTracking()
                 .ToListAsync();
