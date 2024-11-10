@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ExportQuery } from './dto/expense.query';
 import { Expense } from 'src/app/_common/models/expense';
+import { AddExpenseDto } from './dto/add-expense.dto';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,5 +18,9 @@ export class ExpenseService {
     return this.http.get<Expense[]>(this.url, {
       params: { ...query },
     });
+  }
+
+  create(dto: AddExpenseDto): Observable<string> {
+    return this.http.post<string>(this.url, dto);
   }
 }

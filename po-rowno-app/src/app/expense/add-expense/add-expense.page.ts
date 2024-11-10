@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AlertButton } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { set } from 'date-fns';
 import {
   BehaviorSubject,
+  delay,
   Observable,
   of,
   Subject,
@@ -18,6 +21,9 @@ import { UserGroupStatus } from 'src/app/_common/enums/user-group-status.enum';
 import { getExpenseTypeTranslateKey } from 'src/app/_common/helpers/get-expense-translate-key';
 import { Group } from 'src/app/_common/models/group';
 import { User } from 'src/app/_common/models/user';
+import { AddExpenseDto } from 'src/app/_services/expense/dto/add-expense.dto';
+import { ExpenseDeptorDto } from 'src/app/_services/expense/dto/expense-deptor.dto';
+import { ExpenseService } from 'src/app/_services/expense/expense.service';
 import { GroupService } from 'src/app/_services/group/group.service';
 
 @Component({
@@ -25,7 +31,7 @@ import { GroupService } from 'src/app/_services/group/group.service';
   templateUrl: './add-expense.page.html',
   styleUrls: ['./add-expense.page.scss'],
 })
-export class AddExpensePage implements OnInit {
+export class AddExpensePage implements OnInit, OnDestroy {
   protected saving = false;
   protected readonly locale: string = navigator.language;
   protected readonly defaultType = ExpenseType.Cost;
@@ -75,11 +81,15 @@ export class AddExpensePage implements OnInit {
   #downladedGroups = new Map<string, Group>();
   #currentCurrency: Currency | undefined;
 
+  protected showErrorAlert = false;
+  protected errorAlertButtons: ReadonlyArray<AlertButton> = [];
+
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly router: Router,
     private readonly translate: TranslateService,
     private readonly groupService: GroupService,
+    private readonly expenseService: ExpenseService,
   ) {
     this.#groupId$
       .pipe(
@@ -103,7 +113,15 @@ export class AddExpensePage implements OnInit {
       )
       .subscribe();
   }
-  ngOnInit() {}
+
+  ngOnInit() {
+    this.errorAlertButtons = [
+      {
+        role: 'cancel',
+        text: this.translate.instant('CLOSE'),
+      },
+    ];
+  }
 
   onGroupSet() {
     const id = this.form.value.groupId;
@@ -115,7 +133,61 @@ export class AddExpensePage implements OnInit {
     this.#groupId$.next(id);
   }
 
-  onSubmit($event: SubmitEvent) {}
+  restrictDecimalPlaces(event: CustomEvent) {
+    const inputValue = event.detail.value;
+
+    if (inputValue.includes('.') || inputValue.includes(',')) {
+      const [integerPart, decimalPart] = inputValue.split(/[.,]/);
+      decimalPart.concat('0');
+
+      this.form
+        .get('amount')
+        ?.setValue(+`${integerPart}.${decimalPart.slice(0, 2)}`);
+    }
+  }
+
+  onSubmit($event: SubmitEvent) {
+    if (!this.form.valid || !this.form.touched) {
+      return;
+    }
+
+    this.saving = true;
+    this.loading$.next(true);
+
+    const { name, amount, groupId, userIds, type } = this.form.value;
+    const deptors = this.#calcDeptors(userIds!, amount!);
+    const dto: AddExpenseDto = {
+      name: name!,
+      amount: amount!,
+      groupId: groupId!,
+      currency: this.#currentCurrency!,
+      type: +type!,
+      deptors,
+    };
+
+    this.expenseService
+      .create(dto)
+      .pipe(
+        tap(() => {
+          this.saving = false;
+          this.loading$.next(false);
+        }),
+        delay(0),
+      )
+      .subscribe({
+        next: () => {
+          this.router.navigate([`app/groups/${groupId}`]);
+        },
+        error: () => {
+          this.showErrorAlert = true;
+        },
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.#destroy$.next();
+    this.#destroy$.complete();
+  }
 
   #setGroupIdData(e: Group) {
     const users = e.userGroups?.flatMap((u) =>
@@ -133,5 +205,19 @@ export class AddExpensePage implements OnInit {
     }
 
     this.loading$.next(false);
+  }
+
+  #calcDeptors(userIds: string[], amount: number): ExpenseDeptorDto[] {
+    const rawDept = amount / (userIds.length + 1);
+    const dept = Math.floor(rawDept * 100) / 100;
+
+    return userIds.map((e) => ({
+      amount: dept,
+      userId: e,
+    }));
+  }
+
+  hideErrorAlert() {
+    this.showErrorAlert = false;
   }
 }

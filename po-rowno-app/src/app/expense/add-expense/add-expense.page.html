@@ -38,6 +38,7 @@
         label="Kwota"
         class="app-input"
         type="number"
+        (ionInput)="restrictDecimalPlaces($event)"
       ></ion-input>
       @if (form.get('amount')?.touched && !form.get('amount')?.valid) {
         @if (form.get('amount')?.hasError('required')) {
@@ -119,3 +120,11 @@
 </ion-content>
 
 <ion-loading [isOpen]="loading$ | async"></ion-loading>
+
+<ion-alert
+  [isOpen]="showErrorAlert"
+  header="{{ 'VALIDATION.ERROR_OCCURED' | translate }}"
+  message="{{ 'VALIDATION.ERROR_OCCURED' | translate }}"
+  [buttons]="errorAlertButtons"
+  (didDismiss)="hideErrorAlert()"
+></ion-alert>

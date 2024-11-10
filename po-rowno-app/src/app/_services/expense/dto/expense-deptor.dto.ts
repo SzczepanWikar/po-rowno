@@ -1,6 +1,6 @@
 export interface ExpenseDeptorDto {
   /** @format uuid */
-  userId?: string;
+  userId: string;
   /** @format double */
-  amount?: number;
+  amount: number;
 }
