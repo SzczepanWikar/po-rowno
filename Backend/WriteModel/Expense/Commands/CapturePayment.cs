@@ -1,5 +1,5 @@
 ﻿using Core.Common.Exceptions;
-using Core.Common.PayPal.DTO;
+using Core.Common.PayPal;
 using Core.Common.Projections;
 using Core.Expense.Events;
 using Infrastructure.EventStore.Repository;
@@ -16,10 +16,10 @@ namespace WriteModel.Expense.Commands
     using User = Core.User.User;
 
     public sealed record CapturePayment(string OrderNumber, User User)
-        : IRequest<OrderCapturedResponseDto>;
+        : IRequest<OrderCapturedResponse>;
 
     public sealed class CapturePaymentHandler
-        : IRequestHandler<CapturePayment, OrderCapturedResponseDto>
+        : IRequestHandler<CapturePayment, OrderCapturedResponse>
     {
         private readonly IGroupService _groupService;
         private readonly IEventStoreRepository<Expense> _expenseRepository;
@@ -40,7 +40,7 @@ namespace WriteModel.Expense.Commands
             _indexProjectionRepository = indexProjectionRepository;
         }
 
-        public async Task<OrderCapturedResponseDto> Handle(
+        public async Task<OrderCapturedResponse> Handle(
             CapturePayment request,
             CancellationToken cancellationToken
         )

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Core.Common.Configs;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.PayPal
@@ -17,7 +18,17 @@ namespace Infrastructure.PayPal
                 throw new InvalidOperationException("PayPal configuration is missing");
             }
 
+            var url = config.GetValue<string>("BaseUrl");
+
+            if (url is null) {
+                throw new InvalidOperationException("BaseUrl configuration is missing");
+            }
+
+            WebConfig webConfig = new(url);
+
             services.AddSingleton<PayPalConfig>(payPalConfig);
+            services.AddSingleton<WebConfig>(webConfig);
+            
             services.AddHttpClient(
                 "PayPal",
                 httpClient =>

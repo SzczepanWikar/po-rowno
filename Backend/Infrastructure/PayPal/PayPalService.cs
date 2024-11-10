@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
+using Core.Common.Configs;
 using Core.Common.PayPal;
-using Core.Common.PayPal.DTO;
 using Core.Group;
 
 namespace Infrastructure.PayPal
@@ -9,32 +9,55 @@ namespace Infrastructure.PayPal
     public class PayPalService : IPayPalService
     {
         private readonly PayPalConfig _payPalConfig;
+        private readonly WebConfig _webConfig;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public PayPalService(PayPalConfig payPalConfig, IHttpClientFactory httpClientFactory)
+        public PayPalService(
+            PayPalConfig payPalConfig,
+            WebConfig webConfig,
+            IHttpClientFactory httpClientFactory
+        )
         {
             _payPalConfig = payPalConfig;
             _httpClientFactory = httpClientFactory;
+            _webConfig = webConfig;
         }
 
-        public async Task<CreatedOrder> Create(Currency currency, decimal amount)
+        public async Task<CreatedOrder> Create(NewOrder newOrder)
         {
             var accessToken = await GetAccessToken();
 
-            var purchaseUnits = new List<PurchaseUnitDto>
-            {
-                new PurchaseUnitDto(new AmountDto(CurrencyToCode(currency), amount)),
-            };
-
-            var dto = new CreateOrderDto("CAPTURE", purchaseUnits);
-            var jsonPayload = JsonSerializer.Serialize(dto);
-            var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+            var requestContent = new StringContent(
+                $@"
+                    {{
+                        ""intent"": ""CAPTURE"",
+                        ""transactions"": [
+                            {{
+                                ""amount"": {{
+                                    ""total"": ""{newOrder.Amount}"",
+                                    ""currency"": ""{CurrencyToCode(newOrder.Currency)}""
+                                }},
+                                ""payee"": {{
+                                    ""email"": ""{newOrder.PayeeEmail}""
+                                }},
+                                ""description"": ""{newOrder.Description}""
+                            }}
+                        ],
+                        ""redirect_urls"": {{
+                            ""return_url"": ""{_webConfig.BaseUrl}/Payment/Success"",
+                            ""cancel_url"": ""{_webConfig.BaseUrl}/Payment/Cancel""
+                        }}
+                    }}
+                ",
+                Encoding.UTF8,
+                "application/json"
+            );
 
             var httpClient = _httpClientFactory.CreateClient("PayPal");
 
             var request = new HttpRequestMessage(HttpMethod.Post, "/v2/checkout/orders")
             {
-                Content = content,
+                Content = requestContent,
             };
 
             request.Headers.Add("Authorization", $"Bearer {accessToken}");
@@ -44,7 +67,7 @@ namespace Infrastructure.PayPal
             if (response.IsSuccessStatusCode)
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
-                var responseObject = JsonSerializer.Deserialize<OrderCreatedResponseDto>(
+                var responseObject = JsonSerializer.Deserialize<OrderCreatedResponse>(
                     responseContent
                 );
                 var res = new CreatedOrder(responseObject, responseContent);
@@ -75,7 +98,7 @@ namespace Infrastructure.PayPal
             if (response.IsSuccessStatusCode)
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
-                var responseObject = JsonSerializer.Deserialize<OrderCapturedResponseDto>(
+                var responseObject = JsonSerializer.Deserialize<OrderCapturedResponse>(
                     responseContent
                 );
                 var res = new CapturedOrder(responseObject, responseContent);

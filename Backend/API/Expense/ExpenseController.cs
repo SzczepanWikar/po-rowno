@@ -1,5 +1,5 @@
 ﻿using API.Expense.DTO;
-using Core.Common.PayPal.DTO;
+using Core.Common.PayPal;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -86,7 +86,7 @@ namespace API.Expense
         }
 
         [HttpPatch("payment/{orderId}/capture")]
-        public async Task<ActionResult<OrderCapturedResponseDto>> Capture(
+        public async Task<ActionResult<OrderCapturedResponse>> Capture(
             [FromRoute] string orderId
         )
         {

@@ -1,6 +1,6 @@
-﻿namespace Core.Common.PayPal.DTO
+﻿namespace Core.Common.PayPal
 {
-    public sealed record OrderCapturedResponseDto(
+    public record OrderCreatedResponse(
         string id,
         string status,
         IReadOnlyList<PayPalLink> links

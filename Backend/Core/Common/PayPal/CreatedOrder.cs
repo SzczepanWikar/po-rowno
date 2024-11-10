@@ -1,6 +1,4 @@
-﻿using Core.Common.PayPal.DTO;
-
-namespace Core.Common.PayPal
+﻿namespace Core.Common.PayPal
 {
-    public sealed record CreatedOrder(OrderCreatedResponseDto Response, string OriginalResponse);
+    public sealed record CreatedOrder(OrderCreatedResponse Response, string OriginalResponse);
 }

@@ -1,4 +1,5 @@
 ﻿using Core.Common.Exceptions;
+using Core.Common.PayPal;
 using Core.Expense;
 using Core.Expense.Events;
 using Core.Group;
@@ -6,6 +7,7 @@ using Infrastructure.EventStore.Repository;
 using Infrastructure.PayPal;
 using MediatR;
 using WriteModel.Group;
+using WriteModel.User.Services;
 
 namespace WriteModel.Expense.Commands
 {
@@ -27,16 +29,19 @@ namespace WriteModel.Expense.Commands
         private readonly IGroupService _groupService;
         private readonly IEventStoreRepository<Expense> _expenseRepository;
         private readonly IPayPalService _payPalService;
+        private readonly IUserService _userService;
 
         public AddExpenseWithPaymentHandler(
             IGroupService groupService,
             IEventStoreRepository<Expense> expenseRepository,
-            IPayPalService payPalService
+            IPayPalService payPalService,
+            IUserService userService
         )
         {
             _groupService = groupService;
             _expenseRepository = expenseRepository;
             _payPalService = payPalService;
+            _userService = userService;
         }
 
         public async Task<ExpenseWithPaymentCreatedResult> Handle(
@@ -50,7 +55,9 @@ namespace WriteModel.Expense.Commands
 
             try
             {
-                var paymentResult = await _payPalService.Create(request.Currency, request.Amount);
+                var receiver = await _userService.FindOneAsync(request.ReceiverId, cancellationToken);
+                NewOrder newOrder = new(request.Amount, request.Currency, receiver.Email, "PoRowno");
+                var paymentResult = await _payPalService.Create(newOrder);
 
                 var @event = new ExpenseCreated(
                     Guid.NewGuid(),
