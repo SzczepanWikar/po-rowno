@@ -3,10 +3,11 @@ import { environment } from 'src/environments/environment';
 import { SignInDto } from './dto/sign-in.dto';
 import { HttpClient } from '@angular/common/http';
 import { AppSignInResult } from './dto/sign-in-result';
-import { Observable, tap } from 'rxjs';
+import { Observable, retry, tap } from 'rxjs';
 import { ACCESS_TOKEN, REFRESH_TOKEN, USER_ID } from '../../_common/constants';
 import { SignUpDto } from './dto/sign-up.dto';
 import { Router } from '@angular/router';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,7 @@ export class AuthService {
   signIn(dto: SignInDto): Observable<AppSignInResult> {
     return this.http
       .post<AppSignInResult>(this.url + 'sign-in', dto)
-      .pipe(tap(this.saveTokensInStorage));
+      .pipe(tap(this.#saveTokensInStorage));
   }
 
   refresh(): Observable<AppSignInResult> {
@@ -31,7 +32,7 @@ export class AuthService {
       .post<AppSignInResult>(this.url + 'refresh', {
         refreshToken,
       })
-      .pipe(tap(this.saveTokensInStorage));
+      .pipe(tap(this.#saveTokensInStorage));
   }
 
   signUp(dto: SignUpDto): Observable<string> {
@@ -42,7 +43,12 @@ export class AuthService {
     localStorage.clear();
     this.router.navigate(['sign-in']);
   }
-  private saveTokensInStorage(result: AppSignInResult): void {
+
+  changePassword(dto: ChangePasswordDto): Observable<void> {
+    return this.http.patch<void>(this.url + 'change-password', dto);
+  }
+
+  #saveTokensInStorage(result: AppSignInResult): void {
     localStorage.setItem(ACCESS_TOKEN, result.accessToken);
     localStorage.setItem(REFRESH_TOKEN, result.refreshToken);
     localStorage.setItem(USER_ID, result.id);

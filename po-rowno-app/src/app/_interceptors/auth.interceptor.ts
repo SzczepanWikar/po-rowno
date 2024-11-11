@@ -24,7 +24,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           return handleUnauthorized(req, next, authService, router);
         }
 
-        setTimeout(() => router.navigate(['sign-in']));
         return throwError(() => error);
       }),
     );

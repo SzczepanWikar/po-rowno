@@ -15,6 +15,7 @@ import {
   takeUntil,
   takeWhile,
   tap,
+  throwError,
 } from 'rxjs';
 import { USER_ID } from 'src/app/_common/constants';
 import { Currency } from 'src/app/_common/enums/currency.enum';
@@ -174,6 +175,8 @@ export class PayPage implements OnInit, OnDestroy {
             switchMap((f) => {
               if (f.paymentStatus === 'APPROVED') {
                 return this.expenseService.capture(orderId);
+              } else {
+                throwError(() => new Error());
               }
               return [];
             }),
