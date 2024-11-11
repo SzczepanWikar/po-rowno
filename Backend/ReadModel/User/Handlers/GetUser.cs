@@ -19,7 +19,8 @@ namespace ReadModel.User.Handlers
         {
             var user = await _context
                 .Set<UserEntity>()
-                .Where(u => u.Id == request.User.Id)
+                .Where(u => u.Id == request.User.Id && u.Deleted == false)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
 
             if (user is null)

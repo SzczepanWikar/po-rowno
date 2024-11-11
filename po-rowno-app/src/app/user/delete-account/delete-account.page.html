@@ -1,0 +1,34 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Usuwanie konta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Usuwanie konta</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div class="delete-account__container">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="inner-container">
+      <ion-input
+        formControlName="password"
+        type="password"
+        class="app-input"
+        label="{{ 'AUTH.PASSWORD' | translate }}"
+      ></ion-input>
+      <ion-button
+        [disabled]="!(form.valid && form.touched) || saving"
+        color="primary"
+        type="submit"
+      >
+        @if (saving) {
+          {{ 'AUTH.DELETING_ACCOUNT' | translate }}
+        } @else {
+          {{ 'AUTH.DELETE_ACCOUNT' | translate }}
+        }
+      </ion-button>
+    </form>
+  </div>
+</ion-content>

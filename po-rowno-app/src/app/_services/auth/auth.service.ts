@@ -57,6 +57,14 @@ export class AuthService {
     return this.http.patch<void>(this.url + 'reset-password', dto);
   }
 
+  delete(password: string): Observable<void> {
+    return this.http.delete<void>(environment.apiUrl + 'User', {
+      body: {
+        password,
+      },
+    });
+  }
+
   #saveTokensInStorage(result: AppSignInResult): void {
     localStorage.setItem(ACCESS_TOKEN, result.accessToken);
     localStorage.setItem(REFRESH_TOKEN, result.refreshToken);

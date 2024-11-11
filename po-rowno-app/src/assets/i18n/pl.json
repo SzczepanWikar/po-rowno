@@ -21,7 +21,8 @@
     "INVALID_CODE": "Niepoprawny kod."
   },
   "GROUPS": {
-    "GROUPS": "Grupy"
+    "GROUPS": "Grupy",
+    "USER_LEAVED": "Użytkownik nienależący do grupy."
   },
   "AUTH": {
     "SIGN_IN": "Zaloguj się",
@@ -33,7 +34,9 @@
     "SIGN_UP_SUCCESS_INFO": "Wysłaliśmy do Ciebie wiadomość e-mail z linkiem aktywacyjnym twoje konto. Po odwiedzeniu tego linku zalogowanie się będzie już możliwe.",
     "USERNAME": "Nazwa użytkownika",
     "EMAIL_ALREADY_IN_USE": "Adres e-mail jest już w użyciu.",
-    "DONT_HAVE_ACCOUNT": "Nie masz jeszcze konta?"
+    "DONT_HAVE_ACCOUNT": "Nie masz jeszcze konta?",
+    "DELETING_ACCOUNT": "Usuwanie konta",
+    "DELETE_ACCOUNT": "Usuń konto"
   },
   "EXPENSE_TYPE": {
     "COST": "Wydatek",
