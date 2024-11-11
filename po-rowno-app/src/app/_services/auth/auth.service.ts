@@ -8,6 +8,7 @@ import { ACCESS_TOKEN, REFRESH_TOKEN, USER_ID } from '../../_common/constants';
 import { SignUpDto } from './dto/sign-up.dto';
 import { Router } from '@angular/router';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -46,6 +47,14 @@ export class AuthService {
 
   changePassword(dto: ChangePasswordDto): Observable<void> {
     return this.http.patch<void>(this.url + 'change-password', dto);
+  }
+
+  requestResetPassword(email: string): Observable<void> {
+    return this.http.post<void>(this.url + 'request-reset-password', { email });
+  }
+
+  resetPassword(dto: ResetPasswordDto): Observable<void> {
+    return this.http.patch<void>(this.url + 'reset-password', dto);
   }
 
   #saveTokensInStorage(result: AppSignInResult): void {

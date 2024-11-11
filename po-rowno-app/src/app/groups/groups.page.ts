@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { GroupService } from '../_services/group/group.service';
-import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  map,
+  Observable,
+  Subject,
+  tap,
+  throwError,
+} from 'rxjs';
 import { Group } from '../_common/models/group';
 import { getCurrencySymbol } from '../_common/helpers/get-currency-symbol';
 
@@ -16,9 +24,12 @@ export class GroupsPage implements OnInit {
 
   constructor(private readonly groupService: GroupService) {
     this.groups$ = this.groupService.get().pipe(
-      map((e) => {
+      catchError((err) => {
         this.loading$.next(false);
-        return e;
+        return throwError(() => err);
+      }),
+      tap(() => {
+        this.loading$.next(false);
       }),
     );
   }

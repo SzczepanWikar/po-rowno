@@ -17,7 +17,8 @@
     "MAX_LENGTH_50": "Maksymalna długość wynosi 50.",
     "MAX_LENGTH_400": "Maksymalna długość wynosi 400.",
     "MIN_0_02": "Minimalna wartośc wynosi 0,02.",
-    "MIN_0_01": "Minimalna wartośc wynosi 0,01."
+    "MIN_0_01": "Minimalna wartośc wynosi 0,01.",
+    "INVALID_CODE": "Niepoprawny kod."
   },
   "GROUPS": {
     "GROUPS": "Grupy"
