@@ -4,10 +4,35 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #fff;
+            font-size: 24px
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            background-color: #f6f8fc;
+            padding: 1rem;
+            border-radius: 0.5em;
+            gap: 1.5em;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2em;
+        }
+    </style>
 </head>
 <body>
-    <div>
+    <main>
         @RenderBody()
-    </div>
+    </main>
 </body>
 </html>
