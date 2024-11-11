@@ -61,11 +61,10 @@ namespace WriteModel.User.Commands
         {
             var to = new[] { new ReceiverData(user.Username, user.Email) };
             var url = _configuration.GetValue<string>("BaseUrl");
-
             var emailMessage = new EmailMessage(
                 to,
-                "Reset hasła",
-                $"Aby przywrócić hasło wpisz podany kod do formularzu zmiany hasła: {code.Value}",
+                "Password Reset",
+                $"To reset your password, enter the provided code into the password reset form: {code.Value}",
                 MimeKit.Text.TextFormat.Text
             );
             await _emailService.SendEmailAsync(emailMessage);

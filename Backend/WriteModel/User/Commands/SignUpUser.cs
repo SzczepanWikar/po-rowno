@@ -7,6 +7,8 @@ using Infrastructure.Projections.InternalProjections.Repository;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net.Mail;
+using System;
 using WriteModel.User.Services;
 
 namespace WriteModel.User.Commands
@@ -67,8 +69,8 @@ namespace WriteModel.User.Commands
 
             var emailMessage = new EmailMessage(
                 to,
-                "Aktywacja konta",
-                $"Aby aktywować konto odwiedź podany link: {url}/AuthView/AccountActivation/{token}",
+                "Account Activation",
+                $"To activate your account, visit the following link: {url}/AuthView/AccountActivation/{token}",
                 MimeKit.Text.TextFormat.Text
             );
             await _emailService.SendEmailAsync(emailMessage);
