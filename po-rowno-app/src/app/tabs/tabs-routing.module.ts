@@ -25,6 +25,11 @@ const routes: Routes = [
           import('../expense/expense.module').then((m) => m.ExpenseModule),
       },
       {
+        path: 'user',
+        loadChildren: () =>
+          import('../user/user.module').then((m) => m.UserPageModule),
+      },
+      {
         path: '',
         redirectTo: '/app/groups',
         pathMatch: 'full',
