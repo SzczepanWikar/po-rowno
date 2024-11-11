@@ -32,6 +32,7 @@ export class SignInPage implements OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: async () => {
+          this.authForm.reset();
           await this.router.navigate(['app']);
         },
       });

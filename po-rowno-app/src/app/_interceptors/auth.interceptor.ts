@@ -24,10 +24,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           return handleUnauthorized(req, next, authService, router);
         }
 
+        setTimeout(() => router.navigate(['sign-in']));
         return throwError(() => error);
       }),
     );
   } else {
+    setTimeout(() => router.navigate(['sign-in']));
     return next(req);
   }
 };
@@ -53,7 +55,7 @@ function handleUnauthorized(
       return next(cloned);
     }),
     catchError((error) => {
-      router.navigate(['sign-in']);
+      setTimeout(() => router.navigate(['sign-in']));
       return throwError(() => error);
     }),
   );

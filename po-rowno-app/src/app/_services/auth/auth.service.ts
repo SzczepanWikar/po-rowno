@@ -6,13 +6,17 @@ import { AppSignInResult } from './dto/sign-in-result';
 import { Observable, tap } from 'rxjs';
 import { ACCESS_TOKEN, REFRESH_TOKEN, USER_ID } from '../../_common/constants';
 import { SignUpDto } from './dto/sign-up.dto';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private readonly url = environment.apiUrl + 'User/';
-  constructor(private readonly http: HttpClient) {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly router: Router,
+  ) {}
 
   signIn(dto: SignInDto): Observable<AppSignInResult> {
     return this.http
@@ -34,6 +38,10 @@ export class AuthService {
     return this.http.post<string>(this.url + 'sign-up', dto);
   }
 
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['sign-in']);
+  }
   private saveTokensInStorage(result: AppSignInResult): void {
     localStorage.setItem(ACCESS_TOKEN, result.accessToken);
     localStorage.setItem(REFRESH_TOKEN, result.refreshToken);
