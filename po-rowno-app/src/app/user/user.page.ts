@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth/auth.service';
 import { UserService } from '../_services/user/user.service';
 import { BehaviorSubject, catchError, delay, of, tap } from 'rxjs';
@@ -8,7 +8,7 @@ import { BehaviorSubject, catchError, delay, of, tap } from 'rxjs';
   templateUrl: './user.page.html',
   styleUrls: ['./user.page.scss'],
 })
-export class UserPage {
+export class UserPage implements OnDestroy {
   user$ = this.userService.getYourself().pipe(
     tap(() => this.loading$.next(false)),
     catchError(() => {
@@ -25,4 +25,9 @@ export class UserPage {
     protected readonly authService: AuthService,
     private readonly userService: UserService,
   ) {}
+
+  ngOnDestroy(): void {
+    this.loading$.next(false);
+    this.loading$.complete();
+  }
 }

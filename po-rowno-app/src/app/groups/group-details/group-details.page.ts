@@ -65,6 +65,8 @@ export class GroupDetailsPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.loading$.next(false);
+    this.loading$.complete();
     this.destroy$.next();
     this.destroy$.complete();
     this.groupService.clearState();

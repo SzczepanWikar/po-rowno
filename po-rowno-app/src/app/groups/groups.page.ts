@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GroupService } from '../_services/group/group.service';
 import {
   BehaviorSubject,
@@ -17,7 +17,7 @@ import { getCurrencySymbol } from '../_common/helpers/get-currency-symbol';
   templateUrl: './groups.page.html',
   styleUrls: ['./groups.page.scss'],
 })
-export class GroupsPage implements OnInit {
+export class GroupsPage implements OnDestroy {
   protected groups$: Observable<Group[]>;
   protected loading$: Subject<boolean> = new BehaviorSubject(true);
   protected getCurrencySymbolDelegate = getCurrencySymbol;
@@ -33,6 +33,8 @@ export class GroupsPage implements OnInit {
       }),
     );
   }
-
-  ngOnInit() {}
+  ngOnDestroy(): void {
+    this.loading$.next(false);
+    this.loading$.complete();
+  }
 }
