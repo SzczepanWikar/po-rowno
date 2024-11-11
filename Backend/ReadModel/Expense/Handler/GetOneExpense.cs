@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Core.Common.Exceptions;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ReadModel.Expense.Handler
@@ -25,7 +26,14 @@ namespace ReadModel.Expense.Handler
                 .Include(e => e.Payer)
                 .Where(e => e.Id == request.Id);
 
-            return await query.FirstOrDefaultAsync();
+            var res = await query.FirstOrDefaultAsync();
+
+            if (res is null)
+            {
+                throw new NotFoundException("Expense not found");
+            }
+
+            return res;
         }
     }
 }

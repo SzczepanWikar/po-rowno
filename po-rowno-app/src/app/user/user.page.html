@@ -11,16 +11,19 @@
     </ion-toolbar>
   </ion-header>
   <div class="user__container">
-    <ion-grid class="inner-container">
-      <ion-row>
-        <ion-col> Nazwa użytkownika </ion-col>
-        <ion-col class="user__data-value"> Abc </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col> E-mail </ion-col>
-        <ion-col class="user__data-value"> Abc&#64;abc.pl</ion-col>
-      </ion-row>
-    </ion-grid>
+    @if (user$ | async; as user) {
+      <ion-grid class="inner-container">
+        <ion-row>
+          <ion-col> Nazwa użytkownika </ion-col>
+          <ion-col class="user__data-value"> {{ user.username }} </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col> E-mail </ion-col>
+          <ion-col class="user__data-value"> {{ user.email }}</ion-col>
+        </ion-row>
+      </ion-grid>
+    }
+
     <div class="user__actions">
       <ion-item href="app/user/change-password" lines="full">
         <ion-icon name="key-outline" slot="start"></ion-icon>
@@ -43,3 +46,5 @@
     </div>
   </div>
 </ion-content>
+
+<ion-loading isOpen="{{ loading$ | async }}"></ion-loading>

@@ -4,6 +4,7 @@ using Core.User;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ReadModel.User.Handlers;
 using WriteModel.User.Commands;
 
 namespace API.User
@@ -19,6 +20,19 @@ namespace API.User
         {
             _mediator = mediator;
             _logger = logger;
+        }
+
+        [HttpGet("yourself")]
+        [Authorize]
+        public async Task<ActionResult<UserDto>> GetYourself()
+        {
+            var user = HttpContext.Items["User"] as Core.User.User;
+
+            GetUser request = new(user);
+            var res = await _mediator.Send(request);
+            var dto = UserDto.FromEntity(res);
+
+            return Ok(dto);
         }
 
         [HttpPost("sign-up")]
