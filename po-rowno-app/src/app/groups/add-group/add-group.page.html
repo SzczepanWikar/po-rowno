@@ -18,7 +18,7 @@
     >
       <ion-input
         formControlName="name"
-        label="Nazwa"
+        [label]="'NAME_FIELD' | translate"
         class="app-input"
       ></ion-input>
       @if (form.get('name')?.touched && !form.get('name')?.valid) {
@@ -34,7 +34,7 @@
       }
       <ion-textarea
         formControlName="description"
-        label="Opis"
+        [label]="'GROUPS.DESCRIPTION' | translate"
         class="app-input"
         autoGrow="true"
         rows="3"
@@ -52,7 +52,11 @@
           <app-error-label error="VALIDATION.MAX_LENGTH_400" />
         }
       }
-      <ion-select class="app-input" label="Waluta" formControlName="currency">
+      <ion-select
+        class="app-input"
+        [label]="'GROUPS.CURRENCY' | translate"
+        formControlName="currency"
+      >
         @for (currency of currencies; track $index) {
           <ion-select-option value="{{ currency[0] }}">{{
             currency[1] | translate

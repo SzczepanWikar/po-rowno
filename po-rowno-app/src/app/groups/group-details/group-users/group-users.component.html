@@ -6,9 +6,9 @@
     color="primary"
   >
     <ion-icon slot="icon-only" name="exit-outline"></ion-icon>
-    <ion-label> Opuść grupę </ion-label>
+    <ion-label> {{ 'GROUPS.LEAVE' | translate }} </ion-label>
   </ion-button>
-  <h2>Aktywni użytkowicy</h2>
+  <h2>{{ 'GROUPS.ACTIVE_USERS' | translate }}</h2>
   <ion-list>
     @for (ug of activeUsers; track $index) {
       <ion-item lines="full">
@@ -31,7 +31,7 @@
       </ion-item>
     }
   </ion-list>
-  <h2>Zablokowani użytkownicy</h2>
+  <h2>{{ 'GROUPS.BANNED_USERS' | translate }}</h2>
   <ion-list>
     @for (ug of bannedUsers; track $index) {
       <ion-item lines="full">

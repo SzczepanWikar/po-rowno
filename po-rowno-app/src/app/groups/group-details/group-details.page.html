@@ -33,7 +33,7 @@
           <div class="group-details__buttons">
             <ion-button (click)="openJoinCodeModal()" color="tertiary"
               ><ion-icon slot="icon-only" name="person-add-outline"></ion-icon>
-              Zaproś
+              {{ 'GROUPS.INVITE_BTN' | translate }}
             </ion-button>
             @if (groupService.currentUserId === groupService.group.ownerId) {
               <ion-button
@@ -41,14 +41,14 @@
                 color="secondary"
               >
                 <ion-icon slot="icon-only" name="create-outline"></ion-icon>
-                Edytuj
+                {{ 'EDIT' | translate }}
               </ion-button>
             }
           </div>
           <p class="inner-container">
             {{ groupService.group.description }}
           </p>
-          <h2>Bilans</h2>
+          <h2>{{ 'GROUPS.BALANCES' | translate }}</h2>
           <div class="group-details__balances">
             @for (balance of groupService.balances; track $index) {
               <div class="inner-container">
@@ -56,7 +56,7 @@
                   <strong>
                     {{ balance.deptor.username }}
                   </strong>
-                  jest winny
+                  {{ 'GROUPS.OWES' | translate }}
                   <strong>
                     {{ balance.payer.username }}
                   </strong>

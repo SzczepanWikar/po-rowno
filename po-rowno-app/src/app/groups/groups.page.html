@@ -31,7 +31,7 @@
       }
     </ion-list>
   } @else if ((loading$ | async) === false) {
-    <h1>Nie należysz do żadnej z grup.</h1>
+    <h1>{{ 'GROUPS.NO_PART' | translate }}</h1>
   } @else {
     <ion-loading isOpen="{{ loading$ | async }}"></ion-loading>
   }

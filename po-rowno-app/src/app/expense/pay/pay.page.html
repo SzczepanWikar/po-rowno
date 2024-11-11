@@ -1,13 +1,15 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Przelej środki</ion-title>
+    <ion-title>{{ 'EXPENSE.ADD_PAYMENT' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Przelej środki</ion-title>
+      <ion-title size="large">{{
+        'EXPENSE.ADD_PAYMENT' | translate
+      }}</ion-title>
     </ion-toolbar>
   </ion-header>
   <div class="container">
@@ -18,7 +20,7 @@
     >
       <ion-input
         formControlName="name"
-        label="Nazwa"
+        [label]="'NAME_FIELD' | translate"
         class="app-input"
       ></ion-input>
       @if (form.get('name')?.touched && !form.get('name')?.valid) {
@@ -35,7 +37,7 @@
 
       <ion-input
         formControlName="amount"
-        label="Kwota"
+        [label]="'EXPENSE.AMOUNT' | translate"
         class="app-input"
         type="number"
         (ionInput)="restrictDecimalPlaces($event)"
@@ -51,7 +53,7 @@
 
       <ion-select
         class="app-input"
-        label="Grupa"
+        [label]="'EXPENSE.GROUP' | translate"
         formControlName="groupId"
         (ionChange)="onGroupSet()"
       >
@@ -67,7 +69,11 @@
         }
       }
 
-      <ion-select class="app-input" label="Odbiorca" formControlName="userId">
+      <ion-select
+        class="app-input"
+        [label]="'EXPENSE.ADD_PAYMENT' | translate"
+        formControlName="userId"
+      >
         @for (user of users$ | async; track $index) {
           <ion-select-option [value]="user.id">
             {{ user.username }}

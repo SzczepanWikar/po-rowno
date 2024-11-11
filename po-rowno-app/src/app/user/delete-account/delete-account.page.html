@@ -1,13 +1,15 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Usuwanie konta</ion-title>
+    <ion-title>{{ 'USER.DELETE_ACCOUNT' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Usuwanie konta</ion-title>
+      <ion-title size="large">{{
+        'USER.DELETE_ACCOUNT' | translate
+      }}</ion-title>
     </ion-toolbar>
   </ion-header>
   <div class="delete-account__container">
@@ -24,9 +26,9 @@
         type="submit"
       >
         @if (saving) {
-          {{ 'AUTH.DELETING_ACCOUNT' | translate }}
+          {{ 'USER.DELETING_ACCOUNT' | translate }}
         } @else {
-          {{ 'AUTH.DELETE_ACCOUNT' | translate }}
+          {{ 'USER.DELETE_ACCOUNT' | translate }}
         }
       </ion-button>
     </form>

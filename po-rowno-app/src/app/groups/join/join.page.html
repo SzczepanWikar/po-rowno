@@ -1,18 +1,22 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Dołącz do grupy</ion-title>
+    <ion-title>{{ 'GROUPS.JOIN_GROUP' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Dołącz do grupy</ion-title>
+      <ion-title size="large">{{ 'GROUPS.JOIN_GROUP' | translate }}</ion-title>
     </ion-toolbar>
   </ion-header>
   <div class="join__container">
     <form class="inner-container" (submit)="onSubmit()" [formGroup]="form">
-      <ion-input formControlName="code" label="Kod" class="app-input">
+      <ion-input
+        formControlName="code"
+        [label]="'GROUPS.CODE' | translate"
+        class="app-input"
+      >
       </ion-input>
       @if (form.get('code')?.touched && !form.get('code')?.valid) {
         @if (form.get('code')?.hasError('required')) {
@@ -25,9 +29,9 @@
         type="submit"
       >
         @if (saving) {
-          Dołączanie
+          {{ 'GROUPS.JOIN' | translate }}
         } @else {
-          Dołącz
+          {{ 'GROUPS.JOIN' | translate }}
         }
       </ion-button>
     </form>
@@ -36,8 +40,8 @@
 
 <ion-alert
   [isOpen]="showErrorAlert"
-  header="{{ 'VALIDATION.ERROR_OCCURED' | translate }}"
-  message="Kod jest niepoprawny, lub należysz już do tej grupy."
+  [header]="'VALIDATION.ERROR_OCCURED' | translate"
+  [message]="'GROUPS.INCORRECT_CODE' | translate"
   [buttons]="errorAlertButtons"
   (didDismiss)="hideErrorAlert()"
 ></ion-alert>

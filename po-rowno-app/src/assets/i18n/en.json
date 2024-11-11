@@ -3,29 +3,92 @@
   "SAVING": "Saving",
   "SAVE": "Save",
   "CLOSE": "Close",
+  "NAME_FIELD": "Name",
+  "EDIT": "Edit",
   "VALIDATION": {
     "REQUIRED": "Field is required.",
-    "EMAIL_ERROR": "Email address is invalid.",
-    "ERROR_OCCURED": "An error occurred",
+    "EMAIL_ERROR": "Email address is incorrect.",
+    "ERROR_OCCURED": "An error occurred.",
     "PASSWORD_LENGTH": "Password must be at least 12 characters long.",
     "NO_NUMBER": "Password must contain a number.",
     "NO_UPPERCASE_CHAR": "Password must contain at least one uppercase letter.",
     "NO_LOWER_CHAR": "Password must contain at least one lowercase letter.",
     "NO_SPECIAL_CHARACTER": "Password must contain at least one special character.",
-    "PASSWORDS_MISMATCH": "The passwords provided are not identical."
+    "PASSWORDS_MISMATCH": "Passwords do not match.",
+    "MIN_LENGTH_1": "Minimum length is 1.",
+    "MAX_LENGTH_50": "Maximum length is 50.",
+    "MAX_LENGTH_400": "Maximum length is 400.",
+    "MIN_0_02": "Minimum value is 0.02.",
+    "MIN_0_01": "Minimum value is 0.01.",
+    "INVALID_CODE": "Invalid code."
   },
   "GROUPS": {
-    "GROUPS": "Groups"
+    "GROUPS": "Groups",
+    "USER_LEAVED": "User left",
+    "DESCRIPTION": "Description",
+    "CURRENCY": "Currency",
+    "OWNER": "Owner",
+    "COPY_CODE": "Copy code",
+    "INVITE": "Invite user to the group",
+    "CODE_EXPIRES": "Code valid until:",
+    "EXPENSES": "Expenses",
+    "LEAVE": "Leave group",
+    "ACTIVE_USERS": "Active users",
+    "BANNED_USERS": "Banned users",
+    "INVITE_BTN": "Invite",
+    "BALANCES": "Balance",
+    "OWES": "owes",
+    "JOIN_GROUP": "Join group",
+    "JOIN": "Join",
+    "JOINING": "Joining",
+    "CODE": "Code",
+    "INCORRECT_CODE": "The code is incorrect or you are already a member of this group.",
+    "NO_PART": "You do not belong to any group."
   },
   "AUTH": {
     "SIGN_IN": "Sign in",
     "PASSWORD": "Password",
+    "NEW_PASSWORD": "New password",
     "REPEAT_PASSWORD": "Repeat password",
     "SIGN_UP": "Sign up",
-    "SIGN_UP_SUCCESS": "Registration was successful",
-    "SIGN_UP_SUCCESS_INFO": "We have sent you an email with an activation link for your account. After visiting this link, you will be able to log in.",
+    "SIGN_UP_SUCCESS": "Registration successful.",
+    "SIGN_UP_SUCCESS_INFO": "We have sent you an email with an activation link for your account. After visiting the link, you will be able to log in.",
     "USERNAME": "Username",
     "EMAIL_ALREADY_IN_USE": "Email address is already in use.",
-    "DONT_HAVE_ACCOUNT": "Don't have an account yet?"
+    "DONT_HAVE_ACCOUNT": "Don't have an account?",
+    "PASSWORD_RESET": "Password reset",
+    "RESET_PASSWORD": "Reset password",
+    "REQUEST_SENDING": "Sending request",
+    "RESET_PASSWORD_INFO": "If an account with the provided email address exists, we have sent a message with a code.",
+    "CODE": "Code",
+    "RESETING": "Resetting"
+  },
+  "EXPENSE_TYPE": {
+    "COST": "Expense",
+    "SETTLEMENT": "Settlement"
+  },
+  "ADD": {
+    "ADD_GROUP": "Create group",
+    "JOIN_GROUP": "Join group",
+    "ADD_EXPENSE": "Add expense",
+    "ADD_PAYMENT": "Transfer funds"
+  },
+  "EXPENSE": {
+    "NEW_EXPENSE": "New expense",
+    "AMOUNT": "Amount",
+    "GROUP": "Group",
+    "DEPTORS": "Debtors",
+    "ADD_PAYMENT": "Transfer funds",
+    "PAYEE": "Payee"
+  },
+  "USER": {
+    "USER": "User",
+    "PASSWORD_CHANGE": "Change password",
+    "CHANGE_PASSWORD": "Change password",
+    "DELETING_ACCOUNT": "Deleting account",
+    "DELETE_ACCOUNT": "Delete account",
+    "USER_DETAILS": "User details",
+    "USERNAME": "Username",
+    "LOGOUT": "Log out"
   }
 }

@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { UserPageRoutingModule } from './user-routing.module';
 
 import { UserPage } from './user.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    UserPageRoutingModule
+    UserPageRoutingModule,
+    TranslateModule,
   ],
-  declarations: [UserPage]
+  declarations: [UserPage],
 })
 export class UserPageModule {}

@@ -7,6 +7,7 @@ import { User } from 'src/app/_common/models/user';
 import { getCurrencySymbol } from 'src/app/_common/helpers/get-currency-symbol';
 import { UserStatus } from 'src/app/_common/enums/user-status.enum';
 import { USER_ID } from 'src/app/_common/constants';
+import { TranslateService } from '@ngx-translate/core';
 
 type BalanceUser = {
   balance: Balance;
@@ -22,7 +23,10 @@ export class GroupDetailsService {
   currencySymbol: string = '';
   currentUserId = localStorage.getItem(USER_ID);
 
-  constructor(private readonly groupService: GroupService) {}
+  constructor(
+    private readonly groupService: GroupService,
+    private readonly translate: TranslateService,
+  ) {}
 
   getGroup(id: string) {
     this.groupId = id;
@@ -109,7 +113,7 @@ export class GroupDetailsService {
   private createNullUser(id: string): User {
     return {
       id,
-      username: 'GROUP.USER_LEAVED',
+      username: this.translate.instant('GROUPS.USER_LEAVED'),
       email: '',
       status: UserStatus.Inactive,
     };

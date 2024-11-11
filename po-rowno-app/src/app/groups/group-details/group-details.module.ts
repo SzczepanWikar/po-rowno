@@ -11,6 +11,7 @@ import { GroupDetailsService } from './group-details.service';
 import { GroupUsersComponent } from './group-users/group-users.component';
 import { GroupExpensesComponent } from './group-expenses/group-expenses.component';
 import { GroupCodeComponent } from './group-code/group-code.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { GroupCodeComponent } from './group-code/group-code.component';
     FormsModule,
     IonicModule,
     GroupDetailsPageRoutingModule,
+    TranslateModule,
   ],
   providers: [GroupDetailsService],
   declarations: [
