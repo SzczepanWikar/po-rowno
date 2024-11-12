@@ -12,7 +12,10 @@ namespace ReadModel.Expense.Handler
         private readonly ApplicationContext _context;
         private readonly BalanceCalculator _balanceCalculator;
 
-        public ExpenseCreatedHandler(ApplicationContext context, BalanceCalculator balanceCalculator)
+        public ExpenseCreatedHandler(
+            ApplicationContext context,
+            BalanceCalculator balanceCalculator
+        )
         {
             _context = context;
             _balanceCalculator = balanceCalculator;
@@ -70,5 +73,4 @@ namespace ReadModel.Expense.Handler
             }
         }
     }
-
 }

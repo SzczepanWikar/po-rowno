@@ -1,4 +1,6 @@
-﻿using Core.Common.Exceptions;
+﻿using System;
+using System.Net.Mail;
+using Core.Common.Exceptions;
 using Core.Common.Projections;
 using Core.User;
 using Infrastructure.Email.Service;
@@ -7,8 +9,6 @@ using Infrastructure.Projections.InternalProjections.Repository;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net.Mail;
-using System;
 using WriteModel.User.Services;
 
 namespace WriteModel.User.Commands
