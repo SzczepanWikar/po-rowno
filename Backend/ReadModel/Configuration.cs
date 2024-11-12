@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Projections;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ReadModel.Expense;
 
 namespace ReadModel
 {
@@ -11,6 +12,7 @@ namespace ReadModel
             IConfiguration config
         )
         {
+            services.AddScoped<BalanceCalculator>();
             services.AddProjections<ApplicationContext>(config);
             return services;
         }
