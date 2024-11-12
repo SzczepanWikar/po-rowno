@@ -52,7 +52,7 @@ Backend
 
 ```console
 cd Backend
-dotnet watch --target=.\API\
+dotnet run --project=.\API
 ```
 
 Mobile app
