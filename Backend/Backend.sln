@@ -9,11 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{599CC46C-41D6-4CC6-B09B-4657B3F79861}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandModel", "WriteModel\CommandModel.csproj", "{22B05D2B-9CD2-43AB-895D-5BEA875494E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandModel", "CommandModel\CommandModel.csproj", "{22B05D2B-9CD2-43AB-895D-5BEA875494E3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{BAFFD433-BE6B-46E2-8758-E944CF5F166B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QueryModel", "ReadModel\QueryModel.csproj", "{AF683504-3B79-466D-9EF0-280800C3DA1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QueryModel", "QueryModel\QueryModel.csproj", "{AF683504-3B79-466D-9EF0-280800C3DA1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

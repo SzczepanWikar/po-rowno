@@ -27,9 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WriteModel\WriteModel.csproj" />
+    <ProjectReference Include="..\CommandModel\CommandModel.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
-    <ProjectReference Include="..\ReadModel\ReadModel.csproj" />
+    <ProjectReference Include="..\QueryModel\QueryModel.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
