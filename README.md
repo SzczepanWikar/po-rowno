@@ -37,7 +37,7 @@ In `Backend\API` directory create `appsettings.Development.json` or fill `appset
 In `Backend` directory:
 
 ```console
-dotnet ef database update --project ReadModel --startup-project API
+dotnet ef database update --project QueryModel --startup-project API
 ```
 
 In `po-rowno-app` directory:
