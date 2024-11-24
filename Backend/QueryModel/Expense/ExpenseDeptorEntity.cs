@@ -1,6 +1,6 @@
-﻿using ReadModel.User;
+﻿using QueryModel.User;
 
-namespace ReadModel.Expense
+namespace QueryModel.Expense
 {
     public sealed class ExpenseDeptorEntity
     {

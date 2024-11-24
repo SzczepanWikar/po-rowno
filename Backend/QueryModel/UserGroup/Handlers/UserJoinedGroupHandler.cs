@@ -2,10 +2,10 @@
 using Core.UserGroupEvents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ReadModel.Group;
-using ReadModel.User;
+using QueryModel.Group;
+using QueryModel.User;
 
-namespace ReadModel.UserGroup.Handlers
+namespace QueryModel.UserGroup.Handlers
 {
     public sealed class UserJoinedGroupHandler : IEventNotificationHandler<UserJoinedGroup>
     {

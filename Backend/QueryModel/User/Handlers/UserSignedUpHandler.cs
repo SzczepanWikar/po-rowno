@@ -2,7 +2,7 @@
 using Core.User;
 using Core.User.Events;
 
-namespace ReadModel.User.Handlers
+namespace QueryModel.User.Handlers
 {
     public sealed class UserSignedUpHandler : IEventNotificationHandler<UserSignedUp>
     {

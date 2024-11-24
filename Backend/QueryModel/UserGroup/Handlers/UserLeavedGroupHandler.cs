@@ -2,7 +2,7 @@
 using Core.UserGroupEvents;
 using Microsoft.EntityFrameworkCore;
 
-namespace ReadModel.UserGroup.Handlers
+namespace QueryModel.UserGroup.Handlers
 {
     public sealed class UserLeavedGroupHandler : IEventNotificationHandler<UserLeavedGroup>
     {

@@ -1,6 +1,6 @@
 ﻿using API.User.DTO;
-using ReadModel.Expense;
-using ReadModel.User;
+using QueryModel.Expense;
+using QueryModel.User;
 
 namespace API.Group.DTO
 {

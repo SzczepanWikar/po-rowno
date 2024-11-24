@@ -1,5 +1,5 @@
 ﻿using API.User.DTO;
-using ReadModel.Expense;
+using QueryModel.Expense;
 
 namespace API.Expense.DTO
 {

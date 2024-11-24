@@ -1,9 +1,9 @@
 ﻿using Core.Group;
-using ReadModel.Expense;
-using ReadModel.User;
-using ReadModel.UserGroup;
+using QueryModel.Expense;
+using QueryModel.User;
+using QueryModel.UserGroup;
 
-namespace ReadModel.Group
+namespace QueryModel.Group
 {
     public sealed class GroupEntity
     {

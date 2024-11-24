@@ -4,7 +4,7 @@ using CommandModel.Group.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ReadModel.Group.Handlers;
+using QueryModel.Group.Handlers;
 
 namespace API.Group
 {

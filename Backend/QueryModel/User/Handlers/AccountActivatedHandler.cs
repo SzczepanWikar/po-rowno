@@ -3,7 +3,7 @@ using Core.User;
 using Core.User.Events;
 using Microsoft.EntityFrameworkCore;
 
-namespace ReadModel.User.Handlers
+namespace QueryModel.User.Handlers
 {
     public sealed class AccountActivatedHandler : IEventNotificationHandler<AccountActivated>
     {

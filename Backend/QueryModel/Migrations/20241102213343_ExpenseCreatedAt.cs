@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace ReadModel.Migrations
+namespace QueryModel.Migrations
 {
     /// <inheritdoc />
     public partial class ExpenseCreatedAt : Migration

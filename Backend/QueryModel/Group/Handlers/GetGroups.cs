@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using ReadModel.UserGroup;
+using QueryModel.UserGroup;
 
-namespace ReadModel.Group.Handlers
+namespace QueryModel.Group.Handlers
 {
     public sealed record GetGroups(Core.User.User User) : IRequest<IEnumerable<GroupEntity>>;
 

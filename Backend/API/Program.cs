@@ -9,7 +9,7 @@ using Infrastructure.Middleware.Auth;
 using Infrastructure.Middleware.ErrorHandling;
 using Infrastructure.Middleware.UserFetching;
 using Infrastructure.Projections;
-using ReadModel;
+using QueryModel;
 
 var builder = WebApplication.CreateBuilder(args);
 

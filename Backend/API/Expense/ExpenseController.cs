@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using ReadModel.Expense.Handler;
+using QueryModel.Expense.Handler;
 
 namespace API.Expense
 {

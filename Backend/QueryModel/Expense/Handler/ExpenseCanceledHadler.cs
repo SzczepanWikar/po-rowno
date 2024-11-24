@@ -1,7 +1,7 @@
 ﻿using Core.Common.Projections;
 using Microsoft.EntityFrameworkCore;
 
-namespace ReadModel.Expense.Handler
+namespace QueryModel.Expense.Handler
 {
     public sealed class ExpenseCanceledHadler : IEventNotificationHandler<ExpenseCanceled>
     {

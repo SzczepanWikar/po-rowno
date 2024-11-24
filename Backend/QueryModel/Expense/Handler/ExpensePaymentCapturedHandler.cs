@@ -3,7 +3,7 @@ using Core.Common.Projections;
 using Core.Expense.Events;
 using Microsoft.EntityFrameworkCore;
 
-namespace ReadModel.Expense.Handler
+namespace QueryModel.Expense.Handler
 {
     public sealed class ExpensePaymentCapturedHandler
         : IEventNotificationHandler<ExpensePaymentCaptured>

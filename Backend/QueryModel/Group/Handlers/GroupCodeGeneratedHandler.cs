@@ -2,7 +2,7 @@
 using Core.Group.Events;
 using Microsoft.EntityFrameworkCore;
 
-namespace ReadModel.Group.Handlers
+namespace QueryModel.Group.Handlers
 {
     public sealed class GroupCodeGeneratedHandler : IEventNotificationHandler<GroupCodeGenerated>
     {

@@ -1,5 +1,5 @@
 ﻿using Core.User;
-using ReadModel.User;
+using QueryModel.User;
 
 namespace API.User.DTO
 {

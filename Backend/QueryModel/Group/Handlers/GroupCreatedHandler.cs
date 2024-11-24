@@ -1,10 +1,10 @@
 ﻿using Core.Common.Projections;
 using Core.Group.Events;
 using Microsoft.EntityFrameworkCore;
-using ReadModel.User;
-using ReadModel.UserGroup;
+using QueryModel.User;
+using QueryModel.UserGroup;
 
-namespace ReadModel.Group.Handlers
+namespace QueryModel.Group.Handlers
 {
     public sealed class GroupCreatedHandler : IEventNotificationHandler<GroupCreated>
     {

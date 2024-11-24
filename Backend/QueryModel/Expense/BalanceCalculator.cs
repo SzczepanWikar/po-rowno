@@ -1,7 +1,7 @@
 ﻿using Core.Common.DataStructures;
 using Microsoft.EntityFrameworkCore;
 
-namespace ReadModel.Expense
+namespace QueryModel.Expense
 {
     public sealed class BalanceCalculator
     {

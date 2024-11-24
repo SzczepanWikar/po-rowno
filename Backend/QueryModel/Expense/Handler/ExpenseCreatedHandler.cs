@@ -2,10 +2,10 @@
 using Core.Common.Projections;
 using Core.Expense.Events;
 using Microsoft.EntityFrameworkCore;
-using ReadModel.User;
+using QueryModel.User;
 using static Grpc.Core.Metadata;
 
-namespace ReadModel.Expense.Handler
+namespace QueryModel.Expense.Handler
 {
     public sealed class ExpenseCreatedHandler : IEventNotificationHandler<ExpenseCreated>
     {

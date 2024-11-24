@@ -1,9 +1,9 @@
 ﻿using Core.Common.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using ReadModel.UserGroup;
+using QueryModel.UserGroup;
 
-namespace ReadModel.Group.Handlers
+namespace QueryModel.Group.Handlers
 {
     public sealed record GetGroup(Guid Id, Core.User.User User) : IRequest<GroupEntity>;
 

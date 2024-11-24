@@ -1,9 +1,9 @@
 ﻿using API.User.DTO;
 using Core.Group;
-using ReadModel.Expense;
-using ReadModel.Group;
-using ReadModel.User;
-using ReadModel.UserGroup;
+using QueryModel.Expense;
+using QueryModel.Group;
+using QueryModel.User;
+using QueryModel.UserGroup;
 
 namespace API.Group.DTO
 {

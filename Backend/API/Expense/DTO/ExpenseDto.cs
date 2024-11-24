@@ -2,9 +2,9 @@
 using API.User.DTO;
 using Core.Expense;
 using Core.Group;
-using ReadModel.Expense;
-using ReadModel.Group;
-using ReadModel.User;
+using QueryModel.Expense;
+using QueryModel.Group;
+using QueryModel.User;
 
 namespace API.Expense.DTO
 {

@@ -1,9 +1,9 @@
 ﻿using Core.Common.Projections;
 using Core.Group.Events;
 using Microsoft.EntityFrameworkCore;
-using ReadModel.User;
+using QueryModel.User;
 
-namespace ReadModel.Group.Handlers
+namespace QueryModel.Group.Handlers
 {
     internal class GroupDataUpdatedHandler : IEventNotificationHandler<GroupDataUpdated>
     {

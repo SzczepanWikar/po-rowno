@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace ReadModel.User.Handlers
+namespace QueryModel.User.Handlers
 {
     public sealed record GetUser(Core.User.User User) : IRequest<UserEntity>;
 

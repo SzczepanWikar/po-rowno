@@ -1,9 +1,9 @@
 ﻿using Infrastructure.Projections;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ReadModel.Expense;
+using QueryModel.Expense;
 
-namespace ReadModel
+namespace QueryModel
 {
     public static class Configuration
     {

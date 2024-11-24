@@ -1,9 +1,9 @@
 ﻿using Core.User;
-using ReadModel.Expense;
-using ReadModel.Group;
-using ReadModel.UserGroup;
+using QueryModel.Expense;
+using QueryModel.Group;
+using QueryModel.UserGroup;
 
-namespace ReadModel.User
+namespace QueryModel.User
 {
     public sealed class UserEntity
     {

@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ReadModel.Expense;
-using ReadModel.Group;
-using ReadModel.User;
-using ReadModel.UserGroup;
+using QueryModel.Expense;
+using QueryModel.Group;
+using QueryModel.User;
+using QueryModel.UserGroup;
 
-namespace ReadModel
+namespace QueryModel
 {
     public class ApplicationContext : DbContext
     {
