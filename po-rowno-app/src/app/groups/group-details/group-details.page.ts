@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil, tap } from 'rxjs';
 import { Currency } from 'src/app/_common/enums/currency.enum';
 import { getCurrencySymbol } from 'src/app/_common/helpers/get-currency-symbol';
 import { Balance } from 'src/app/_common/models/balance';
@@ -41,11 +41,13 @@ export class GroupDetailsPage implements OnInit, OnDestroy {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((e) => {
       this.groupService
         .getGroup(e['id'])
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: () => {
+        .pipe(
+          takeUntil(this.destroy$),
+          tap(() => {
             this.loading$.next(false);
-          },
+          }),
+        )
+        .subscribe({
           error: () => {
             this.router.navigate(['app/groups']);
           },

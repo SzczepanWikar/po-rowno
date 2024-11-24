@@ -3,7 +3,7 @@ import { GroupDetailsService } from '../group-details.service';
 import { UserGroupStatus } from 'src/app/_common/enums/user-group-status.enum';
 import { UserGroup } from 'src/app/_common/models/user-group';
 import { USER_ID } from 'src/app/_common/constants';
-import { Subject, takeUntil } from 'rxjs';
+import { delay, Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -53,9 +53,9 @@ export class GroupUsersComponent implements OnInit, OnDestroy {
   protected leaveGroup() {
     this.groupService
       .leave()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntil(this.destroy$), delay(20))
       .subscribe(() => {
-        this.router.navigate(['app/Groups']);
+        this.router.navigate(['app/groups']);
       });
   }
 

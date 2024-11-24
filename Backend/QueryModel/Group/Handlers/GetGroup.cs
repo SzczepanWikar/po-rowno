@@ -25,7 +25,7 @@ namespace QueryModel.Group.Handlers
                 .ThenInclude(ug => ug.User)
                 .Include(g => g.Balances.Where(b => b.Balance != 0))
                 .Include(g => g.Owner)
-                .Where(g => g.Id == request.Id && g.UserGroups.Any(ug => ug.UserId == userId))
+                .Where(g => g.Id == request.Id && g.UserGroups.Any(ug => ug.UserId == userId && ug.Status == UserGroupStatus.Active))
                 .AsNoTracking()
                 .FirstOrDefaultAsync(cancellationToken);
 
