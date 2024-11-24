@@ -1,5 +1,6 @@
 using API.Expense.PaymentView;
 using API.User.AuthView;
+using CommandModel;
 using Infrastructure.CQRS;
 using Infrastructure.Email;
 using Infrastructure.EventStore;
@@ -9,7 +10,6 @@ using Infrastructure.Middleware.ErrorHandling;
 using Infrastructure.Middleware.UserFetching;
 using Infrastructure.Projections;
 using ReadModel;
-using WriteModel;
 
 var builder = WebApplication.CreateBuilder(args);
 

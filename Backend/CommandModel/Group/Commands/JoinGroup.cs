@@ -1,13 +1,13 @@
-﻿using Core.Common.Exceptions;
+﻿using CommandModel.User.Services;
+using Core.Common.Exceptions;
 using Core.Common.Projections;
 using Core.Group;
 using Core.UserGroupEvents;
 using Infrastructure.Projections.InternalProjections.Repository;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using WriteModel.User.Services;
 
-namespace WriteModel.Group.Commands
+namespace CommandModel.Group.Commands
 {
     using Group = Core.Group.Group;
     using User = Core.User.User;

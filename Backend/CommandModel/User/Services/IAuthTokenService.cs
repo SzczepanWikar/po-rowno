@@ -1,7 +1,7 @@
 ﻿using Core.User;
 using Core.User.Events;
 
-namespace WriteModel.User.Services
+namespace CommandModel.User.Services
 {
     public interface IAuthTokenService
     {

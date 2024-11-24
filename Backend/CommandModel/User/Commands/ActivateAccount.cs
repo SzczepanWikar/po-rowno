@@ -1,11 +1,11 @@
-﻿using Core.Common.Exceptions;
+﻿using CommandModel.User.Services;
+using Core.Common.Exceptions;
 using Core.User;
 using Core.User.Events;
 using Infrastructure.EventStore.Repository;
 using MediatR;
-using WriteModel.User.Services;
 
-namespace WriteModel.User.Commands
+namespace CommandModel.User.Commands
 {
     public record ActivateAccount(Guid Token) : IRequest;
 

@@ -1,4 +1,6 @@
-﻿using Core.Common.Exceptions;
+﻿using CommandModel.Group;
+using CommandModel.User.Services;
+using Core.Common.Exceptions;
 using Core.Common.PayPal;
 using Core.Expense;
 using Core.Expense.Events;
@@ -6,10 +8,8 @@ using Core.Group;
 using Infrastructure.EventStore.Repository;
 using Infrastructure.PayPal;
 using MediatR;
-using WriteModel.Group;
-using WriteModel.User.Services;
 
-namespace WriteModel.Expense.Commands
+namespace CommandModel.Expense.Commands
 {
     using Expense = Core.Expense.Expense;
     using Group = Core.Group.Group;

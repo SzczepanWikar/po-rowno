@@ -3,7 +3,7 @@ using EventStore.Client;
 using Infrastructure.Projections.InternalProjections.Repository;
 using Microsoft.Extensions.Logging;
 
-namespace WriteModel.Group
+namespace CommandModel.Group
 {
     public class GroupIndexRepository : IndexProjectionRepository
     {

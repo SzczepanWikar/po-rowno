@@ -1,11 +1,11 @@
 ﻿using API.User.DTO;
 using API.User.ViewModels;
+using CommandModel.User.Commands;
 using Core.User;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReadModel.User.Handlers;
-using WriteModel.User.Commands;
 
 namespace API.User
 {

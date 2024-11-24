@@ -1,6 +1,6 @@
-﻿using MediatR;
+﻿using CommandModel.User.Commands;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WriteModel.User.Commands;
 
 namespace API.User.AuthView
 {

@@ -1,4 +1,8 @@
-﻿using Core.Common.Projections;
+﻿using CommandModel.Expense;
+using CommandModel.Group;
+using CommandModel.User.Repositories;
+using CommandModel.User.Services;
+using Core.Common.Projections;
 using Core.User;
 using Infrastructure.EventStore.Repository;
 using Infrastructure.PayPal;
@@ -8,12 +12,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WriteModel.Expense;
-using WriteModel.Group;
-using WriteModel.User.Repositories;
-using WriteModel.User.Services;
 
-namespace WriteModel
+namespace CommandModel
 {
     public static class Configuration
     {

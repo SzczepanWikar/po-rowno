@@ -3,7 +3,7 @@ using EventStore.Client;
 using Infrastructure.Projections.InternalProjections.Repository;
 using Microsoft.Extensions.Logging;
 
-namespace WriteModel.Expense
+namespace CommandModel.Expense
 {
     public sealed class PaymentIndexRepository : IndexProjectionRepository
     {

@@ -3,7 +3,7 @@ using Core.Common.Exceptions;
 using Infrastructure.EventStore.Repository;
 using MediatR;
 
-namespace WriteModel.Group.Commands
+namespace CommandModel.Group.Commands
 {
     using Group = Core.Group.Group;
 

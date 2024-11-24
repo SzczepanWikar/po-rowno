@@ -1,9 +1,9 @@
-﻿namespace WriteModel.User.Commands
+﻿namespace CommandModel.User.Commands
 {
     using System.Threading;
     using System.Threading.Tasks;
+    using CommandModel.User.Services;
     using MediatR;
-    using WriteModel.User.Services;
     using User = Core.User.User;
 
     public sealed record Logout(User User) : IRequest;

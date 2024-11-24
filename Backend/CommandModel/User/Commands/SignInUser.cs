@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using CommandModel.User.Services;
 using Core.Common.Configs;
 using Core.Common.Exceptions;
 using Core.Common.Projections;
@@ -12,9 +13,8 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WriteModel.User.Services;
 
-namespace WriteModel.User.Commands
+namespace CommandModel.User.Commands
 {
     using User = Core.User.User;
 

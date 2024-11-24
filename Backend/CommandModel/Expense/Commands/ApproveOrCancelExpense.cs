@@ -1,10 +1,10 @@
-﻿using Core.Expense.Events;
+﻿using CommandModel.Group;
+using Core.Expense.Events;
 using Infrastructure.EventStore.Repository;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using WriteModel.Group;
 
-namespace WriteModel.Expense.Commands
+namespace CommandModel.Expense.Commands
 {
     using Expense = Core.Expense.Expense;
 

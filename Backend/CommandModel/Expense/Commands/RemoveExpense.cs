@@ -1,11 +1,11 @@
-﻿using Core.Common.Exceptions;
+﻿using CommandModel.Group;
+using Core.Common.Exceptions;
 using Core.Expense.Events;
 using Core.Group.Events;
 using Infrastructure.EventStore.Repository;
 using MediatR;
-using WriteModel.Group;
 
-namespace WriteModel.Expense.Commands
+namespace CommandModel.Expense.Commands
 {
     using Expense = Core.Expense.Expense;
     using User = Core.User.User;

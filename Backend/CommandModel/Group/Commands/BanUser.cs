@@ -2,7 +2,7 @@
 using Core.UserGroupEvents;
 using MediatR;
 
-namespace WriteModel.Group.Commands
+namespace CommandModel.Group.Commands
 {
     public sealed record BanUser(Guid GroupId, Guid BannedUserId, Core.User.User user) : IRequest;
 

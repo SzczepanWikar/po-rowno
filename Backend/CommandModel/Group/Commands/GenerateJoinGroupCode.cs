@@ -8,7 +8,7 @@ using Infrastructure.Projections.InternalProjections.Repository;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace WriteModel.Group.Commands
+namespace CommandModel.Group.Commands
 {
     public record GenerateJoinGroupCode(DateTime ValidTo, Guid GroupId, Core.User.User User)
         : IRequest;

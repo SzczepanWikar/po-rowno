@@ -1,10 +1,10 @@
-﻿using Core.Common.Exceptions;
+﻿using CommandModel.User.Services;
+using Core.Common.Exceptions;
 using Core.User.Events;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using WriteModel.User.Services;
 
-namespace WriteModel.User.Commands
+namespace CommandModel.User.Commands
 {
     using User = Core.User.User;
 

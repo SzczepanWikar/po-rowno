@@ -1,12 +1,12 @@
-﻿using Core.Common.Exceptions;
+﻿using CommandModel.User.Services;
+using Core.Common.Exceptions;
 using Core.Common.Projections;
 using Core.User;
 using Infrastructure.Projections.InternalProjections.Repository;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using WriteModel.User.Services;
 
-namespace WriteModel.User.Commands
+namespace CommandModel.User.Commands
 {
     using User = Core.User.User;
 

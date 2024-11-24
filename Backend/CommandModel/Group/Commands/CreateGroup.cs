@@ -1,7 +1,7 @@
 ﻿using Core.Group;
 using MediatR;
 
-namespace WriteModel.Group.Commands
+namespace CommandModel.Group.Commands
 {
     public record CreateGroup(
         Core.User.User User,

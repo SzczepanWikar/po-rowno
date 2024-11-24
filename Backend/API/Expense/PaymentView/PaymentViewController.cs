@@ -1,6 +1,6 @@
-﻿using MediatR;
+﻿using CommandModel.Expense.Commands;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WriteModel.Expense.Commands;
 
 namespace API.Expense.PaymentView
 {

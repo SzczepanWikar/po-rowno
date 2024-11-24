@@ -1,4 +1,5 @@
-﻿using Core.Common.Exceptions;
+﻿using CommandModel.Group;
+using Core.Common.Exceptions;
 using Core.Common.PayPal;
 using Core.Common.Projections;
 using Core.Expense.Events;
@@ -7,9 +8,8 @@ using Infrastructure.PayPal;
 using Infrastructure.Projections.InternalProjections.Repository;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using WriteModel.Group;
 
-namespace WriteModel.Expense.Commands
+namespace CommandModel.Expense.Commands
 {
     using Expense = Core.Expense.Expense;
     using Group = Core.Group.Group;

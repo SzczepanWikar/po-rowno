@@ -1,4 +1,5 @@
 ﻿using API.Expense.DTO;
+using CommandModel.Expense.Commands;
 using Core.Common.PayPal;
 using Core.Expense;
 using MediatR;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using ReadModel.Expense.Handler;
-using WriteModel.Expense.Commands;
 
 namespace API.Expense
 {

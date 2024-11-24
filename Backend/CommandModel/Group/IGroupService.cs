@@ -1,6 +1,6 @@
-﻿using WriteModel.Group.Commands;
+﻿using CommandModel.Group.Commands;
 
-namespace WriteModel.Group
+namespace CommandModel.Group
 {
     using Group = Core.Group.Group;
 

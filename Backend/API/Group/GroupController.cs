@@ -1,10 +1,10 @@
 ﻿using API.Group.DTO;
 using API.User.DTO;
+using CommandModel.Group.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReadModel.Group.Handlers;
-using WriteModel.Group.Commands;
 
 namespace API.Group
 {

@@ -1,13 +1,13 @@
-﻿using Core.Common.Exceptions;
+﻿using CommandModel.Group.Commands;
+using CommandModel.User.Services;
+using Core.Common.Exceptions;
 using Core.Group;
 using Core.Group.Events;
 using Core.UserGroupEvents;
 using Google.Protobuf.WellKnownTypes;
 using Infrastructure.EventStore.Repository;
-using WriteModel.Group.Commands;
-using WriteModel.User.Services;
 
-namespace WriteModel.Group
+namespace CommandModel.Group
 {
     using Group = Core.Group.Group;
 

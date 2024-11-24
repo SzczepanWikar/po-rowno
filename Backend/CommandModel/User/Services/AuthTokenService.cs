@@ -8,7 +8,7 @@ using Core.User.Events;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace WriteModel.User.Services
+namespace CommandModel.User.Services
 {
     using User = Core.User.User;
 

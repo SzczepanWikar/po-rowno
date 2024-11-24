@@ -1,7 +1,7 @@
-﻿namespace WriteModel.User.Services
+﻿namespace CommandModel.User.Services
 {
+    using CommandModel.User.Commands;
     using Core.User.Events;
-    using WriteModel.User.Commands;
     using User = Core.User.User;
 
     public interface IUserService
