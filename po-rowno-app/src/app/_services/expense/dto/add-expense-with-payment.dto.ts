@@ -1,6 +1,7 @@
 import { Currency } from 'src/app/_common/enums/currency.enum';
 
 export interface AddExpenseWithPaymentDto {
+  name: string;
   /**
    * @format double
    * @min 0

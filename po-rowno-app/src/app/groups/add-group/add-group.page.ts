@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AlertButton } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { delay, Subject, takeUntil } from 'rxjs';
+import { DELAY } from 'src/app/_common/constants';
 import { Currency } from 'src/app/_common/enums/currency.enum';
 import { getCurrencySymbol } from 'src/app/_common/helpers/get-currency-symbol';
 import { CreateGroupDto } from 'src/app/_services/group/dto/create-group.dto';
@@ -72,7 +73,7 @@ export class AddGroupPage implements OnInit, OnDestroy {
 
     this.groupService
       .create(dto)
-      .pipe(takeUntil(this.#destroy$), delay(100))
+      .pipe(takeUntil(this.#destroy$), delay(DELAY))
       .subscribe({
         next: () => {
           this.router.navigate(['app/groups']);

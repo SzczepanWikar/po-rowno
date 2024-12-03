@@ -87,6 +87,7 @@ namespace API.Expense
             var user = HttpContext.Items["User"] as User;
 
             var request = new AddExpenseWithPayment(
+                dto.Name,
                 dto.Amount,
                 dto.Currency,
                 dto.GroupId,

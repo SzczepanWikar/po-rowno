@@ -16,6 +16,7 @@ namespace CommandModel.Expense.Commands
     using User = Core.User.User;
 
     public sealed record AddExpenseWithPayment(
+        string Name,
         decimal Amount,
         Currency Currency,
         Guid GroupId,
@@ -66,7 +67,7 @@ namespace CommandModel.Expense.Commands
 
                 var @event = new ExpenseCreated(
                     id,
-                    "",
+                    request.Name,
                     request.Amount,
                     request.Currency,
                     ExpenseType.Settlement,

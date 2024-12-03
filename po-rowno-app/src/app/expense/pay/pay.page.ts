@@ -152,9 +152,10 @@ export class PayPage implements OnInit, OnDestroy {
     this.saving = true;
     this.loading$.next(true);
 
-    const { amount, userId, groupId } = this.form.value;
+    const { amount, userId, groupId, name } = this.form.value;
 
     const dto: AddExpenseWithPaymentDto = {
+      name: name!,
       amount: +amount!,
       currency: this.#currentCurrency!,
       groupId: groupId!,

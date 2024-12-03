@@ -6,7 +6,7 @@ import { Balance } from 'src/app/_common/models/balance';
 import { User } from 'src/app/_common/models/user';
 import { getCurrencySymbol } from 'src/app/_common/helpers/get-currency-symbol';
 import { UserStatus } from 'src/app/_common/enums/user-status.enum';
-import { USER_ID } from 'src/app/_common/constants';
+import { DELAY, USER_ID } from 'src/app/_common/constants';
 import { TranslateService } from '@ngx-translate/core';
 
 type BalanceUser = {
@@ -43,7 +43,7 @@ export class GroupDetailsService {
 
   refreshJoinCode(validTo: Date) {
     return this.groupService.refreshJoinCode(this.groupId, validTo).pipe(
-      delay(20),
+      delay(DELAY),
       concatMap(() => {
         return this.getGroup(this.groupId);
       }),
@@ -52,7 +52,7 @@ export class GroupDetailsService {
 
   banUser(id: string) {
     return this.groupService.banUser(this.groupId, id).pipe(
-      delay(20),
+      delay(DELAY),
       concatMap(() => {
         return this.getGroup(this.groupId);
       }),
@@ -61,7 +61,7 @@ export class GroupDetailsService {
 
   unbanUser(id: string) {
     return this.groupService.unbanUser(this.groupId, id).pipe(
-      delay(20),
+      delay(DELAY),
       concatMap(() => {
         return this.getGroup(this.groupId);
       }),
