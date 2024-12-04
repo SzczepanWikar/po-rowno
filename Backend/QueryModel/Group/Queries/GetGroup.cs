@@ -3,7 +3,7 @@ using Core.ProjectionEntities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace QueryModel.Group.Handlers
+namespace QueryModel.Group.Queries
 {
     public sealed record GetGroup(Guid Id, Core.User.User User) : IRequest<GroupEntity>;
 

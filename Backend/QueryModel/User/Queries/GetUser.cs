@@ -3,7 +3,7 @@ using Core.ProjectionEntities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace QueryModel.User.Handlers
+namespace QueryModel.User.Queries
 {
     public sealed record GetUser(Core.User.User User) : IRequest<UserEntity>;
 

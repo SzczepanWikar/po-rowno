@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace QueryModel.Group.Handlers
+namespace QueryModel.Group.Queries
 {
     public sealed record GetGroups(Core.User.User User) : IRequest<IEnumerable<GroupEntity>>;
 

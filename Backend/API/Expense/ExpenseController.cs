@@ -4,9 +4,8 @@ using Core.Common.PayPal;
 using Core.Expense;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using QueryModel.Expense.Handler;
+using QueryModel.Expense.Queries;
 
 namespace API.Expense
 {

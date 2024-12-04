@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace QueryModel.Expense.Handler
+namespace QueryModel.Expense.Queries
 {
     public sealed record GetExpenses(
         Guid GroupId,

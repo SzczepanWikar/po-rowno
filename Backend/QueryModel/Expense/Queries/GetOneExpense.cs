@@ -3,7 +3,7 @@ using Core.ProjectionEntities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace QueryModel.Expense.Handler
+namespace QueryModel.Expense.Queries
 {
     public sealed record GetOneExpense(Guid Id, Core.User.User User) : IRequest<ExpenseEntity>;
 

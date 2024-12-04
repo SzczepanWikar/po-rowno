@@ -5,7 +5,7 @@ using Core.User;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using QueryModel.User.Handlers;
+using QueryModel.User.Queries;
 
 namespace API.User
 {
