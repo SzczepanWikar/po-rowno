@@ -1,9 +1,8 @@
 ﻿using Core.Common.Projections;
+using Core.ProjectionEntities;
 using Core.UserGroupEvents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using QueryModel.Group;
-using QueryModel.User;
 
 namespace QueryModel.UserGroup.Handlers
 {

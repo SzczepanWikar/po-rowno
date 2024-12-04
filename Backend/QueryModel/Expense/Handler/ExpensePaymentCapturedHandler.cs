@@ -1,6 +1,6 @@
-﻿using Core.Common.DataStructures;
-using Core.Common.Projections;
+﻿using Core.Common.Projections;
 using Core.Expense.Events;
+using Core.ProjectionEntities;
 using Microsoft.EntityFrameworkCore;
 
 namespace QueryModel.Expense.Handler

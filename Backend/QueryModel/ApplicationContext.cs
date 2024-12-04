@@ -1,8 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using QueryModel.Expense;
-using QueryModel.Group;
-using QueryModel.User;
-using QueryModel.UserGroup;
+﻿using Core.ProjectionEntities;
+using Microsoft.EntityFrameworkCore;
 
 namespace QueryModel
 {

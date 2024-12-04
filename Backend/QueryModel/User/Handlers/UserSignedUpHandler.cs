@@ -1,4 +1,5 @@
 ﻿using Core.Common.Projections;
+using Core.ProjectionEntities;
 using Core.User;
 using Core.User.Events;
 

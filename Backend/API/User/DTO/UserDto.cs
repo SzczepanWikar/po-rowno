@@ -1,5 +1,5 @@
-﻿using Core.User;
-using QueryModel.User;
+﻿using Core.ProjectionEntities;
+using Core.User;
 
 namespace API.User.DTO
 {

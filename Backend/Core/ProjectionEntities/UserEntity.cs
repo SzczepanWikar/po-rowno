@@ -1,9 +1,6 @@
 ﻿using Core.User;
-using QueryModel.Expense;
-using QueryModel.Group;
-using QueryModel.UserGroup;
 
-namespace QueryModel.User
+namespace Core.ProjectionEntities
 {
     public sealed class UserEntity
     {

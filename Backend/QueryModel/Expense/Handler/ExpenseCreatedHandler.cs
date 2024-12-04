@@ -1,9 +1,7 @@
-﻿using Core.Common.DataStructures;
-using Core.Common.Projections;
+﻿using Core.Common.Projections;
 using Core.Expense.Events;
+using Core.ProjectionEntities;
 using Microsoft.EntityFrameworkCore;
-using QueryModel.User;
-using static Grpc.Core.Metadata;
 
 namespace QueryModel.Expense.Handler
 {

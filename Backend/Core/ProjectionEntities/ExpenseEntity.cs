@@ -1,9 +1,7 @@
 ﻿using Core.Expense;
 using Core.Group;
-using QueryModel.Group;
-using QueryModel.User;
 
-namespace QueryModel.Expense
+namespace Core.ProjectionEntities
 {
     public sealed class ExpenseEntity
     {

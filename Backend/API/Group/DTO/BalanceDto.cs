@@ -1,6 +1,4 @@
-﻿using API.User.DTO;
-using QueryModel.Expense;
-using QueryModel.User;
+﻿using Core.ProjectionEntities;
 
 namespace API.Group.DTO
 {

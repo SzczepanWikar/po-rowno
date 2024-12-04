@@ -1,5 +1,6 @@
 ﻿using Core.Common.Projections;
 using Core.Group.Events;
+using Core.ProjectionEntities;
 using Microsoft.EntityFrameworkCore;
 
 namespace QueryModel.Group.Handlers

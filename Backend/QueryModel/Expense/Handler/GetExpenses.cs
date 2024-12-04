@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Core.ProjectionEntities;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace QueryModel.Expense.Handler

@@ -1,8 +1,7 @@
 ﻿using Core.Common.Projections;
 using Core.Group.Events;
+using Core.ProjectionEntities;
 using Microsoft.EntityFrameworkCore;
-using QueryModel.User;
-using QueryModel.UserGroup;
 
 namespace QueryModel.Group.Handlers
 {

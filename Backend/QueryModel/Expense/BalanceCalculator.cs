@@ -1,4 +1,5 @@
 ﻿using Core.Common.DataStructures;
+using Core.ProjectionEntities;
 using Microsoft.EntityFrameworkCore;
 
 namespace QueryModel.Expense

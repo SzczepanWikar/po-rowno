@@ -1,6 +1,4 @@
-﻿using QueryModel.User;
-
-namespace QueryModel.Expense
+﻿namespace Core.ProjectionEntities
 {
     public sealed class ExpenseDeptorEntity
     {

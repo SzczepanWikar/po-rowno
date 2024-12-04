@@ -1,7 +1,4 @@
-﻿using QueryModel.Group;
-using QueryModel.User;
-
-namespace QueryModel.UserGroup
+﻿namespace Core.ProjectionEntities
 {
     public enum UserGroupStatus
     {

@@ -1,7 +1,7 @@
 ﻿using Core.Common.Exceptions;
+using Core.ProjectionEntities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using QueryModel.UserGroup;
 
 namespace QueryModel.Group.Handlers
 {

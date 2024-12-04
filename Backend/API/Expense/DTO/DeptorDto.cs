@@ -1,5 +1,5 @@
 ﻿using API.User.DTO;
-using QueryModel.Expense;
+using Core.ProjectionEntities;
 
 namespace API.Expense.DTO
 {

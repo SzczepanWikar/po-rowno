@@ -2,9 +2,7 @@
 using API.User.DTO;
 using Core.Expense;
 using Core.Group;
-using QueryModel.Expense;
-using QueryModel.Group;
-using QueryModel.User;
+using Core.ProjectionEntities;
 
 namespace API.Expense.DTO
 {

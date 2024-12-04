@@ -1,4 +1,5 @@
 ﻿using Core.Common.Projections;
+using Core.ProjectionEntities;
 using Core.User.Events;
 using Microsoft.EntityFrameworkCore;
 

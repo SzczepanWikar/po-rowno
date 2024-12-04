@@ -1,4 +1,5 @@
 ﻿using Core.Common.Exceptions;
+using Core.ProjectionEntities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
