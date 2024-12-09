@@ -27,6 +27,8 @@ Engineering thesis
 
 ## Setup
 
+Create database.
+
 In `Backend` directory:
 
 ```console
