@@ -4,11 +4,10 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { catchError, switchMap, throwError } from 'rxjs';
 import { ACCESS_TOKEN } from '../_common/constants';
 import { AuthService } from '../_services/auth/auth.service';
-import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
@@ -62,7 +61,7 @@ function handleUnauthorized(
       return next(cloned);
     }),
     catchError((error) => {
-      setTimeout(() => router.navigate(['sign-in']));
+      router.navigate(['sign-in']);
       return throwError(() => error);
     }),
   );
