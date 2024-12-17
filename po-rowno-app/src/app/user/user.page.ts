@@ -26,8 +26,11 @@ export class UserPage implements OnDestroy {
     private readonly userService: UserService,
   ) {}
 
-  ngOnDestroy(): void {
+  ionViewWillLeave() {
     this.loading$.next(false);
+  }
+
+  ngOnDestroy(): void {
     this.loading$.complete();
   }
 }

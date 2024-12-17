@@ -8,7 +8,6 @@ namespace Infrastructure.EventStore
 {
     public sealed class EventParser
     {
-        public static readonly EventParser Instance = new();
         private readonly ConcurrentDictionary<string, Type?> _eventTypesDictionary = new();
         private readonly ConcurrentDictionary<string, Type?> _eventNotificationsDictionary = new();
 

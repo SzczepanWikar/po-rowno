@@ -22,7 +22,7 @@ namespace Infrastructure.EventStore
             services.AddEventStorePersistentSubscriptionsClient(connectionString);
             services.AddEventStoreProjectionManagementClient(connectionString);
 
-            services.AddSingleton(EventParser.Instance);
+            services.AddSingleton<EventParser>();
 
             return services;
         }

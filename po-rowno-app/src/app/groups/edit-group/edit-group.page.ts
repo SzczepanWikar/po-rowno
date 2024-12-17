@@ -45,8 +45,11 @@ export class EditGroupPage implements OnInit, OnDestroy {
     this.#getGroup();
   }
 
-  ngOnDestroy(): void {
+  ionViewWillLeave() {
     this.loading$.next(false);
+  }
+
+  ngOnDestroy(): void {
     this.loading$.complete();
     this.#destroy$.next();
     this.#destroy$.complete();

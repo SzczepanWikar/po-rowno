@@ -200,8 +200,11 @@ export class PayPage implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy(): void {
+  ionViewWillLeave() {
     this.loading$.next(false);
+  }
+
+  ngOnDestroy(): void {
     this.loading$.complete();
     this.#destroy$.next();
     this.#destroy$.complete();

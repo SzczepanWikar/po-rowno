@@ -66,8 +66,11 @@ export class GroupDetailsPage implements OnInit, OnDestroy {
     modal.present();
   }
 
-  ngOnDestroy(): void {
+  ionViewWillLeave() {
     this.loading$.next(false);
+  }
+
+  ngOnDestroy(): void {
     this.loading$.complete();
     this.destroy$.next();
     this.destroy$.complete();

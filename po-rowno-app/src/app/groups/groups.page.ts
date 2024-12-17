@@ -33,8 +33,12 @@ export class GroupsPage implements OnDestroy {
       }),
     );
   }
-  ngOnDestroy(): void {
+
+  ionViewWillLeave() {
     this.loading$.next(false);
+  }
+
+  ngOnDestroy(): void {
     this.loading$.complete();
   }
 }
