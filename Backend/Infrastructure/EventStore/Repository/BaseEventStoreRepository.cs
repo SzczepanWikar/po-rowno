@@ -30,7 +30,7 @@ namespace Infrastructure.EventStore.Repository
             CancellationToken ct = default
         )
         {
-            await AppendToStream(id, events, StreamState.NoStream, ct);
+            await AppendToStreamAsync(id, events, StreamState.NoStream, ct);
         }
 
         public Task AppendAsync(Guid id, object @event, CancellationToken ct = default)
@@ -44,7 +44,7 @@ namespace Infrastructure.EventStore.Repository
             CancellationToken ct = default
         )
         {
-            await AppendToStream(id, @events, StreamState.StreamExists, ct);
+            await AppendToStreamAsync(id, @events, StreamState.StreamExists, ct);
         }
 
         public async Task<T?> FindOneAsync(
@@ -70,17 +70,11 @@ namespace Infrastructure.EventStore.Repository
 
             await foreach (var @event in readResult)
             {
-                var evt = @event.Event;
-                var eventType = _eventTypeParser.GetEventType(evt.EventType);
-
-                if (eventType == null)
-                {
-                    continue;
-                }
-
                 try
                 {
-                    var eventData = JsonSerializer.Deserialize(evt.Data.Span, eventType);
+                    var evt = @event.Event;
+
+                    var eventData = _eventTypeParser.GetEventData(evt, null);
 
                     if (eventData == null)
                     {
@@ -98,7 +92,7 @@ namespace Infrastructure.EventStore.Repository
             return aggregate;
         }
 
-        private async Task AppendToStream(
+        private async Task AppendToStreamAsync(
             Guid id,
             IReadOnlyCollection<object> @events,
             StreamState streamState,

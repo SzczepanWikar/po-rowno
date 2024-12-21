@@ -37,7 +37,7 @@ namespace CommandModel.User.Commands
         )
         {
             var user = await GetUser(request, cancellationToken);
-            var refreshToken = GetRefreshToken(user);
+            var refreshToken = GetRefreshToken(user, request.RefreshToken);
 
             var authToken = _authTokenService.GenerateAccessToken(user);
 
@@ -69,9 +69,11 @@ namespace CommandModel.User.Commands
             }
         }
 
-        private static RefreshToken GetRefreshToken(User user)
+        private static RefreshToken GetRefreshToken(User user, string refreshTokenValue)
         {
-            var refreshToken = user.RefreshTokens.LastOrDefault();
+            var refreshToken = user
+                .RefreshTokens.Where(rt => rt.Token == refreshTokenValue)
+                .LastOrDefault();
 
             if (refreshToken is null)
             {

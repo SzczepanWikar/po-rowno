@@ -32,7 +32,7 @@ namespace Infrastructure.Projections.InternalProjections
                 existingProjections = await _eventStoreClient
                     .ListContinuousAsync()
                     .Select(e => e.Name)
-                    .ToHashSetAsync();
+                    .ToHashSetAsync(cancellationToken);
             }
             catch (Exception ex)
             {
@@ -56,7 +56,8 @@ namespace Infrastructure.Projections.InternalProjections
                         await _eventStoreClient.UpdateAsync(
                             projection.Name,
                             code,
-                            emitEnabled: true
+                            emitEnabled: true,
+                            cancellationToken: cancellationToken
                         );
                     }
                     else
@@ -69,11 +70,15 @@ namespace Infrastructure.Projections.InternalProjections
                         await _eventStoreClient.UpdateAsync(
                             projection.Name,
                             code,
-                            emitEnabled: true
+                            emitEnabled: true,
+                            cancellationToken: cancellationToken
                         ); // update after create to enable emit
                     }
 
-                    await _eventStoreClient.EnableAsync(projection.Name);
+                    await _eventStoreClient.EnableAsync(
+                        projection.Name,
+                        cancellationToken: cancellationToken
+                    );
                 }
                 catch (Exception ex)
                 {

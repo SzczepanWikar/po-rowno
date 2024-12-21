@@ -57,7 +57,7 @@ namespace Infrastructure.Projections.InternalProjections.Repository
 
                 if (@event.Event.EventType == EmailIndexedEvent)
                 {
-                    throw new ConflictException("Given email is already in use.");
+                    throw new ConflictException("Given value is already in use.");
                 }
                 else
                 {
