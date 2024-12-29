@@ -3,7 +3,6 @@ using System.Text.Json;
 using Core.Common.Configs;
 using Core.Common.PayPal;
 using Core.Group;
-using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.PayPal
 {
@@ -12,7 +11,6 @@ namespace Infrastructure.PayPal
         private readonly PayPalConfig _payPalConfig;
         private readonly WebConfig _webConfig;
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly ILogger<PayPalService> _logger;
 
         public PayPalService(
             PayPalConfig payPalConfig,

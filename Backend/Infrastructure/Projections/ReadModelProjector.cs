@@ -97,7 +97,7 @@ namespace Infrastructure.Projections
         {
             _subscription = await _eventStoreClient.SubscribeToAllAsync(
                 _subscriptionGroup,
-                OnEventAppered,
+                OnEventAppeared,
                 cancellationToken: _cancellationToken,
                 subscriptionDropped: OnSubscriptionDropped
             );
@@ -105,7 +105,7 @@ namespace Infrastructure.Projections
             _logger.LogInformation($"Subscribed to {_subscription}");
         }
 
-        private async Task OnEventAppered(
+        private async Task OnEventAppeared(
             PersistentSubscription subscription,
             ResolvedEvent resolvedEvent,
             int? retryCount,

@@ -17,7 +17,7 @@ namespace Tests.Infrastructure
             public string Name { get; set; }
         }
 
-        EventParser eventParser = EventParser.Instance;
+        EventParser eventParser = new();
 
         [Fact]
         public void GetEventType_ExistingTypeName_ReturnsType()

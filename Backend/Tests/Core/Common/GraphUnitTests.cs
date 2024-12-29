@@ -77,6 +77,59 @@ namespace Tests.Core.Common
         }
 
         [Fact]
+        public void MinimizeEdges_ShouldHandleModifiedValuesCorrectly()
+        {
+            var graph = new Graph<int>();
+            var controlGraph = new Graph<int>();
+            var personA = Guid.NewGuid();
+            var personB = Guid.NewGuid();
+            var personC = Guid.NewGuid();
+
+            graph.SetValue(personA, personB, 20);
+            graph.SetValue(personB, personC, 10);
+            graph.SetValue(personC, personA, 5);
+
+            graph.MinimizeEdges();
+
+            graph.SetValue(personB, personC, 20);
+
+            graph.MinimizeEdges();
+
+            controlGraph.SetValue(personA, personB, 20);
+            controlGraph.SetValue(personB, personC, 30);
+            controlGraph.SetValue(personC, personA, 5);
+
+            controlGraph.MinimizeEdges();
+
+            Assert.Equal(controlGraph.GetValue(personA, personB), graph.GetValue(personA, personB));
+            Assert.Equal(controlGraph.GetValue(personB, personC), graph.GetValue(personB, personC));
+            Assert.Equal(controlGraph.GetValue(personC, personA), graph.GetValue(personC, personA));
+        }
+
+        [Fact]
+        public void MinimizeEdges_ComplexGraph_MinimizesCorrectlyExampleFromThesis()
+        {
+            var graph = new Graph<int>();
+
+            var personA = Guid.NewGuid();
+            var personB = Guid.NewGuid();
+            var personC = Guid.NewGuid();
+            var personD = Guid.NewGuid();
+
+            graph.SetValue(personA, personB, 10);
+            graph.SetValue(personB, personC, 15);
+            graph.SetValue(personC, personD, 20);
+            graph.SetValue(personD, personA, 25);
+            graph.SetValue(personD, personB, 5);
+            graph.SetValue(personC, personA, 5);
+
+            graph.MinimizeEdges();
+
+            Assert.Equal(10, graph.GetValue(personC, personA));
+            Assert.Equal(10, graph.GetValue(personD, personA));
+        }
+
+        [Fact]
         public void HasCycle_ShouldReturnFalse_WhenMatrixIsAcyclic()
         {
             var matrix = new Graph<int>();
